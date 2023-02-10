@@ -66,10 +66,12 @@ ipcMain.on("read-file", (event, filePath) => {
 }); */
 
 // Dialog
-ipcMain.on("select-folder-send", (event) => {
+ipcMain.on("select-folder-send", async (event) => {
   const filePath = dialog.showOpenDialogSync({ properties: ["openDirectory"] });
+  const data = await Utils.generateMusicData(filePath[0]);
 
-  console.log("[i] Electron: select-folder-send", filePath);
+  console.log("[i] Electron: select-folder-send", filePath[0]);
+  console.log("data", data);
 
   if (filePath) {
     event.sender.send("select-folder-on", { path: filePath[0], error: null });
