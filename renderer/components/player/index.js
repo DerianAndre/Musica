@@ -4,6 +4,7 @@ import "./styles.module.scss";
 
 import React, { useState, useEffect, useRef } from "react";
 import { Howl, Howler } from "howler";
+import { useInterval } from "usehooks-ts";
 
 const PLAYER_STATES = {
   PLAY: "PLAY",
@@ -17,6 +18,8 @@ const Player = () => {
   const howl = useRef(null);
   const player = howl?.current || null;
 
+  const [delay, setDelay] = useState(null);
+
   const [loop, setLoop] = useState(false);
   const [seek, setSeek] = useState(0);
   const [volume, setVolume] = useState(100);
@@ -25,7 +28,9 @@ const Player = () => {
   const [path, setPath] = useState("C:\\");
   const [metadata, setMetadata] = useState(false);
 
-  const intervalUpdate = setInterval(() => handlePlayerUpdate(), 100);
+  useInterval(() => {
+    handlePlayerUpdate();
+  }, delay);
 
   const playerArtImage = (object) => {
     if (object?.data) {
@@ -38,7 +43,7 @@ const Player = () => {
   };
 
   const handleSliderTime = (event) => {
-    if (!player) return;
+    if (!player || state !== PLAYER_STATES.PLAY) return;
 
     const value = event.target.value;
     const currentSeek = seekMap(value);
@@ -51,7 +56,6 @@ const Player = () => {
     if (!player) return;
 
     const value = event.target.value;
-    console.log(value);
 
     setVolume(value);
     player.volume(value);
@@ -70,7 +74,7 @@ const Player = () => {
   };
 
   const handlePlayPause = () => {
-    if (!metadata || !howl.current) return;
+    if (!metadata || !player) return;
 
     if (state === PLAYER_STATES.PAUSE) {
       setState(PLAYER_STATES.PLAY);
@@ -114,15 +118,20 @@ const Player = () => {
     return ((value - 0) / (100 - 0)) * (duration - 0) + 0;
   };
 
+  const sliderValue = () => (seek > 0 ? (seek / player.duration()) * 100 : 0);
+
+  const handleReset = () => {
+    if (!howl.current || state === PLAYER_STATES.PLAY) return;
+    howl.current.stop();
+    setDelay(null);
+    setState(PLAYER_STATES.STOP);
+    setSeek(0);
+  };
+
   const handlePlayerUpdate = () => {
-    if (state === PLAYER_STATES.PLAY) {
-      if (sliderTime?.current) {
-        let currentSeek = player.seek();
-        let currentDuration = player.duration();
-        setSeek(currentSeek);
-        sliderTime.current.value = (currentSeek / currentDuration) * 100;
-      }
-    }
+    if (player && state !== PLAYER_STATES.PLAY) return;
+    console.log(state, seek);
+    setSeek(player?.seek());
   };
 
   useEffect(() => {
@@ -135,33 +144,30 @@ const Player = () => {
     window.electron.player.metadata((event, data) => {
       setMetadata(data);
 
+      handleReset();
+
       howl.current = new Howl({
-        autoplay: false,
+        autoplay: true,
         src: data?.file || null,
         onplay: () => {
           setState(PLAYER_STATES.PLAY);
-          intervalUpdate;
+          setDelay(100); // Starts the useInterval to 100ms
         },
         onpause: () => {
           setState(PLAYER_STATES.PAUSE);
-          clearInterval(intervalUpdate);
+          setDelay(null); // Stops the useInterval
         },
         onend: () => {
           setState(PLAYER_STATES.STOP);
-          clearInterval(intervalUpdate);
         },
         onstop: () => {
           setState(PLAYER_STATES.STOP);
-          clearInterval(intervalUpdate);
         },
         onvolume: () => {
           setVolume(howl.current.volume());
           sliderVolume.current.value === howl.current.volume();
         },
       });
-      setTimeout(() => {
-        howl.current.play();
-      }, 0);
     });
   }, []);
 
@@ -175,7 +181,7 @@ const Player = () => {
           <input
             ref={sliderTime}
             type="range"
-            defaultValue={0}
+            value={sliderValue()}
             min="0"
             max="100"
             step="0.5"
@@ -193,7 +199,7 @@ const Player = () => {
           <figure className="art select-none swap">
             <img
               className={`d-block rounded-sm max-w-none ${
-                metadata?.common?.picture?.[0] && "shadow-inner"
+                state === PLAYER_STATES.PLAY && "shadow-inner"
               }`}
               src={playerArtImage(metadata?.common?.picture?.[0])}
               width="75px"
@@ -284,16 +290,19 @@ const Player = () => {
         </div>
 
         <div className="secondary-controls flex flex-1 items-center justify-end gap-3">
-          <input
-            ref={sliderVolume}
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            defaultValue={1}
-            className="range range-xs min-w-[100px] max-w-[150px]"
-            onChange={handleSliderVolume}
-          />
+          {metadata && (
+            <input
+              ref={sliderVolume}
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              defaultValue={1}
+              className="range range-xs min-w-[100px] max-w-[150px]"
+              onChange={handleSliderVolume}
+            />
+          )}
+
           <button
             className="btn-mute-toggle btn btn-circle btn-sm"
             onClick={handleMute}

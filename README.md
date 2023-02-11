@@ -9,4 +9,4 @@ Electron + Next.js + Tailwind
 npm run start
 ```
 
-You can create the production app using `npm run dist`.
+You can create the production app using `npm run build:prod`.

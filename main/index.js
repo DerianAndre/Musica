@@ -17,8 +17,8 @@ app.on("ready", async () => {
   await prepareNext("./renderer");
 
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 800,
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,
@@ -50,20 +50,6 @@ app.on("window-all-closed", app.quit);
 ipcMain.on("message", (event, message) => {
   event.sender.send("message", message);
 });
-
-// Read files
-/*
-ipcMain.on("read-file", (event, filePath) => {
-  fs.readFile(filePath, (err, data) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-
-    const metadata = extractMetadata(data);
-    event.sender.send("file-metadata", metadata);
-  });
-}); */
 
 // Dialog
 ipcMain.on("select-folder-send", async (event) => {
