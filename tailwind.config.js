@@ -26,7 +26,11 @@ module.exports = {
     extend: {},
   },
   plugins: [require("@tailwindcss/typography"), require("daisyui")],
-
+  variants: {
+    extend: {
+      visibility: ["group-hover"],
+    },
+  },
   daisyui: {
     styled: true,
     themes: ["light", darkTheme],
