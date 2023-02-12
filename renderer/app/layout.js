@@ -1,6 +1,7 @@
 "use client";
 
 import "./layout.module.scss";
+import library from "../../library.json";
 
 import { useEffect } from "react";
 import Link from "next/link";
@@ -49,7 +50,7 @@ export default function Layout({ children }) {
             </div>
           </header>
           <main className="main grid h-full p-10">{children}</main>
-          <Player />
+          <Player library={library} />
         </div>
       </body>
     </html>

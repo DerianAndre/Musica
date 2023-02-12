@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
-const mm = require("music-metadata");
+const MM = require("music-metadata");
+const { getCoverFile } = require("./index");
 
 const supportedExtensions = [
   "aac",
@@ -17,34 +18,34 @@ const supportedExtensions = [
 
 const jsonLibrary = {};
 
-function formatTrackNo(num, targetLength = 2) {
+const formatTrackNo = (num, targetLength = 2) => {
   return Number(num).toString().padStart(targetLength, "0");
-}
+};
 
 const walk = async (root) => {
   const files = await fs.promises.readdir(root);
   for (const file of files) {
     const filePath = path.join(root, file);
     const stat = await fs.promises.stat(filePath);
+
     if (stat.isDirectory()) {
       await walk(filePath);
     } else {
       const fileExtension = filePath.split(".").slice(-1)[0];
       if (!supportedExtensions.includes(fileExtension)) continue;
       try {
-        const { common: metadata } = await mm.parseFile(filePath);
+        const { common: metadata } = await MM.parseFile(filePath);
+        const cover = MM.selectCover(metadata.picture);
         const {
           album = "Unknown Album",
           artist = "Unknown Artist",
           title = "Unknown Title",
           track = "??",
           genre = "Unknown Genre",
-          year = "????",
-          date = "????",
+          year = null,
+          date = null,
         } = metadata;
-        const trackNo = track
-          ? track.no
-          : Object.keys(jsonLibrary[album] || []).length;
+        const trackNo = track.no ? track.no : date;
         const musicFileObject = {
           track: formatTrackNo(trackNo),
           artist: artist,
@@ -54,6 +55,8 @@ const walk = async (root) => {
           extension: fileExtension,
           path: filePath,
         };
+
+        const coverPath = getCoverFile({ artist, album, year, cover });
 
         if (!jsonLibrary[artist]) {
           jsonLibrary[artist] = { albums: [] };
@@ -70,16 +73,36 @@ const walk = async (root) => {
         if (albumIndex === -1) {
           jsonLibrary[artist].albums.push({
             title: album,
-            year,
+            year: year || date || "????",
+            cover: coverPath,
             tracks: [musicFileObject],
           });
         } else {
           jsonLibrary[artist].albums[albumIndex].tracks.push(musicFileObject);
         }
+
+        saveCover(coverPath, cover);
       } catch (err) {
         console.error(err);
+      } finally {
       }
     }
+  }
+};
+
+const saveCover = (coverPath, cover) => {
+  const cachePath = "./cache";
+  const filePath = cachePath + "/" + coverPath;
+
+  if (!fs.existsSync(cachePath)) {
+    fs.mkdirSync(cachePath);
+  }
+
+  if (!fs.existsSync(filePath)) {
+    console.log(`[i] Library parser: Saving cover in cache ${filePath}`);
+    fs.promises.writeFile(filePath, cover.data);
+  } else {
+    // console.log(`[i] Library parser: Cover already exists`);
   }
 };
 
@@ -123,13 +146,10 @@ const main = async (dir, libraryFile) => {
   );
 
   if (Object.keys(jsonLibrarySorted).length > 0) {
-    fs.promises.writeFile(
-      libraryFile,
-      JSON.stringify(jsonLibrarySorted, null, 2)
-    );
+    fs.promises.writeFile(libraryFile, JSON.stringify(jsonLibrarySorted));
     console.log(`[i] Library parser: Saved to ${libraryFile}`);
   }
   console.timeEnd(`[i] Library parser: Total time`);
 };
 
-main("D:\\Música\\", "library.json");
+main("D:\\Música", "library.json");

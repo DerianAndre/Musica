@@ -7,10 +7,13 @@ import {
   MdVolumeUp,
   MdHome,
   MdSettings,
+  MdShuffleOn,
   MdShuffle,
   MdDarkMode,
   MdLightMode,
   MdLoop,
+  MdRepeat,
+  MdRepeatOn,
 } from "react-icons/md";
 
 export {
@@ -20,9 +23,13 @@ export {
   MdSkipPrevious as SkipPrevious,
   MdVolumeOff as VolumeOff,
   MdVolumeUp as VolumeUp,
-  MdLoop as Loop,
+  MdRepeat as Repeat,
+  MdRepeat as RepeatOff,
+  MdRepeatOn as RepeatOn,
   MdHome as Home,
   MdSettings as Settings,
+  MdShuffleOn as ShuffleOn,
+  MdShuffle as ShuffleOff,
   MdShuffle as Shuffle,
   MdDarkMode as DarkMode,
   MdLightMode as LightMode,

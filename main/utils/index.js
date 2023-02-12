@@ -1,5 +1,21 @@
 const MM = require("music-metadata");
 
+const getCoverFile = ({ artist, album, year, cover }) => {
+  const ext = cover.format.replace("image/", "");
+  return `${slugifyFile(artist)}_${year}_${slugifyFile(album)}.${ext}`;
+};
+
+const slugifyFile = (string) => {
+  return String(string)
+    .toString()
+    .toLowerCase()
+    .replace(/\s+/g, "-") // Replace spaces with -
+    .replace(/[^\w\-]+/g, "") // Remove all non-word chars
+    .replace(/\-\-+/g, "-") // Replace multiple - with single -
+    .replace(/^-+/, "") // Trim - from start of text
+    .replace(/-+$/, ""); // Trim - from end of text
+};
+
 const readFile = async (file, event) => {
   try {
     const result = await readMetadata(file);
@@ -21,4 +37,4 @@ const readMetadata = async (file) => {
   }
 };
 
-module.exports = { readFile, readMetadata };
+module.exports = { getCoverFile, slugifyFile, readFile, readMetadata };

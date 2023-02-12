@@ -12,7 +12,8 @@
     "start": "electron .",
     "build": "next build renderer && next export renderer",
     "build:app": "npm run build && electron-builder --dir",
-    "build:prod": "npm run build && electron-builder"
+    "build:prod": "npm run build && electron-builder",
+    "parse": "node main/utils/parser.js"
   },
   "build": {
     "asar": true,

@@ -9,8 +9,8 @@ import { List, Loader } from "../components";
 import { handlePlayRandom } from "../utils/random";
 
 const Home = () => {
-  const [status, setStatus] = useState("loading");
-  const [library, setLibrary] = useState({});
+  const [status, setStatus] = useState("ready");
+  //const [library, setLibrary] = useState({});
 
   const handlePlay = (file) => {
     window.electron.player.play(file);
@@ -41,7 +41,9 @@ const Home = () => {
       </div>
 
       {status === "loading" && <Loader />}
-      {status === "ready" && <List library={library} handlePlay={handlePlay} />}
+      {status === "ready" && (
+        <List library={library} handlePlay={handlePlay} show={false} />
+      )}
     </div>
   );
 };

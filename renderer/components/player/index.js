@@ -4,10 +4,12 @@ import "./styles.module.scss";
 
 import React, { useState, useEffect, useRef } from "react";
 import {
-  Loop,
+  RepeatOn,
+  RepeatOff,
   Pause,
   Play,
-  Shuffle,
+  ShuffleOn,
+  ShuffleOff,
   SkipNext,
   SkipPrevious,
   VolumeOff,
@@ -16,6 +18,7 @@ import {
 
 import { Howl, Howler } from "howler";
 import { useInterval } from "usehooks-ts";
+import { handlePlayRandom } from "../../utils/random";
 
 const PLAYER_STATES = {
   PLAY: "PLAY",
@@ -23,7 +26,7 @@ const PLAYER_STATES = {
   STOP: "STOP",
 };
 
-const Player = () => {
+const Player = ({ library }) => {
   const sliderTime = useRef(null);
   const sliderVolume = useRef(null);
   const howl = useRef(null);
@@ -31,12 +34,13 @@ const Player = () => {
 
   const [delay, setDelay] = useState(null);
 
-  const [loop, setLoop] = useState(false);
+  const shuffle = useRef(false);
+  const repeat = useRef(false);
+
   const [seek, setSeek] = useState(0);
-  const [volume, setVolume] = useState(100);
+  const [volume, setVolume] = useState(1);
   const [state, setState] = useState(PLAYER_STATES.STOP);
   const [isMuted, setIsMuted] = useState(false);
-  const [path, setPath] = useState("C:\\");
   const [metadata, setMetadata] = useState(false);
 
   useInterval(() => {
@@ -84,6 +88,10 @@ const Player = () => {
     }
   };
 
+  const handlePlay = (file) => {
+    window.electron.player.play(file);
+  };
+
   const handlePlayPause = () => {
     if (!metadata || !player) return;
 
@@ -102,16 +110,23 @@ const Player = () => {
   // TODO
   const handlePlayNext = () => {};
 
-  // TODO
-  const handleLoop = () => {
-    if (!metadata || !howl.current) return;
-
-    if (!loop) {
-      setLoop(true);
-      player.loop(true);
+  // TODO Fix
+  const handleShuffle = () => {
+    if (shuffle.current) {
+      shuffle.current = false;
     } else {
-      setVolume(100);
-      player.mute(false);
+      shuffle.current = true;
+    }
+  };
+
+  // TODO Fix
+  const handleRepeat = () => {
+    if (repeat.current) {
+      repeat.current = false;
+      player?.loop(false);
+    } else {
+      repeat.current = true;
+      player?.loop(true);
     }
   };
 
@@ -160,6 +175,7 @@ const Player = () => {
       howl.current = new Howl({
         autoplay: false,
         src: data?.file || null,
+        volume,
         onplay: () => {
           setState(PLAYER_STATES.PLAY);
           setDelay(100); // Starts the useInterval to 100ms
@@ -170,6 +186,9 @@ const Player = () => {
         },
         onend: () => {
           setState(PLAYER_STATES.STOP);
+          if (shuffle.current) {
+            handlePlayRandom(library, handlePlay);
+          }
         },
         onstop: () => {
           setState(PLAYER_STATES.STOP);
@@ -187,7 +206,7 @@ const Player = () => {
   }, []);
 
   return (
-    <div className="fixed player w-full flex flex-col gap-2 p-3 backdrop-blur-sm bg-black/30 bottom-0 left-0">
+    <div className="fixed player w-full flex flex-col gap-2 p-3 backdrop-blur-md bg-black/50 bottom-0 left-0">
       <div className="track flex gap-6 mb-2">
         <div className="flex flex-none items-center justify-start">
           {timeFormat(seek)}
@@ -233,9 +252,12 @@ const Player = () => {
           )}
         </div>
 
-        <div className="main-controls flex flex-1 items-center justify-center gap-3">
-          <button className="btn-shuffle btn btn-ghost btn-circle btn-sm text-xl">
-            <Shuffle />
+        <div className="main-controls flex flex-1 items-center justify-center gap-2">
+          <button
+            className="btn-shuffle btn btn-ghost btn-circle btn-sm text-xl"
+            onClick={handleShuffle}
+          >
+            {shuffle.current ? <ShuffleOn /> : <ShuffleOff />}
           </button>
           <button className="btn-prev btn btn-ghost btn-circle btn-sm text-3xl">
             <SkipPrevious />
@@ -249,23 +271,31 @@ const Player = () => {
           <button className="btn-next btn btn-ghost btn-circle btn-sm text-3xl">
             <SkipNext />
           </button>
-          <button className="btn-loop btn btn-ghost btn-circle btn-sm text-xl">
-            <Loop />
+          <button
+            className="btn-loop btn btn-ghost btn-circle btn-sm text-xl"
+            onClick={handleRepeat}
+          >
+            {repeat.current ? <RepeatOn /> : <RepeatOff />}
           </button>
         </div>
 
-        <div className="secondary-controls flex flex-1 items-center justify-end gap-3">
+        <div className="secondary-controls flex flex-1 items-center justify-end gap-2 group">
           {metadata && (
-            <input
-              ref={sliderVolume}
-              type="range"
-              min="0"
-              max="1"
-              step="0.01"
-              defaultValue={1}
-              className="range range-xs min-w-[100px] max-w-[150px]"
-              onChange={handleSliderVolume}
-            />
+            <div className="slider-volume flex items-center opacity-0 hover:opacity-100 gap-2 transition ease-in">
+              <div className="text-sm opacity-50">
+                {(player.volume() * 100).toFixed(0)}%
+              </div>
+              <input
+                ref={sliderVolume}
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                defaultValue={1}
+                className="range range-xs min-w-[75px] max-w-[125px]"
+                onChange={handleSliderVolume}
+              />
+            </div>
           )}
 
           <button

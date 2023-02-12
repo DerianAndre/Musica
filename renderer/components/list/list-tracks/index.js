@@ -7,15 +7,23 @@ const ListTracks = ({ track, handlePlay }) => {
       key={track.path}
     >
       <div className="flex-initial">
-        <button
-          className="btn btn-circle btn-ghost btn-xs text-xl opacity-0 group-hover:opacity-100"
-          onClick={() => handlePlay(track.path)}
-        >
-          <MdPlayArrow />
-        </button>
+        <div className="relative">
+          <span className="opacity-50 group-hover:opacity-0">
+            {track.track}
+          </span>
+          <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
+            <button
+              className="btn btn-circle btn-ghost btn-xs text-xl opacity-0 group-hover:opacity-100"
+              onClick={() => handlePlay(track.path)}
+            >
+              <MdPlayArrow />
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="flex-initial opacity-50">{track.track}</div>
-      <div className="flex-1">{track.title}</div>
+      <div className="flex-1" onClick={() => handlePlay(track.path)}>
+        {track.title}
+      </div>
     </div>
   );
 };
