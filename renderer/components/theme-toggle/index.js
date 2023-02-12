@@ -1,38 +1,25 @@
 import React, { useEffect, useState } from "react";
+import { useLocalStorage } from "usehooks-ts";
 import { DarkMode, LightMode } from "../icons";
 
 const ToggleTheme = () => {
-  const [theme, setTheme] = useState("");
+  const [theme, setTheme] = useLocalStorage("theme", "light");
 
   const toggleTheme = () => {
     const newTheme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    document.querySelector("html").setAttribute("data-theme", newTheme);
   };
 
   useEffect(() => {
-    let newTheme = "dark";
-    if (!localStorage.getItem("theme")) {
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        newTheme = "dark";
-      } else {
-        newTheme = "light";
-      }
-    } else {
-      newTheme = localStorage.getItem("theme");
-    }
-    setTheme(newTheme);
-    localStorage?.setItem("theme", newTheme);
-    document.querySelector("html").setAttribute("data-theme", newTheme);
-  }, []);
+    document.querySelector("html").setAttribute("data-theme", theme);
+  }, [theme]);
 
   return (
     <button
       className="btn btn-ghost btn-circle btn-md text-xl swap swap-rotate"
       onClick={toggleTheme}
     >
-      {theme === "light" ? <DarkMode /> : <LightMode />}
+      {theme === "dark" ? <DarkMode /> : <LightMode />}
     </button>
   );
 };

@@ -12,6 +12,7 @@ const List = ({ library, handlePlay, show = true }) => {
             <div className="flex gap-3 py-3" key={album.title}>
               <div className="album-cover flex-initial">
                 <img
+                  className="block"
                   width="100px"
                   height="100px"
                   src={
@@ -19,6 +20,7 @@ const List = ({ library, handlePlay, show = true }) => {
                       ? `D:\\Websites\\GitHub\\Derian Andre\\Musica\\cache\\${album.cover}`
                       : ""
                   }
+                  loading="lazy"
                 />
               </div>
               <div className="info flex-auto">

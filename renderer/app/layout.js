@@ -32,7 +32,7 @@ export default function Layout({ children }) {
           <header
             className={`header flex items-center justify-between px-10 py-5 pb-0 w-full`}
           >
-            <h1 className="text-3xl font-bold">Musica</h1>
+            <h1 className="text-4xl font-medium">Musica</h1>
             <div className="flex items-center gap-1">
               <Link
                 className="btn btn-ghost btn-circle btn-md text-xl"

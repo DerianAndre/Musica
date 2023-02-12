@@ -47,17 +47,13 @@ app.on("ready", async () => {
 // Quit the app once all windows are closed
 app.on("window-all-closed", app.quit);
 
-// listen the channel `message` and resend the received message to the renderer process
-ipcMain.on("message", (event, message) => {
-  event.sender.send("message", message);
-});
-
 // Dialog
 ipcMain.on("library-select", async (event) => {
   const folderPath = dialog.showOpenDialogSync({
     properties: ["openDirectory"],
   });
-  console.log("[i] Electron: Event <library-select>'", folderPath[0]);
+
+  console.log(`[i] Electron: Event <library-select> "${folderPath[0]}"`);
 
   Parser.parseLibrary(folderPath[0], "library.json", (done, error = null) => {
     if (done) {
@@ -69,14 +65,14 @@ ipcMain.on("library-select", async (event) => {
     } else {
       event.sender.send("library-parsed", {
         status: "error",
-        path: false,
-        error: "No folder selected",
+        path: folderPath[0],
+        error,
       });
     }
   });
 });
 
 ipcMain.on("player-play-file", async (event, payload) => {
-  console.log("[i] Electron: player-play-file", payload);
+  console.log(`[i] Electron: Event <player-play-file> "${payload}"`);
   await Utils.readFile(payload, event);
 });

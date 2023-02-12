@@ -1,10 +1,11 @@
 # Musica
+A minimal hackable music player made with electron.
 
-Electron + Next.js + Tailwind
+```
+Electron + React + Next + Tailwind + Daisyui
+```
 
 ## How to use
-
-
 ```bash
 npm run start
 ```
