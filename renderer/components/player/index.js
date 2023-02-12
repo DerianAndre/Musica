@@ -37,6 +37,7 @@ const Player = ({ library }) => {
   const shuffle = useRef(false);
   const repeat = useRef(false);
 
+  const [trigger, setTrigger] = useState(0); // * Use to force rerender
   const [seek, setSeek] = useState(0);
   const [volume, setVolume] = useState(1);
   const [state, setState] = useState(PLAYER_STATES.STOP);
@@ -81,10 +82,10 @@ const Player = ({ library }) => {
 
     if (!isMuted) {
       setIsMuted(true);
-      player.mute(true);
+      player?.mute(true);
     } else {
       setIsMuted(false);
-      player.mute(false);
+      player?.mute(false);
     }
   };
 
@@ -110,8 +111,8 @@ const Player = ({ library }) => {
   // TODO
   const handlePlayNext = () => {};
 
-  // TODO Fix
   const handleShuffle = () => {
+    setTrigger((old) => old + 1);
     if (shuffle.current) {
       shuffle.current = false;
     } else {
@@ -119,8 +120,8 @@ const Player = ({ library }) => {
     }
   };
 
-  // TODO Fix
   const handleRepeat = () => {
+    setTrigger((old) => old + 1);
     if (repeat.current) {
       repeat.current = false;
       player?.loop(false);
@@ -176,6 +177,7 @@ const Player = ({ library }) => {
         autoplay: false,
         src: data?.file || null,
         volume,
+        loop: repeat.current,
         onplay: () => {
           setState(PLAYER_STATES.PLAY);
           setDelay(100); // Starts the useInterval to 100ms
