@@ -1,26 +1,47 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useLocalStorage } from "usehooks-ts";
+
+import Loader from "../../components/loader";
 
 const Settings = () => {
-  const [path, setPath] = useState("C:\\");
+  const [libraryPath, setLibraryPath] = useLocalStorage("libraryPath", null);
+  const [status, setStatus] = useState("ready");
 
   const handleSelectFolder = () => {
-    window.electron.dialog.open();
+    window.electron.library.select();
+    setStatus("loading");
   };
 
   useEffect(() => {
-    window.electron.dialog.on((event, data) => {
-      if (data.path) {
-        setPath(data.path);
+    window.electron.library.parsed((event, data) => {
+      if (data.status === "success") {
+        setLibraryPath(data.path);
+        setStatus("ready");
+      } else {
+        setStatus("error");
       }
     });
   }, []);
 
   return (
-    <button className="btn" onClick={handleSelectFolder}>
-      Select Folder
-    </button>
+    <div className="flex flex-col">
+      {status === "ready" && (
+        <button className="btn btn-sm" onClick={handleSelectFolder}>
+          Select Folder
+        </button>
+      )}
+
+      {libraryPath && (
+        <div>
+          <p className="font-bold">Library path:</p>
+          <p>{libraryPath}</p>
+        </div>
+      )}
+
+      {status === "loading" && <Loader />}
+    </div>
   );
 };
 

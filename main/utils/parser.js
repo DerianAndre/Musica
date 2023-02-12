@@ -22,14 +22,14 @@ const formatTrackNo = (num, targetLength = 2) => {
   return Number(num).toString().padStart(targetLength, "0");
 };
 
-const walk = async (root) => {
+const parseFolder = async (root) => {
   const files = await fs.promises.readdir(root);
   for (const file of files) {
     const filePath = path.join(root, file);
     const stat = await fs.promises.stat(filePath);
 
     if (stat.isDirectory()) {
-      await walk(filePath);
+      await parseFolder(filePath);
     } else {
       const fileExtension = filePath.split(".").slice(-1)[0];
       if (!supportedExtensions.includes(fileExtension)) continue;
@@ -106,9 +106,10 @@ const saveCover = (coverPath, cover) => {
   }
 };
 
-const main = async (dir, libraryFile) => {
+const parseLibrary = async (dir, libraryFile, callback) => {
   console.log(`[i] Library parser: Init...`);
   console.time(`[i] Library parser: Total time`);
+
   try {
     const files = await fs.promises.readdir(dir);
     const promises = files.map(async (file) => {
@@ -117,13 +118,14 @@ const main = async (dir, libraryFile) => {
       if (stat.isDirectory()) {
         return fs.promises
           .readdir(filepath)
-          .then((files) => walk(filepath, files));
+          .then((files) => parseFolder(filepath, files));
       }
       return await Promise.resolve();
     });
     await Promise.all(promises);
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
+    callback(false, error);
   }
 
   if (Object.keys(jsonLibrary).length === 0) {
@@ -145,11 +147,19 @@ const main = async (dir, libraryFile) => {
     } item/s...`
   );
 
-  if (Object.keys(jsonLibrarySorted).length > 0) {
-    fs.promises.writeFile(libraryFile, JSON.stringify(jsonLibrarySorted));
-    console.log(`[i] Library parser: Saved to ${libraryFile}`);
+  try {
+    if (Object.keys(jsonLibrarySorted).length > 0) {
+      fs.promises.writeFile(libraryFile, JSON.stringify(jsonLibrarySorted));
+      console.log(`[i] Library parser: Saved to ${libraryFile}`);
+      callback(true, null);
+    }
+  } catch (error) {
+    callback(false, error);
+  } finally {
+    console.timeEnd(`[i] Library parser: Total time`);
   }
-  console.timeEnd(`[i] Library parser: Total time`);
 };
 
-main("D:\\Música", "library.json");
+module.exports = {
+  parseLibrary,
+};

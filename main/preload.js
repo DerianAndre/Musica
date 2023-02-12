@@ -1,9 +1,9 @@
 const { ipcRenderer, contextBridge } = require("electron");
 
 contextBridge.exposeInMainWorld("electron", {
-  dialog: {
-    open: (payload) => ipcRenderer.send("select-folder-send", payload),
-    on: (handler) => ipcRenderer.on("select-folder-on", handler),
+  library: {
+    select: (payload) => ipcRenderer.send("library-select", payload),
+    parsed: (handler) => ipcRenderer.on("library-parsed", handler),
   },
   player: {
     play: (payload) => ipcRenderer.send("player-play-file", payload),

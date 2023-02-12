@@ -10,24 +10,10 @@ import { handlePlayRandom } from "../utils/random";
 
 const Home = () => {
   const [status, setStatus] = useState("ready");
-  //const [library, setLibrary] = useState({});
 
   const handlePlay = (file) => {
     window.electron.player.play(file);
   };
-
-  // const load = async () => {
-  //   const importLibrary = await import("../../library.json", {
-  //     assert: { type: "json" },
-  //   });
-  //   setLibrary(importLibrary.default);
-  //   setStatus("ready");
-  // };
-
-  // useEffect(() => {
-  //   if (Object.keys(library).length > 0) return;
-  //   load();
-  // }, []);
 
   return (
     <div className="flex flex-col">
@@ -42,7 +28,7 @@ const Home = () => {
 
       {status === "loading" && <Loader />}
       {status === "ready" && (
-        <List library={library} handlePlay={handlePlay} show={false} />
+        <List library={library} handlePlay={handlePlay} show={true} />
       )}
     </div>
   );

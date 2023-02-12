@@ -1,4 +1,5 @@
 const Utils = require("./utils");
+const Parser = require("./utils/parser");
 
 // Native
 const fs = require("fs");
@@ -52,21 +53,27 @@ ipcMain.on("message", (event, message) => {
 });
 
 // Dialog
-ipcMain.on("select-folder-send", async (event) => {
-  const filePath = dialog.showOpenDialogSync({ properties: ["openDirectory"] });
-  const data = await Utils.generateMusicData(filePath[0]);
+ipcMain.on("library-select", async (event) => {
+  const folderPath = dialog.showOpenDialogSync({
+    properties: ["openDirectory"],
+  });
+  console.log("[i] Electron: Event <library-select>'", folderPath[0]);
 
-  console.log("[i] Electron: select-folder-send", filePath[0]);
-  console.log("data", data);
-
-  if (filePath) {
-    event.sender.send("select-folder-on", { path: filePath[0], error: null });
-  } else {
-    event.sender.send("select-folder-on", {
-      path: false,
-      error: "No folder selected",
-    });
-  }
+  Parser.parseLibrary(folderPath[0], "library.json", (done, error = null) => {
+    if (done) {
+      event.sender.send("library-parsed", {
+        status: "success",
+        path: folderPath[0],
+        error: null,
+      });
+    } else {
+      event.sender.send("library-parsed", {
+        status: "error",
+        path: false,
+        error: "No folder selected",
+      });
+    }
+  });
 });
 
 ipcMain.on("player-play-file", async (event, payload) => {
