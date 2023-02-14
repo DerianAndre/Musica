@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const MM = require("music-metadata");
-const { getCoverFile } = require("./index");
+const { getCoverFile, slugifyFile } = require("./index");
 
 const supportedExtensions = [
   "aac",
@@ -106,7 +106,7 @@ const saveCover = (coverPath, cover) => {
   }
 };
 
-const parseLibrary = async (dir, libraryFile, callback) => {
+const parseLibrary = async (dir, libraryPath, libraryFile, callback) => {
   console.log(`[i] Library parser: Init...`);
   console.time(`[i] Library parser: Total time`);
 
@@ -149,8 +149,44 @@ const parseLibrary = async (dir, libraryFile, callback) => {
 
   try {
     if (Object.keys(jsonLibrarySorted).length > 0) {
-      fs.promises.writeFile(libraryFile, JSON.stringify(jsonLibrarySorted));
-      console.log(`[i] Library parser: Saved to ${libraryFile}`);
+      // Library
+      const libraryFullPath = `${libraryPath}/${libraryFile}`;
+      fs.promises.writeFile(libraryFullPath, JSON.stringify(jsonLibrarySorted));
+      console.log(`[i] Library parser: Saved to <${libraryFullPath}>`);
+
+      // Chunks
+      console.log(
+        `[i] Library parser: Creating chunks <${libraryPath}/chunks> ...`
+      );
+      const chunksList = [];
+      Object.keys(jsonLibrarySorted).forEach((item) => {
+        const chunkPath = `${libraryPath}/chunks/`;
+        const chunkFile = `${slugifyFile(item)}.json`;
+        const chunkFullPath = chunkPath + chunkFile;
+
+        chunksList.push({
+          artist: item,
+          file: slugifyFile(item),
+          path: chunkFullPath,
+        });
+
+        fs.promises.writeFile(
+          chunkFullPath,
+          JSON.stringify(jsonLibrarySorted[item], null, 2)
+        );
+      });
+      console.log(`[i] Library parser: Saved chunks`);
+
+      // Chunk list
+      console.log(
+        `[i] Library parser: Creating chunks list <${libraryPath}/list.json> ...`
+      );
+      fs.promises.writeFile(
+        `${libraryPath}/list.json`,
+        JSON.stringify(chunksList, null, 2)
+      );
+      console.log(`[i] Library parser: Saved chunks list.`);
+
       callback(true, null);
     }
   } catch (error) {

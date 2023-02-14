@@ -39,5 +39,6 @@ next-env.d.ts
 
 # app
 /cache/
-./cache/
-library.json
+/.cache/
+/library/*.json
+/library/*/*.*

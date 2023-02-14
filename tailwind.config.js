@@ -23,7 +23,12 @@ module.exports = {
     "./renderer/components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        "3xl": "1700px",
+        "4xl": "1850px",
+      },
+    },
   },
   plugins: [require("@tailwindcss/typography"), require("daisyui")],
   variants: {

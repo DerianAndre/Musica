@@ -1,7 +1,7 @@
 "use client";
 
 import "./layout.module.scss";
-import library from "../../library.json";
+//import library from "../../library/index.json";
 
 import { useEffect } from "react";
 import Link from "next/link";
@@ -30,7 +30,7 @@ export default function Layout({ children }) {
       <body>
         <div className="flex flex-col w-full h-screen relative">
           <header
-            className={`header flex items-center justify-between px-10 py-5 pb-0 w-full`}
+            className={`header flex items-center justify-between px-10 pt-3 pb-1 w-full`}
           >
             <h1 className="text-4xl font-medium">Musica</h1>
             <div className="flex items-center gap-1">
@@ -49,8 +49,10 @@ export default function Layout({ children }) {
               <ToggleTheme />
             </div>
           </header>
-          <main className="main grid h-full p-10">{children}</main>
-          <Player library={library} />
+          <main className="main grid h-full overflow-y-scroll relative px-10">
+            <div className="wrapper mb-[250px]">{children}</div>
+          </main>
+          <Player library={{}} />
         </div>
       </body>
     </html>

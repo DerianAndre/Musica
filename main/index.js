@@ -55,21 +55,26 @@ ipcMain.on("library-select", async (event) => {
 
   console.log(`[i] Electron: Event <library-select> "${folderPath[0]}"`);
 
-  Parser.parseLibrary(folderPath[0], "library.json", (done, error = null) => {
-    if (done) {
-      event.sender.send("library-parsed", {
-        status: "success",
-        path: folderPath[0],
-        error: null,
-      });
-    } else {
-      event.sender.send("library-parsed", {
-        status: "error",
-        path: folderPath[0],
-        error,
-      });
+  Parser.parseLibrary(
+    folderPath[0],
+    "library",
+    "index.json",
+    (done, error = null) => {
+      if (done) {
+        event.sender.send("library-parsed", {
+          status: "success",
+          path: folderPath[0],
+          error: null,
+        });
+      } else {
+        event.sender.send("library-parsed", {
+          status: "error",
+          path: folderPath[0],
+          error,
+        });
+      }
     }
-  });
+  );
 });
 
 ipcMain.on("player-play-file", async (event, payload) => {

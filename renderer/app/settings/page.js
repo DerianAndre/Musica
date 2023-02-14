@@ -41,6 +41,7 @@ const Settings = () => {
             <button
               className={`btn btn-sm ${status}`}
               onClick={handleSelectFolder}
+              disabled={status === "loading"}
             >
               Select library folder
             </button>
