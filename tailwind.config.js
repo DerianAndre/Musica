@@ -23,6 +23,10 @@ module.exports = {
     "./renderer/components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    fontFamily: {
+      headings: ['"Poppins"', ...defaultTheme.fontFamily.sans],
+      sans: ['"Open Sans"', ...defaultTheme.fontFamily.sans],
+    },
     extend: {
       screens: {
         "3xl": "1700px",
@@ -45,11 +49,5 @@ module.exports = {
     rtl: false,
     prefix: "",
     darkTheme: "dark",
-    theme: {
-      fontFamily: {
-        headings: ["Montserrat", ...defaultTheme.fontFamily.sans],
-        body: ['"Open Sans"', ...defaultTheme.fontFamily.sans],
-      },
-    },
   },
 };

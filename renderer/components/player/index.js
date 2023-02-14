@@ -6,8 +6,7 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   RepeatOn,
   RepeatOff,
-  Pause,
-  Play,
+  PlayPause,
   ShuffleOn,
   ShuffleOff,
   SkipNext,
@@ -18,14 +17,10 @@ import {
 
 import { Howl } from "howler";
 import { useInterval, useLocalStorage } from "usehooks-ts";
+import PlayerInfo from "./player-info";
+import PlayerSeeker from "./player-seeker";
+import PLAYER_STATES from "./constants";
 import { handlePlayRandom } from "../../utils/random";
-
-const PLAYER_STATES = {
-  PLAY: "PLAY",
-  PAUSE: "PAUSE",
-  STOP: "STOP",
-  END: "END",
-};
 
 const Player = ({ library }) => {
   const sliderTime = useRef(null);
@@ -45,19 +40,10 @@ const Player = ({ library }) => {
   const [isMuted, setIsMuted] = useState(false);
   const [metadata, setMetadata] = useState(false);
 
-  const playerArtImage = (object) => {
-    if (object?.data) {
-      return URL.createObjectURL(
-        new Blob([object?.data], { type: object?.data?.format })
-      );
-    } else {
-      return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
-    }
-  };
-
   const playerReset = () => {
     if (!howl.current || state === PLAYER_STATES.PLAY) return;
     howl.current.stop();
+    howl.current = null;
     setDelay(null);
     setState(PLAYER_STATES.STOP);
     setSeek(0);
@@ -85,7 +71,7 @@ const Player = ({ library }) => {
   const sliderValue = seek > 0 ? (seek / player.duration()) * 100 : 0;
 
   const handleSliderTime = (event) => {
-    if (!player || state !== PLAYER_STATES.PLAY) return;
+    if (!player) return;
 
     const value = event.target.value;
     const currentSeek = seekMap(value);
@@ -95,12 +81,10 @@ const Player = ({ library }) => {
   };
 
   const handleSliderVolume = (event) => {
-    if (!player) return;
-
     const value = event.target.value;
 
     setVolume(value);
-    player.volume(value);
+    if (player) player.volume(value);
   };
 
   const handleMute = () => {
@@ -168,9 +152,8 @@ const Player = ({ library }) => {
 
   useEffect(() => {
     window.electron.player.metadata((event, data) => {
-      setMetadata(data);
-
       playerReset();
+      setMetadata(data);
 
       howl.current = new Howl({
         autoplay: false,
@@ -217,51 +200,17 @@ const Player = ({ library }) => {
 
   return (
     <div className="player fixed bottom-0 left-0 right-0">
-      <div className="px-10 py-5 w-full flex flex-col gap-2 backdrop-blur-md bg-base-300/50 dark:bg-base-300/75">
-        <div className="track flex gap-6 mb-2">
-          <div className="flex flex-none items-center justify-start">
-            <span className="text-xs">{timeCurrent}</span>
-          </div>
-          <div className="flex flex-1 items-center justify-center">
-            <input
-              ref={sliderTime}
-              type="range"
-              value={sliderValue}
-              min={0}
-              max={100}
-              step={0.05}
-              className="range range-xs w-full"
-              onChange={handleSliderTime}
-            />
-          </div>
-          <div className="flex flex-none items-center justify-end">
-            <span className="text-xs">{timeDuration}</span>
-          </div>
-        </div>
+      <div className="px-10 py-5 w-full flex flex-col gap-2 backdrop-blur-xl bg-gradient-to-t from-base-300 via-bg-base-300/[0.25] to-bg-base-300/[0.1] dark:via-bg-base-300/[0.50] dark:to-bg-base-300/[0.15] drop-shadow-[0 -2rem 2rem rgba(0,0,0,0.5)]">
+        <PlayerSeeker
+          sliderTime={sliderTime}
+          sliderValue={sliderValue}
+          timeCurrent={timeCurrent}
+          timeDuration={timeDuration}
+          handleSliderTime={handleSliderTime}
+        />
 
         <div className="player flex w-full gap-5">
-          <div className="track-info flex flex-1 items-center justify-start gap-3">
-            <figure className="art select-none swap">
-              <img
-                className={`d-block rounded-sm max-w-none ${
-                  state === PLAYER_STATES.PLAY && "shadow-inner"
-                }`}
-                src={playerArtImage(metadata?.common?.picture?.[0])}
-                width="75px"
-                height="75px"
-              />
-            </figure>
-            {metadata?.common?.title && (
-              <div className="info font-display">
-                <h2 className="font-bold text-xl">{metadata?.common?.title}</h2>
-                <h3 className="text-sm text-clip text-ellipsis opacity-60">
-                  <span>{metadata?.common?.artist}</span>
-                  <span> • </span>
-                  <span>{metadata?.common?.album}</span>
-                </h3>
-              </div>
-            )}
-          </div>
+          <PlayerInfo state={state} metadata={metadata} />
 
           <div className="main-controls flex flex-1 items-center justify-center gap-2">
             <button
@@ -274,10 +223,10 @@ const Player = ({ library }) => {
               <SkipPrevious />
             </button>
             <button
-              className="btn-play btn btn-circle btn-md text-4xl btn-outline border-[3px]"
+              className="btn-play btn btn-circle btn-md text-4xl border-0 shadow-lg"
               onClick={handlePlayPause}
             >
-              {state === PLAYER_STATES.PLAY ? <Pause /> : <Play />}
+              <PlayPause state={state} />
             </button>
             <button className="btn-next btn btn-ghost btn-circle btn-sm text-3xl">
               <SkipNext />

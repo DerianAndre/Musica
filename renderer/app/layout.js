@@ -1,15 +1,13 @@
 "use client";
 
 import "./layout.module.scss";
-//import library from "../../library/index.json";
-
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import Link from "next/link";
-import Player from "../components/player";
 import ToggleTheme from "../components/theme-toggle";
 import { Home, Settings } from "../components/icons";
 
 export default function Layout({ children }) {
+  const Player = lazy(() => import("../components/player"));
   useEffect(() => {
     if (
       localStorage.getItem("color-theme") === "dark" ||
@@ -32,7 +30,7 @@ export default function Layout({ children }) {
           <header
             className={`header flex items-center justify-between px-10 pt-3 pb-1 w-full`}
           >
-            <h1 className="text-4xl font-medium">Musica</h1>
+            <h1 className="text-3xl font-headings font-semibold">Musica</h1>
             <div className="flex items-center gap-1">
               <Link
                 className="btn btn-ghost btn-circle btn-md text-xl"
@@ -52,7 +50,9 @@ export default function Layout({ children }) {
           <main className="main grid h-full overflow-y-scroll relative px-10">
             <div className="wrapper flex-1 mb-[250px]">{children}</div>
           </main>
-          <Player library={{}} />
+          <Suspense>
+            <Player />
+          </Suspense>
         </div>
       </body>
     </html>

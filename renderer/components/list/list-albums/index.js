@@ -8,7 +8,7 @@ const ListAlbums = ({ library, handlePlay }) => {
 
   return (
     <div className="list-albums">
-      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 2xl:grid-cols-8 3xl:grid-cols-10 4xl:grid-cols-12 gap-10">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 3xl:grid-cols-8 4xl:grid-cols-10 gap-10">
         {objectKeys?.map((artist) => (
           <React.Fragment key={artist}>
             {library[artist]?.albums?.map((album) => (

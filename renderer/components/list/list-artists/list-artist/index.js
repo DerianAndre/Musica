@@ -8,7 +8,9 @@ const ListArtist = ({ artist, data }) => {
           album={data?.albums ? data?.albums[0] : null}
           rounded={true}
         />
-        <h2 className="text-center mt-2">{artist}</h2>
+        <h2 className="text-center font-headings font-semibold mt-2">
+          {artist}
+        </h2>
       </div>
     </div>
   );

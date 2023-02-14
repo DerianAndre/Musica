@@ -106,70 +106,76 @@ const Home = () => {
 
   return (
     <div className="flex min-h-full flex-col">
-      <div className="sticky top-0 left-0 right-0 bg-base-100 mb-5 z-[9999]">
-        <div className="flex w-full items-center justify-between">
-          <div className="tabs">
-            <button
-              className={`tab tab-lg tab-bordered ${
-                mode === "all" && "tab-active"
-              }`}
-              onClick={() => setMode("all")}
-            >
-              All
-            </button>
-            <button
-              className={`tab tab-lg tab-bordered ${
-                mode === "artists" && "tab-active"
-              }`}
-              onClick={() => setMode("artists")}
-            >
-              Artists
-            </button>
-            <button
-              className={`tab tab-lg tab-bordered ${
-                mode === "albums" && "tab-active"
-              }`}
-              onClick={() => setMode("albums")}
-            >
-              Albums
-            </button>
-            <button
-              className={`tab tab-lg tab-bordered ${
-                mode === "tracks" && "tab-active"
-              }`}
-              onClick={() => setMode("tracks")}
-            >
-              Tracks
-            </button>
-          </div>
-          <div className="flex gap-3">
-            <button
-              className="btn btn-sm gap-2"
-              onClick={() => handlePlayRandom(library, handlePlay)}
-            >
-              <Shuffle /> Random play
-            </button>
-            <input
-              type="text"
-              className="input w-full max-w-xs bg-slate-500/25 hidden"
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button className="btn btn-sm gap-2 hidden" onClick={handleSearch}>
-              Search
-            </button>
-          </div>
-        </div>
-      </div>
-
       {status === "loading" && <Loader />}
-
       {status === "ready" && library && (
-        // TODO Artist page
-        <Suspense fallback={<Loader />}>
-          <List mode={mode} library={libraryFiltered} handlePlay={handlePlay} />
-        </Suspense>
+        <>
+          <div className="sticky top-0 left-0 right-0 bg-base-100 mb-5 z-[9999]">
+            <div className="flex w-full items-center justify-between">
+              <div className="tabs font-headings font-semibold">
+                <button
+                  className={`text-md tab tab-bordered ${
+                    mode === "all" && "tab-active"
+                  }`}
+                  onClick={() => setMode("all")}
+                >
+                  All
+                </button>
+                <button
+                  className={`text-md tab tab-bordered ${
+                    mode === "artists" && "tab-active"
+                  }`}
+                  onClick={() => setMode("artists")}
+                >
+                  Artists
+                </button>
+                <button
+                  className={`text-md tab tab-bordered ${
+                    mode === "albums" && "tab-active"
+                  }`}
+                  onClick={() => setMode("albums")}
+                >
+                  Albums
+                </button>
+                <button
+                  className={`text-md tab tab-bordered ${
+                    mode === "tracks" && "tab-active"
+                  }`}
+                  onClick={() => setMode("tracks")}
+                >
+                  Tracks
+                </button>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  className="btn btn-xs gap-2"
+                  onClick={() => handlePlayRandom(library, handlePlay)}
+                >
+                  <Shuffle /> Random play
+                </button>
+                <input
+                  type="text"
+                  className="input w-full max-w-xs bg-slate-500/25 hidden"
+                  placeholder="Search..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <button
+                  className="btn btn-sm gap-2 hidden"
+                  onClick={handleSearch}
+                >
+                  Search
+                </button>
+              </div>
+            </div>
+          </div>
+          <Suspense fallback={<Loader />}>
+            <List
+              mode={mode}
+              library={libraryFiltered}
+              handlePlay={handlePlay}
+            />
+          </Suspense>
+        </>
       )}
     </div>
   );

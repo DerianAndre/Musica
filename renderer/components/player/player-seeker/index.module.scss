@@ -1,0 +1,74 @@
+.slider {
+  --slider-gradient: linear-gradient(90deg, #007fbf, #582080, #f20079);
+  --slider-gradient-thumb: linear-gradient(45deg, #582080, #f20079);
+  --slider-height: 15px;
+  --slider-track-height: 5px;
+  --slider-track-background: hsl(var(--n) / var(--tw-bg-opacity, 0.5));
+  --slider-progress-height: 5px;
+  --slider-progress-background: var(--slider-gradient);
+  --slider-thumb-bg: var(--slider-gradient-thumb);
+  --slider-thumb-width: 20px;
+  --slider-thumb-height: 20px;
+  --slider-thumb-border-width: 4px;
+  --slider-thumb-border-color: hsl(var(--n));
+  --slider-thumb-hover-bg: var(--slider-gradient-thumb);
+  --slider-thumb-hover-width: 20px;
+  --slider-thumb-hover-height: 20px;
+  --slider-thumb-hover-border-width: 2.5px;
+  --slider-thumb-hover-border-color: hsl(var(--n));
+
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  &::before,
+  &::after {
+    --slider-gradient-degree: 90deg;
+    position: absolute;
+    content: "";
+    left: 0;
+    top: 50%;
+    bottom: 0;
+    z-index: -1;
+    border-radius: 999rem;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  &::before {
+    height: var(--slider-progress-height);
+    width: var(--slider-value);
+    background: var(--slider-progress-background);
+  }
+  &::after {
+    height: var(--slider-track-height);
+    width: 100%;
+    background: var(--slider-track-background);
+    z-index: -2;
+  }
+  input {
+    -webkit-appearance: none !important;
+    width: 100%;
+    height: 10px;
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none !important;
+      width: var(--slider-thumb-width);
+      height: var(--slider-thumb-height);
+      background: var(--slider-thumb-bg);
+      border: var(--slider-thumb-border-width) solid
+        var(--slider-thumb-border-color);
+      border-radius: 50%;
+      transition: border 0.35s ease;
+      &:hover {
+        width: var(--slider-thumb-hover-width);
+        height: var(--slider-thumb-hover-height);
+        background: var(--slider-thumb-hover-bg);
+        border: var(--slider-thumb-hover-border-width) solid
+          var(--slider-thumb-hover-border-color);
+      }
+    }
+  }
+}

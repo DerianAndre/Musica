@@ -15,10 +15,14 @@ import {
   MdRepeat,
   MdRepeatOn,
 } from "react-icons/md";
+import Play from "./play";
+import PlayPause from "./play-pause";
 
 export {
+  Play,
+  PlayPause,
   MdPause as Pause,
-  MdPlayArrow as Play,
+  //MdPlayArrow as Play,
   MdSkipNext as SkipNext,
   MdSkipPrevious as SkipPrevious,
   MdVolumeOff as VolumeOff,

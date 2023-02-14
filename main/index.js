@@ -20,6 +20,7 @@ app.on("ready", async () => {
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 800,
+    icon: "icon.ico",
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,

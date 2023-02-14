@@ -16,6 +16,9 @@
     "parse": "node main/utils/parser.js"
   },
   "build": {
+    "productName": "Musica",
+    "copyright": "Copyright © year ${author.name}",
+    "appId": "com.derianandre.musica",
     "asar": true,
     "files": [
       "main",
