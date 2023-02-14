@@ -1,6 +1,6 @@
 "use client";
 
-import "./styles.module.scss";
+import styles from "./index.module.scss";
 
 import React, { useState, useEffect, useRef } from "react";
 import {
@@ -106,7 +106,7 @@ const Player = ({ library }) => {
   const handlePlayPause = () => {
     if (!metadata || !player) return;
 
-    if (state === PLAYER_STATES.PAUSE) {
+    if (state !== PLAYER_STATES.PLAY) {
       setState(PLAYER_STATES.PLAY);
       player.play();
     } else {
@@ -173,6 +173,8 @@ const Player = ({ library }) => {
         onend: () => {
           window.electron.player.event(PLAYER_STATES.END);
           setState(PLAYER_STATES.STOP);
+          setSeek(0);
+          player.seek(0);
           if (shuffle.current) {
             //handlePlayRandom(library, handlePlay);
           }
@@ -199,69 +201,71 @@ const Player = ({ library }) => {
   }, []);
 
   return (
-    <div className="player fixed bottom-0 left-0 right-0">
+    <div className={styles.player}>
       <div className="px-10 py-5 w-full flex flex-col gap-2 backdrop-blur-xl bg-gradient-to-t from-base-300 via-bg-base-300/[0.25] to-bg-base-300/[0.1] dark:via-bg-base-300/[0.50] dark:to-bg-base-300/[0.15] drop-shadow-[0 -2rem 2rem rgba(0,0,0,0.5)]">
-        <PlayerSeeker
-          sliderTime={sliderTime}
-          sliderValue={sliderValue}
-          timeCurrent={timeCurrent}
-          timeDuration={timeDuration}
-          handleSliderTime={handleSliderTime}
-        />
+        <div className={styles.wrapper}>
+          <PlayerSeeker
+            sliderTime={sliderTime}
+            sliderValue={sliderValue}
+            timeCurrent={timeCurrent}
+            timeDuration={timeDuration}
+            handleSliderTime={handleSliderTime}
+          />
 
-        <div className="player flex w-full gap-5">
-          <PlayerInfo state={state} metadata={metadata} />
+          <div className="player flex w-full gap-5">
+            <PlayerInfo state={state} metadata={metadata} />
 
-          <div className="main-controls flex flex-1 items-center justify-center gap-2">
-            <button
-              className="btn-shuffle btn btn-ghost btn-circle btn-sm text-xl"
-              onClick={handleShuffle}
-            >
-              {shuffle.current ? <ShuffleOn /> : <ShuffleOff />}
-            </button>
-            <button className="btn-prev btn btn-ghost btn-circle btn-sm text-3xl">
-              <SkipPrevious />
-            </button>
-            <button
-              className="btn-play btn btn-circle btn-md text-4xl border-0 shadow-lg"
-              onClick={handlePlayPause}
-            >
-              <PlayPause state={state} />
-            </button>
-            <button className="btn-next btn btn-ghost btn-circle btn-sm text-3xl">
-              <SkipNext />
-            </button>
-            <button
-              className="btn-loop btn btn-ghost btn-circle btn-sm text-xl"
-              onClick={handleRepeat}
-            >
-              {repeat.current ? <RepeatOn /> : <RepeatOff />}
-            </button>
-          </div>
+            <div className="main-controls flex flex-1 items-center justify-center gap-2">
+              <button
+                className="btn-shuffle btn btn-ghost btn-circle btn-sm text-xl"
+                onClick={handleShuffle}
+              >
+                {shuffle.current ? <ShuffleOn /> : <ShuffleOff />}
+              </button>
+              <button className="btn-prev btn btn-ghost btn-circle btn-sm text-3xl">
+                <SkipPrevious />
+              </button>
+              <button
+                className="btn-play btn btn-circle btn-md text-4xl border-0 shadow-lg"
+                onClick={handlePlayPause}
+              >
+                <PlayPause state={state} />
+              </button>
+              <button className="btn-next btn btn-ghost btn-circle btn-sm text-3xl">
+                <SkipNext />
+              </button>
+              <button
+                className="btn-loop btn btn-ghost btn-circle btn-sm text-xl"
+                onClick={handleRepeat}
+              >
+                {repeat.current ? <RepeatOn /> : <RepeatOff />}
+              </button>
+            </div>
 
-          <div className="secondary-controls flex flex-1 items-center justify-end gap-2 group">
-            {metadata && (
-              <div className="slider-volume flex items-center opacity-0 hover:opacity-100 gap-2 transition ease-in">
-                <div className="text-sm opacity-50">{volumeCurrent}%</div>
-                <input
-                  className="range range-xs min-w-[75px] max-w-[125px]"
-                  type="range"
-                  min={0}
-                  max={1}
-                  step={0.01}
-                  ref={sliderVolume}
-                  value={volume}
-                  onChange={handleSliderVolume}
-                />
-              </div>
-            )}
+            <div className="secondary-controls flex flex-1 items-center justify-end gap-2 group">
+              {metadata && (
+                <div className="slider-volume flex items-center opacity-0 hover:opacity-100 gap-2 transition ease-in">
+                  <div className="text-sm opacity-50">{volumeCurrent}%</div>
+                  <input
+                    className="range range-xs min-w-[75px] max-w-[125px]"
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    ref={sliderVolume}
+                    value={volume}
+                    onChange={handleSliderVolume}
+                  />
+                </div>
+              )}
 
-            <button
-              className="btn-mute-toggle btn btn-circle btn-ghost btn-sm text-xl"
-              onClick={handleMute}
-            >
-              {volume <= 0.05 || isMuted ? <VolumeOff /> : <VolumeUp />}
-            </button>
+              <button
+                className="btn-mute-toggle btn btn-circle btn-ghost btn-sm text-xl"
+                onClick={handleMute}
+              >
+                {volume <= 0.05 || isMuted ? <VolumeOff /> : <VolumeUp />}
+              </button>
+            </div>
           </div>
         </div>
       </div>

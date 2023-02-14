@@ -10,12 +10,12 @@
   --slider-thumb-width: 20px;
   --slider-thumb-height: 20px;
   --slider-thumb-border-width: 4px;
-  --slider-thumb-border-color: hsl(var(--n));
+  --slider-thumb-border-color: white;
   --slider-thumb-hover-bg: var(--slider-gradient-thumb);
   --slider-thumb-hover-width: 20px;
   --slider-thumb-hover-height: 20px;
-  --slider-thumb-hover-border-width: 2.5px;
-  --slider-thumb-hover-border-color: hsl(var(--n));
+  --slider-thumb-hover-border-width: 2px;
+  --slider-thumb-hover-border-color: white;
 
   position: relative;
   width: 100%;
@@ -61,7 +61,7 @@
       border: var(--slider-thumb-border-width) solid
         var(--slider-thumb-border-color);
       border-radius: 50%;
-      transition: border 0.35s ease;
+      transition: border 0.25s ease;
       &:hover {
         width: var(--slider-thumb-hover-width);
         height: var(--slider-thumb-hover-height);

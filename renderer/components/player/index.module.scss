@@ -1,0 +1,16 @@
+.player {
+  position: fixed;
+  inset: 0;
+  top: initial;
+  z-index: 9999;
+  .wrapper {
+    opacity: 0;
+    animation: fade-in 5s ease forwards;
+  }
+}
+
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
+}
