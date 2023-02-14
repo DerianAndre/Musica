@@ -2,9 +2,9 @@
 
 import "../scss/globals.scss";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { lazy, Suspense, useState, useEffect, useMemo } from "react";
 import { Shuffle } from "../components/icons";
-import { List, Loader } from "../components";
+import { Loader } from "../components";
 import { handlePlayRandom } from "../utils/random";
 import { useLocalStorage } from "usehooks-ts";
 
@@ -15,6 +15,8 @@ const Home = () => {
   const [library, setLibrary] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [toggleSearch, setToggleSearch] = useState(false);
+
+  const List = lazy(() => import("../components/list"));
 
   const loadList = async () => {
     setStatus("loading");
@@ -33,6 +35,7 @@ const Home = () => {
   };
 
   const loadListChunk = async (chunk) => {
+    if (!chunk || !Object.keys(chunk).length) return;
     return new Promise((resolve, reject) => {
       import(`../../library/chunks/${chunk.file}.json`)
         .then((data) => {
@@ -45,8 +48,8 @@ const Home = () => {
   };
 
   const loadLibrary = async () => {
-    if (!list) return;
-    list.forEach(async (chunk) => await loadListChunk(chunk));
+    if (!list || !Object.keys(list).length) return;
+    list.forEach(async (chunk) => chunk && (await loadListChunk(chunk)));
   };
 
   const handlePlay = (file) => {
@@ -102,7 +105,7 @@ const Home = () => {
   }, [list]);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex min-h-full flex-col">
       <div className="sticky top-0 left-0 right-0 bg-base-100 mb-5 z-[9999]">
         <div className="flex w-full items-center justify-between">
           <div className="tabs">
@@ -161,9 +164,12 @@ const Home = () => {
       </div>
 
       {status === "loading" && <Loader />}
+
       {status === "ready" && library && (
         // TODO Artist page
-        <List mode={mode} library={libraryFiltered} handlePlay={handlePlay} />
+        <Suspense fallback={<Loader />}>
+          <List mode={mode} library={libraryFiltered} handlePlay={handlePlay} />
+        </Suspense>
       )}
     </div>
   );

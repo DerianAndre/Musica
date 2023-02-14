@@ -40,6 +40,7 @@ const parseFolder = async (root) => {
           album = "Unknown Album",
           albumsort = "Unknown Album",
           artist = "Unknown Artist",
+          artists = ["Unknown Artist"],
           albumartist = "Unknown Artist",
           title = "Unknown Title",
           track = "??",
@@ -51,31 +52,34 @@ const parseFolder = async (root) => {
         } = metadata;
         const trackNo = track.no ? track.no : date;
         const musicFileObject = {
+          trackNo,
           track: formatTrackNo(trackNo),
-          artist: artist,
-          album: album,
-          title: title,
-          genre: genre,
+          artist,
+          albumartist,
+          artists,
+          album,
+          title,
+          genre,
           extension: fileExtension,
           path: filePath,
         };
 
         const coverPath = getCoverFile({ artist, album, year, cover });
 
-        if (!jsonLibrary[artist]) {
-          jsonLibrary[artist] = { albums: [] };
+        if (!jsonLibrary[albumartist]) {
+          jsonLibrary[albumartist] = { albums: [] };
         }
 
         let albumIndex = -1;
-        for (let i = 0; i < jsonLibrary[artist].albums.length; i++) {
-          if (jsonLibrary[artist].albums[i].title === album) {
+        for (let i = 0; i < jsonLibrary[albumartist].albums.length; i++) {
+          if (jsonLibrary[albumartist].albums[i].title === album) {
             albumIndex = i;
             break;
           }
         }
 
         if (albumIndex === -1) {
-          jsonLibrary[artist].albums.push({
+          jsonLibrary[albumartist].albums.push({
             title: album,
             albumartist,
             albumsort,
@@ -88,7 +92,9 @@ const parseFolder = async (root) => {
             tracks: [musicFileObject],
           });
         } else {
-          jsonLibrary[artist].albums[albumIndex].tracks.push(musicFileObject);
+          jsonLibrary[albumartist].albums[albumIndex].tracks.push(
+            musicFileObject
+          );
         }
 
         saveCover(coverPath, cover);

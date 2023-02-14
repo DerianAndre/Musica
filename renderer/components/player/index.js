@@ -24,6 +24,7 @@ const PLAYER_STATES = {
   PLAY: "PLAY",
   PAUSE: "PAUSE",
   STOP: "STOP",
+  END: "END",
 };
 
 const Player = ({ library }) => {
@@ -177,20 +178,24 @@ const Player = ({ library }) => {
         volume,
         loop: repeat.current,
         onplay: () => {
+          window.electron.player.event(PLAYER_STATES.PLAY);
           setState(PLAYER_STATES.PLAY);
           setDelay(100); // Starts the useInterval to 100ms
         },
         onpause: () => {
+          window.electron.player.event(PLAYER_STATES.PAUSE);
           setState(PLAYER_STATES.PAUSE);
           setDelay(null); // Stops the useInterval
         },
         onend: () => {
+          window.electron.player.event(PLAYER_STATES.END);
           setState(PLAYER_STATES.STOP);
           if (shuffle.current) {
             //handlePlayRandom(library, handlePlay);
           }
         },
         onstop: () => {
+          window.electron.player.event(PLAYER_STATES.STOP);
           setState(PLAYER_STATES.STOP);
         },
         onvolume: () => {
@@ -203,6 +208,11 @@ const Player = ({ library }) => {
         howl.current.play();
       }, 0);
     });
+
+    // TODO Manage global events
+    //window.electron.player.on((event, payload) => {
+    //
+    //})
   }, []);
 
   return (

@@ -8,5 +8,7 @@ contextBridge.exposeInMainWorld("electron", {
   player: {
     play: (payload) => ipcRenderer.send("player-play-file", payload),
     metadata: (handler) => ipcRenderer.on("player-file-metadata", handler),
+    event: (payload) => ipcRenderer.send("player-event", payload),
+    on: (handler) => ipcRenderer.send("player-on", handler),
   },
 });

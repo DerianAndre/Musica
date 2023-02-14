@@ -13,10 +13,13 @@ const Settings = () => {
 
   const handleSelectFolder = () => {
     window.electron.library.select();
-    setStatus("loading");
   };
 
   useEffect(() => {
+    // TODO
+    //window.electron.library.loading(() => {
+    //  setStatus("loading");
+    //});
     window.electron.library.parsed((event, data) => {
       if (data.status === "success") {
         setLibraryPath(data.path);
@@ -30,7 +33,7 @@ const Settings = () => {
   return (
     <div className="flex flex-col">
       <h2 className="font-bold text-2xl mb-3">Settings</h2>
-      <div className="divide-y divide-slate-700">
+      <div className="divide-y divide-base-300">
         <section className="my-3 py-2">
           <h3 className="font-bold text-xl mb-3">Library</h3>
           <div className="flex items-center justify-between">

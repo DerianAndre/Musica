@@ -50,7 +50,7 @@ export default function Layout({ children }) {
             </div>
           </header>
           <main className="main grid h-full overflow-y-scroll relative px-10">
-            <div className="wrapper mb-[250px]">{children}</div>
+            <div className="wrapper flex-1 mb-[250px]">{children}</div>
           </main>
           <Player library={{}} />
         </div>

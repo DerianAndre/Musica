@@ -53,6 +53,8 @@ ipcMain.on("library-select", async (event) => {
     properties: ["openDirectory"],
   });
 
+  if (!folderPath || !folderPath.length) return;
+
   console.log(`[i] Electron: Event <library-select> "${folderPath[0]}"`);
 
   Parser.parseLibrary(
@@ -80,4 +82,8 @@ ipcMain.on("library-select", async (event) => {
 ipcMain.on("player-play-file", async (event, payload) => {
   console.log(`[i] Electron: Event <player-play-file> "${payload}"`);
   await Utils.readFile(payload, event);
+});
+
+ipcMain.on("player-event", async (event, playerEvent) => {
+  console.log(`[i] Electron: Player event <${playerEvent}>`);
 });
