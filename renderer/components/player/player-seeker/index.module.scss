@@ -3,7 +3,7 @@
   --slider-gradient-thumb: linear-gradient(45deg, #582080, #f20079);
   --slider-height: 15px;
   --slider-track-height: 5px;
-  --slider-track-background: hsl(var(--n) / var(--tw-bg-opacity, 0.5));
+  --slider-track-background: hsl(var(--bc));
   --slider-progress-height: 5px;
   --slider-progress-background: var(--slider-gradient);
   --slider-thumb-bg: var(--slider-gradient-thumb);
@@ -26,24 +26,27 @@
     --slider-gradient-degree: 90deg;
     position: absolute;
     content: "";
-    left: 0;
     top: 50%;
     bottom: 0;
-    z-index: -1;
     border-radius: 999rem;
     transform: translateY(-50%);
     pointer-events: none;
+    z-index: -1;
   }
   &::before {
+    left: 0;
     height: var(--slider-progress-height);
-    width: calc(var(--slider-value) + 1px);
+    width: 100%;
     background: var(--slider-progress-background);
+    z-index: -2;
   }
   &::after {
-    height: var(--slider-track-height);
-    width: 100%;
+    right: -1px;
+    height: calc(var(--slider-track-height) + 2px);
+    width: calc(100% - var(--slider-value) + 1px);
     background: var(--slider-track-background);
-    z-index: -2;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
   }
   input {
     -webkit-appearance: none !important;
