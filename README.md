@@ -1,5 +1,6 @@
 <h1  align="center">
-  <img src="icon.png" alt= “Musica” width="55px" height="55px">
+  <img src="icon.png" alt= “Musica” width="75px" height="75px">
+  <br/>
   Musica
 </h1>
 <center>
