@@ -38,12 +38,16 @@ const parseFolder = async (root) => {
         const cover = MM.selectCover(metadata.picture);
         const {
           album = "Unknown Album",
+          albumsort = "Unknown Album",
           artist = "Unknown Artist",
+          albumartist = "Unknown Artist",
           title = "Unknown Title",
           track = "??",
           genre = "Unknown Genre",
           year = null,
+          originalyear = null,
           date = null,
+          originaldate = null,
         } = metadata;
         const trackNo = track.no ? track.no : date;
         const musicFileObject = {
@@ -73,7 +77,13 @@ const parseFolder = async (root) => {
         if (albumIndex === -1) {
           jsonLibrary[artist].albums.push({
             title: album,
-            year: year || date || "????",
+            albumartist,
+            albumsort,
+            year: year || originalyear || date || originaldate || "????",
+            originalyear,
+            date: date || originaldate || "????",
+            originaldate,
+            genre,
             cover: coverPath,
             tracks: [musicFileObject],
           });
