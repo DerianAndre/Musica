@@ -36,7 +36,7 @@
   }
   &::before {
     height: var(--slider-progress-height);
-    width: var(--slider-value);
+    width: calc(var(--slider-value) + (var(--slider-thumb-width) / 2));
     background: var(--slider-progress-background);
   }
   &::after {
