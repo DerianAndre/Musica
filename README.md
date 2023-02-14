@@ -1,6 +1,8 @@
-<center>
+<h1  align="center">
   <img src="icon.png" alt= “Musica” width="55px" height="55px">
-  <h1  align="center">Musica</h1>
+  Musica
+</h1>
+<center>
   <p>A minimal hackable music player made with electron, react, next, daisyui and tailwind.</p>
 </center>
 
