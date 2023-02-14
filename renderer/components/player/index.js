@@ -202,7 +202,7 @@ const Player = ({ library }) => {
 
   return (
     <div className={styles.player}>
-      <div className="px-10 py-5 w-full flex flex-col gap-2 backdrop-blur-xl bg-gradient-to-t from-base-300 via-bg-base-300/[0.25] to-bg-base-300/[0.1] dark:via-bg-base-300/[0.50] dark:to-bg-base-300/[0.15] drop-shadow-[0 -2rem 2rem rgba(0,0,0,0.5)]">
+      <div className="p-5 w-full flex flex-col gap-2 backdrop-blur-xl bg-gradient-to-t from-base-300 via-bg-base-300/[0.25] to-bg-base-300/[0.1] dark:via-bg-base-300/[0.50] dark:to-bg-base-300/[0.15] drop-shadow-[0 -2rem 2rem rgba(0,0,0,0.5)]">
         <div className={styles.wrapper}>
           <PlayerSeeker
             sliderTime={sliderTime}

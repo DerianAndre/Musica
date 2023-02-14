@@ -7,10 +7,12 @@ const PlayerSeeker = ({
   handleSliderTime,
 }) => {
   return (
-    <div className="player-seeker">
-      <div className="flex gap-6 mb-2">
-        <div className="flex flex-none items-center justify-start">
-          <span className="text-xs">{timeCurrent}</span>
+    <div className="player-seeker mb-3">
+      <div className="flex">
+        <div className="flex items-center justify-start w-14">
+          <span className="font-headings font-medium text-xs block">
+            {timeCurrent}
+          </span>
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div
@@ -28,8 +30,10 @@ const PlayerSeeker = ({
             />
           </div>
         </div>
-        <div className="flex flex-none items-center justify-end">
-          <span className="text-xs">{timeDuration}</span>
+        <div className="flex items-center justify-end w-14">
+          <span className="font-headings font-medium text-xs block">
+            {timeDuration}
+          </span>
         </div>
       </div>
     </div>
