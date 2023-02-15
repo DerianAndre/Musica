@@ -11,17 +11,19 @@ const ListTrack = ({ track, handlePlay }) => {
         <div className="flex-auto truncate w-36 font-headings">
           {track?.title || "Unkwon title"}
         </div>
-        <div className="flex-auto truncate w-14">
+        <div className="flex-auto truncate w-14 hidden xs:block">
           {track?.artist || "Unkwon artist"}
         </div>
-        <div className="flex-auto truncate w-14">
+        <div className="flex-auto truncate w-14 hidden sm:block">
           {track?.album || "Unkwon album"}
         </div>
-        <div className="flex-1 truncate">{track?.year || "0000"}</div>
-        <div className="flex-auto truncate w-7">
+        <div className="flex-auto truncate w-7 hidden lg:block">
           {track?.genre || "Unkwon genre"}
         </div>
-        <div className="flex-1 truncate text-end">
+        <div className="flex-initial truncate w-14 hidden md:block">
+          {track?.year || "0000"}
+        </div>
+        <div className="flex-initial truncate w-14 text-end">
           {timeFormat(track?.duration) || "00:00"}
         </div>
       </div>

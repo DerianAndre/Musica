@@ -19,17 +19,16 @@ const ListAllItem = ({ library, artist, handlePlay }) => {
       <div className="divide-y divide-black/[0.1] dark:divide-white/[0.05]">
         {albums.map((album) => (
           <ListIntersection key={album?.title}>
-            <div className="flex gap-5 py-5">
-              <div className="album-cover flex-initial">
+            <div className="flex flex-wrap gap-5 py-5">
+              <div className="flex-none w-full md:w-[150px]">
                 <ListCover album={album} width="150px" />
               </div>
-              <div className="info flex-auto">
+              <div className="list-info flex-auto">
                 <h3 className="font-headings text-2xl font-semibold">
-                  {album?.title}{" "}
-                  <small className="opacity-30">({album?.year})</small>
+                  {album?.title}
                 </h3>
-                <h4 className="font-headings opacity-50 text-lg mb-4">
-                  {album?.genre}
+                <h4 className="font-headings opacity-50 mb-4">
+                  {album?.year} • {album?.genre}
                 </h4>
                 <div className="flex flex-col">
                   {album?.tracks?.map((track) => (
