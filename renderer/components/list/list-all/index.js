@@ -9,16 +9,18 @@ const List = ({ library, handlePlay }) => {
   const objectKeys = Object.keys(library);
 
   return (
-    objectKeys?.length > 0 &&
-    objectKeys?.map((artist) => (
-      <ListIntersection key={artist}>
-        <ListAllItem
-          library={library}
-          artist={artist}
-          handlePlay={handlePlay}
-        />
-      </ListIntersection>
-    ))
+    <div className="list-all">
+      {objectKeys?.length > 0 &&
+        objectKeys?.map((artist) => (
+          <ListIntersection key={artist}>
+            <ListAllItem
+              library={library}
+              artist={artist}
+              handlePlay={handlePlay}
+            />
+          </ListIntersection>
+        ))}
+    </div>
   );
 };
 
