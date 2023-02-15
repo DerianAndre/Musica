@@ -2,7 +2,7 @@ const ListCover = ({ album = {}, width, rounded = false }) => {
   return (
     <div className="list-cover w-full" style={{ maxWidth: width }}>
       <img
-        className={`block shadow-lg bg-base-300 w-full aspect-[1/1] select-none ${
+        className={`block shadow-lg bg-base-300 w-full aspect-[1/1]  border border-base-content/[0.05] select-none ${
           rounded && "rounded-full"
         }`}
         alt={album?.title || ""}

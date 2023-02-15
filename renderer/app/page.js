@@ -115,6 +115,14 @@ const Home = () => {
               <div className="tabs font-headings font-semibold">
                 <button
                   className={`text-md tab tab-bordered ${
+                    mode === "tracks" && "tab-active"
+                  }`}
+                  onClick={() => setMode("tracks")}
+                >
+                  Tracks
+                </button>
+                <button
+                  className={`text-md tab tab-bordered ${
                     mode === "artists" && "tab-active"
                   }`}
                   onClick={() => setMode("artists")}
@@ -131,15 +139,7 @@ const Home = () => {
                 </button>
                 <button
                   className={`text-md tab tab-bordered ${
-                    mode === "tracks" && "tab-active"
-                  }`}
-                  onClick={() => setMode("tracks")}
-                >
-                  Tracks
-                </button>
-                <button
-                  className={`text-md tab tab-bordered ${
-                    mode === "all" && "tab-active"
+                    mode === "list" && "tab-active"
                   }`}
                   onClick={() => setMode("list")}
                 >

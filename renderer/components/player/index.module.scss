@@ -13,6 +13,7 @@
   --tw-gradient-to: hsl(var(--b3, var(--b2)) / 0);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
   --tw-backdrop-blur: blur(24px);
+  background-image: linear-gradient(to top, var(--tw-gradient-stops));
   -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
     var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale)
     var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert)
@@ -23,7 +24,9 @@
     var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert)
     var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
     var(--tw-backdrop-sepia);
+  box-shadow: 0px 0px 25px 5px rgba(0, 0, 0, 0.15);
 }
+
 .backdrop-false {
   background-color: hsl(var(--b3, var(--b2)) / 0.95);
 }

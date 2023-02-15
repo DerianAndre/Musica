@@ -34,8 +34,10 @@ const parseFolder = async (root) => {
       const fileExtension = filePath.split(".").slice(-1)[0];
       if (!supportedExtensions.includes(fileExtension)) continue;
       try {
-        const { common: metadata } = await MM.parseFile(filePath);
-        const cover = MM.selectCover(metadata.picture);
+        const { common, format } = await MM.parseFile(filePath);
+
+        const cover = MM.selectCover(common.picture);
+
         const {
           album = "Unknown Album",
           albumsort = "Unknown Album",
@@ -49,8 +51,17 @@ const parseFolder = async (root) => {
           originalyear = null,
           date = null,
           originaldate = null,
-        } = metadata;
+        } = common;
+
+        const {
+          container = null,
+          codec = null,
+          duration = null,
+          bitrate = null,
+        } = format;
+
         const trackNo = track.no ? track.no : date;
+
         const musicFileObject = {
           trackNo,
           track: formatTrackNo(trackNo),
@@ -60,6 +71,11 @@ const parseFolder = async (root) => {
           album,
           title,
           genre,
+          year,
+          container,
+          codec,
+          duration,
+          bitrate,
           extension: fileExtension,
           path: filePath,
         };
@@ -81,6 +97,7 @@ const parseFolder = async (root) => {
         if (albumIndex === -1) {
           jsonLibrary[albumartist].albums.push({
             title: album,
+            artist,
             albumartist,
             albumsort,
             year: year || originalyear || date || originaldate || "????",

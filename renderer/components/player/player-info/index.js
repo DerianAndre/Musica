@@ -25,7 +25,7 @@ const PlayerInfo = ({ state, metadata }) => {
           />
         </figure>
         {metadata?.common?.title && (
-          <div className="info font-display">
+          <div className="info">
             <h2 className="font-headings font-bold text-md">
               {metadata?.common?.title}
             </h2>

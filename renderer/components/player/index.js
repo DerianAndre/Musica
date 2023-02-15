@@ -207,7 +207,7 @@ const Player = () => {
   return (
     <div className={styles.player}>
       <div
-        className={`p-5 w-full flex flex-col gap-2 from-base-300 via-bg-base-300/[0.25] to-bg-base-300/[0.1] dark:via-bg-base-300/[0.50] dark:to-bg-base-300/[0.15] drop-shadow-[0 -2rem 2rem rgba(0,0,0,0.5)] ${
+        className={`p-5 w-full flex flex-col gap-2 ${
           blurEnabled ? styles["backdrop-true"] : styles["backdrop-false"]
         }`}
       >
