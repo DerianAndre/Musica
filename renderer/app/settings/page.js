@@ -6,8 +6,12 @@ import Loader from "../../components/loader";
 
 const Settings = () => {
   const [libraryPath, setLibraryPath] = useLocalStorage(
-    "libraryPath",
+    "musica-library-path",
     "<No folder selected>"
+  );
+  const [blurEnabled, setBlurEnabled] = useLocalStorage(
+    "musica-blur-enabled",
+    true
   );
   const [status, setStatus] = useState("ready");
 
@@ -50,7 +54,19 @@ const Settings = () => {
             </button>
           </div>
         </section>
-        <section></section>
+        <section>
+          <div className="form-control">
+            <label className="label cursor-pointer">
+              <span className="label-text">Enable blur</span>
+              <input
+                type="checkbox"
+                className="toggle"
+                checked={blurEnabled}
+                onChange={() => setBlurEnabled((v) => !v)}
+              />
+            </label>
+          </div>
+        </section>
       </div>
       <div className="text-sm mt-5 opacity-50">Derian Castillo</div>
     </div>

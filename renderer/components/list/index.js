@@ -1,21 +1,19 @@
 import { lazy, Suspense } from "react";
-import Loader from "../loader";
+import ListAll from "./list-all";
+import ListArtists from "./list-artists";
+import ListAlbums from "./list-albums";
 
 const List = ({ library, handlePlay, mode }) => {
   if (!library) return;
 
-  const ListAll = lazy(() => import("./list-all"));
-  const ListArtists = lazy(() => import("./list-artists"));
-  const ListAlbums = lazy(() => import("./list-albums"));
-
   const components = {
-    all: <ListAll library={library} handlePlay={handlePlay} />,
     artists: <ListArtists library={library} handlePlay={handlePlay} />,
     albums: <ListAlbums library={library} handlePlay={handlePlay} />,
-    tracks: null,
+    tracks: <div>WIP</div>,
+    list: <ListAll library={library} handlePlay={handlePlay} />,
   };
 
-  return <Suspense fallback={<Loader />}>{components[mode]}</Suspense>;
+  return components[mode];
 };
 
 export default List;

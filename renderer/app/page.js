@@ -2,7 +2,8 @@
 
 import "../scss/globals.scss";
 
-import React, { lazy, Suspense, useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import List from "../components/list";
 import { Shuffle } from "../components/icons";
 import { Loader } from "../components";
 import { handlePlayRandom } from "../utils/random";
@@ -10,13 +11,13 @@ import { useLocalStorage } from "usehooks-ts";
 
 const Home = () => {
   const [status, setStatus] = useState("ready");
-  const [mode, setMode] = useLocalStorage("mode", null);
+  const [mode, setMode] = useLocalStorage("mode", "artists");
   const [list, setList] = useState(null);
   const [library, setLibrary] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [toggleSearch, setToggleSearch] = useState(false);
 
-  const List = lazy(() => import("../components/list"));
+  //const List = lazy(() => import("../components/list"));
 
   const loadList = async () => {
     setStatus("loading");
@@ -107,19 +108,11 @@ const Home = () => {
   return (
     <div className="flex min-h-full flex-col">
       {status === "loading" && <Loader />}
-      {status === "ready" && library && (
+      {status === "ready" && (
         <>
           <div className="sticky top-0 left-0 right-0 bg-base-100 mb-5 z-[9999]">
             <div className="flex w-full items-center justify-between">
               <div className="tabs font-headings font-semibold">
-                <button
-                  className={`text-md tab tab-bordered ${
-                    mode === "all" && "tab-active"
-                  }`}
-                  onClick={() => setMode("all")}
-                >
-                  All
-                </button>
                 <button
                   className={`text-md tab tab-bordered ${
                     mode === "artists" && "tab-active"
@@ -143,6 +136,14 @@ const Home = () => {
                   onClick={() => setMode("tracks")}
                 >
                   Tracks
+                </button>
+                <button
+                  className={`text-md tab tab-bordered ${
+                    mode === "all" && "tab-active"
+                  }`}
+                  onClick={() => setMode("list")}
+                >
+                  List
                 </button>
               </div>
               <div className="flex gap-3">
@@ -168,13 +169,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <Suspense fallback={<Loader />}>
-            <List
-              mode={mode}
-              library={libraryFiltered}
-              handlePlay={handlePlay}
-            />
-          </Suspense>
+          <List mode={mode} library={libraryFiltered} handlePlay={handlePlay} />
         </>
       )}
     </div>

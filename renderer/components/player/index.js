@@ -2,7 +2,7 @@
 
 import styles from "./index.module.scss";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   RepeatOn,
   RepeatOff,
@@ -16,18 +16,20 @@ import {
 } from "../icons";
 
 import { Howl } from "howler";
-import { useInterval, useLocalStorage } from "usehooks-ts";
+import { useInterval, useLocalStorage, useReadLocalStorage } from "usehooks-ts";
 import PlayerInfo from "./player-info";
 import PlayerSeeker from "./player-seeker";
 import PLAYER_STATES from "./constants";
+import { PlayerContext } from "../../context/player";
 import { handlePlayRandom } from "../../utils/random";
 
-const Player = ({ library }) => {
+const Player = () => {
   const sliderTime = useRef(null);
   const sliderVolume = useRef(null);
   const howl = useRef(null);
   const player = howl?.current || null;
-
+  const blurEnabled = useReadLocalStorage("musica-blur-enabled");
+  //const { libraryMemo } = useContext(PlayerContext);
   const [delay, setDelay] = useState(null);
 
   const shuffle = useRef(false);
@@ -39,6 +41,8 @@ const Player = ({ library }) => {
   const [state, setState] = useState(PLAYER_STATES.STOP);
   const [isMuted, setIsMuted] = useState(false);
   const [metadata, setMetadata] = useState(false);
+
+  //console.log(libraryMemo);
 
   const playerReset = () => {
     if (!howl.current || state === PLAYER_STATES.PLAY) return;
@@ -202,7 +206,11 @@ const Player = ({ library }) => {
 
   return (
     <div className={styles.player}>
-      <div className="p-5 w-full flex flex-col gap-2 backdrop-blur-xl bg-gradient-to-t from-base-300 via-bg-base-300/[0.25] to-bg-base-300/[0.1] dark:via-bg-base-300/[0.50] dark:to-bg-base-300/[0.15] drop-shadow-[0 -2rem 2rem rgba(0,0,0,0.5)]">
+      <div
+        className={`p-5 w-full flex flex-col gap-2 from-base-300 via-bg-base-300/[0.25] to-bg-base-300/[0.1] dark:via-bg-base-300/[0.50] dark:to-bg-base-300/[0.15] drop-shadow-[0 -2rem 2rem rgba(0,0,0,0.5)] ${
+          blurEnabled ? styles["backdrop-true"] : styles["backdrop-false"]
+        }`}
+      >
         <div className={styles.wrapper}>
           <PlayerSeeker
             sliderTime={sliderTime}
