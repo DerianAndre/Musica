@@ -41,4 +41,4 @@ next-env.d.ts
 /cache/
 /.cache/
 /library/*.json
-/library/*/*.*
+/library/chunks/*.json
