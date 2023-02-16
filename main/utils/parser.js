@@ -124,7 +124,7 @@ const parseFolder = async (root) => {
 };
 
 const saveCover = (coverPath, cover) => {
-  const cachePath = "./cache";
+  const cachePath = "./library/cache";
   const filePath = cachePath + "/" + coverPath;
 
   if (!fs.existsSync(cachePath)) {
