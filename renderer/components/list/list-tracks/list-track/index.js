@@ -11,7 +11,7 @@ const ListTrack = ({ track, handlePlay }) => {
         <div className="flex-auto truncate w-36 font-headings">
           {track?.title || "Unkwon title"}
         </div>
-        <div className="flex-auto truncate w-14 hidden xs:block">
+        <div className="flex-auto truncate w-14 hidden sm:block">
           {track?.artist || "Unkwon artist"}
         </div>
         <div className="flex-auto truncate w-14 hidden sm:block">

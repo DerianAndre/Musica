@@ -1,12 +1,11 @@
 import React, { lazy } from "react";
 import ListIntersection from "../list-intersecton";
-
-const ListAllItem = lazy(() => import("./list-all-item"));
+import ListAllItem from "./list-all-item";
 
 const List = ({ library, handlePlay }) => {
   if (!library) return;
 
-  const artists = Object.keys(library).sort((a, b) => a - b);
+  const artists = Object.keys(library);
 
   return (
     <div className="list-all">
