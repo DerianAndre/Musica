@@ -1,15 +1,15 @@
-import { timeFormat } from '../../../../utils';
-import { MdPlayArrow } from 'react-icons/md';
+import { timeFormat } from '~/renderer/utils';
 import { slugifyFile } from '~/main/utils/files';
 import Link from 'next/link';
+import ListIntersection from '../../list-intersecton';
 
 const ListTrack = ({ track, handlePlay }) => {
   const artist = slugifyFile(track?.artist);
   const album = slugifyFile(track?.album);
 
   return (
-    <div className="list-track bg-transparent even:bg-base-100">
-      <div className="align-items-center my-1 flex select-none gap-5 rounded text-xs transition duration-150 ease-in hover:bg-base-100">
+    <div className="list-track">
+      <div className="align-items-center flex select-none gap-5 rounded text-xs transition duration-150 ease-in hover:bg-base-100">
         <div
           className="group w-36 flex-auto cursor-pointer text-start font-headings"
           onClick={() => handlePlay(track)}

@@ -1,20 +1,26 @@
-import React, { Suspense } from "react";
-import { useInView } from "react-intersection-observer";
+import React, { Suspense } from 'react';
+import { useInView } from 'react-intersection-observer';
 
-const ListIntersection = (props) => {
+const ListIntersection = ({
+  children,
+  threshold = 0.5,
+  triggerOnce = true,
+}) => {
   const [ref, inView] = useInView({
-    threshold: props.threshold || undefined,
-    triggerOnce: true,
+    threshold,
+    triggerOnce,
   });
 
   return (
     <div
       ref={ref}
-      className={`item transition duration-500 ease ${
-        inView ? "opacity-100" : "opacity-0"
+      className={`item ${
+        inView
+          ? 'has-loaded ease opacity-100 transition duration-500'
+          : 'is-loading block min-h-[30px] opacity-0'
       }`}
     >
-      {inView && props.children}
+      {inView && children}
     </div>
   );
 };

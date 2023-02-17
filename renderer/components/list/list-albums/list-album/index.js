@@ -4,15 +4,16 @@ import { slugifyFile } from '~/main/utils/files';
 
 const ListAlbum = ({ artist, album = {}, ...props }) => {
   return (
-    <div className="list-album" id={album?.id} data-id={album?.id}>
-      <Link href={`/artist/${slugifyFile(artist)}/${album?.slug}`}>
-        <div className="flex flex-col">
-          <ListCover album={album} />
-          <h2 className="mt-2 font-headings text-sm font-bold leading-[1.15]">
-            {album?.title}
-          </h2>
-          <h3 className="text-xs font-medium opacity-50">{artist}</h3>
-        </div>
+    <div className="list-album flex h-full" id={album?.id} data-id={album?.id}>
+      <Link
+        className="flex h-full flex-col rounded p-3 transition hover:bg-base-content/[0.15] dark:hover:bg-base-content/[0.05] dark:hover:shadow-lg"
+        href={`/artist/${slugifyFile(artist)}/${album?.slug}`}
+      >
+        <ListCover album={album} />
+        <h2 className="mt-2 font-headings text-sm font-bold leading-[1.15]">
+          {album?.title}
+        </h2>
+        <h3 className="text-xs font-medium opacity-50">{artist}</h3>
       </Link>
     </div>
   );

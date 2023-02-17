@@ -1,7 +1,13 @@
-import "../scss/globals.scss";
+import '../scss/globals.scss';
 
-function App({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+declare global {
+  interface Window {
+    electron?: any;
+  }
 }
+
+const App = ({ Component, pageProps }) => {
+  return <Component {...pageProps} />;
+};
 
 export default App;

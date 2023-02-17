@@ -1,6 +1,32 @@
 import loadChunk from './chunks';
 
-const loadLibrary = async ({ setLibrary, setStatus }) => {
+const loadLibrary = async ({ mode = 'full', setLibrary, setStatus }) => {
+  if (mode === 'full') {
+    await loadFull({ setLibrary, setStatus });
+    return;
+  }
+  await loadChunks({ setLibrary, setStatus });
+  return;
+};
+const loadFull = async ({ setLibrary, setStatus }) => {
+  try {
+    setStatus('loading');
+    await import(`./index.json`)
+      .then((data) => {
+        setLibrary(data?.default);
+        setStatus('ready');
+      })
+      .catch((error) => {
+        setStatus('error');
+        console.error(error);
+      });
+  } catch (error) {
+    setStatus('error');
+    console.error(error);
+  }
+};
+
+const loadChunks = async ({ setLibrary, setStatus }) => {
   try {
     let list = [];
 

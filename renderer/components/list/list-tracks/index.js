@@ -1,35 +1,20 @@
-import { Suspense } from 'react';
+import React from 'react';
 import ListIntersection from '../list-intersecton';
 import ListTrack from './list-track';
 
-const ListTracks = ({ library, handlePlay }) => {
-  const tracks = Object.values(library)
-    .flatMap((item) => {
-      return item.albums?.map((album) =>
-        album?.tracks?.map((track) => ({ ...track, album: album.title })),
-      );
-    })
-    .reduce((tracks, albumTracks) => tracks.concat(albumTracks), [])
-    .sort((a, b) => {
-      if (a.title < b.title) {
-        return -1;
-      }
-      if (a.title > b.title) {
-        return 1;
-      }
-      return 0;
-    });
+const ListTracks = ({ library, tracks, handlePlay }) => {
+  if (!tracks) return;
 
   return (
-    <Suspense>
-      <div className="list-tracks">
+    <div className="list-tracks">
+      <div className="align-stretch grid grid-cols-1 gap-1">
         {tracks?.map((track, index) => (
           <ListIntersection key={index + track?.path}>
             <ListTrack track={track} handlePlay={handlePlay} />
           </ListIntersection>
         ))}
       </div>
-    </Suspense>
+    </div>
   );
 };
 
