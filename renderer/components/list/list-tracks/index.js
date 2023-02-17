@@ -1,11 +1,12 @@
-import ListIntersection from "../list-intersecton";
-import ListTrack from "./list-track";
+import { Suspense } from 'react';
+import ListIntersection from '../list-intersecton';
+import ListTrack from './list-track';
 
 const ListTracks = ({ library, handlePlay }) => {
   const tracks = Object.values(library)
     .flatMap((item) => {
       return item.albums?.map((album) =>
-        album?.tracks?.map((track) => ({ ...track, album: album.title }))
+        album?.tracks?.map((track) => ({ ...track, album: album.title })),
       );
     })
     .reduce((tracks, albumTracks) => tracks.concat(albumTracks), [])
@@ -20,15 +21,15 @@ const ListTracks = ({ library, handlePlay }) => {
     });
 
   return (
-    <div className="list-tracks">
-      <div className="divide-y divide-base-300">
+    <Suspense>
+      <div className="list-tracks">
         {tracks?.map((track, index) => (
           <ListIntersection key={index + track?.path}>
             <ListTrack track={track} handlePlay={handlePlay} />
           </ListIntersection>
         ))}
       </div>
-    </div>
+    </Suspense>
   );
 };
 

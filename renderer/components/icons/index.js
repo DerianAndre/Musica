@@ -22,7 +22,6 @@ export {
   Play,
   PlayPause,
   MdPause as Pause,
-  //MdPlayArrow as Play,
   MdSkipNext as SkipNext,
   MdSkipPrevious as SkipPrevious,
   MdVolumeOff as VolumeOff,

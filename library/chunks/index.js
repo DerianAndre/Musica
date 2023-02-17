@@ -1,15 +1,23 @@
-const loadChunk = async ({ chunk, setLibrary }) => {
-  if (!chunk || !Object.keys(chunk).length) return;
+const loadChunk = async ({ chunk = {}, slug = '', setter = () => {} }) => {
+  if (!slug && (!chunk || !Object.keys(chunk).length)) return;
 
   return new Promise((resolve, reject) => {
-    import(`./${chunk.file}.json`)
+    import(`./${chunk?.file || slug}.json`)
       .then((data) => {
-        setLibrary((old) => ({ ...old, [chunk.artist]: data?.default }));
-        resolve(true);
+        if (setter) {
+          setter((old) => ({
+            ...old,
+            [chunk?.artist || 'chunk']: {
+              slug: chunk?.file || slug | '',
+              ...data?.default,
+            },
+          }));
+        }
+        resolve({ slug: chunk?.file || slug || '', ...data?.default });
       })
       .catch((error) => {
         console.error(error);
-        reject(false);
+        reject({});
       });
   });
 };

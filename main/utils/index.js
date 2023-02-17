@@ -1,3 +1,4 @@
+const { slugifyFile } = require("./files");
 const MM = require("music-metadata");
 
 const getCoverFile = ({ artist, album, year, cover }) => {
@@ -5,27 +6,15 @@ const getCoverFile = ({ artist, album, year, cover }) => {
   return `${slugifyFile(artist)}_${year}_${slugifyFile(album)}.${ext}`;
 };
 
-const slugifyFile = (string) => {
-  return String(string)
-    .toString()
-    .toLowerCase()
-    .replaceAll("ｃ", "c") // TODO better way to do this...
-    .replaceAll("ｄ", "d")
-    .replaceAll("ｅ", "e")
-    .replaceAll("ｈ", "h")
-    .replaceAll("ｏ", "o")
-    .replace(/\s+/g, "-") // Replace spaces with -
-    .replace(/[^\w\-]+/g, "") // Remove all non-word chars
-    .replace(/\-\-+/g, "-") // Replace multiple - with single -
-    .replace(/^-+/, "") // Trim - from start of text
-    .replace(/-+$/, ""); // Trim - from end of text
-};
-
-const readFile = async (file, event) => {
+const readFile = async (payload, event) => {
+  if (!payload || !payload.path) return;
   try {
-    const result = await readMetadata(file);
+    const result = await readMetadata(payload?.path);
     if (result.metadata) {
-      event.sender.send("player-file-metadata", result.metadata);
+      event.sender.send("player-file-metadata", {
+        data: payload,
+        metadata: result.metadata,
+      });
       return;
     }
   } catch (error) {

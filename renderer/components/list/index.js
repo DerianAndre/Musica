@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import ListAll from "./list-all";
 import ListArtists from "./list-artists";
 import ListAlbums from "./list-albums";

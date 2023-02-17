@@ -81,7 +81,7 @@ ipcMain.on("library-select", async (event) => {
 });
 
 ipcMain.on("player-play-file", async (event, payload) => {
-  console.log(`[i] Electron: Event <player-play-file> "${payload}"`);
+  console.log(`[i] Electron: Event <player-play-file> "${payload?.slug}"`);
   await Utils.readFile(payload, event);
 });
 

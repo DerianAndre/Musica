@@ -26,7 +26,7 @@ const handlePlayRandom = (library, handlePlay) => {
   const track = getRandomTrack(album);
 
   try {
-    handlePlay(track.path);
+    handlePlay(track);
   } catch (error) {
     throw Error(error);
   }

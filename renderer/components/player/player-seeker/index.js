@@ -1,4 +1,5 @@
 import { slider } from "./index.module.scss";
+
 const PlayerSeeker = ({
   sliderTime,
   sliderValue,
@@ -20,6 +21,7 @@ const PlayerSeeker = ({
             style={{ "--slider-value": `${sliderValue}%` }}
           >
             <input
+              className="w-full"
               ref={sliderTime}
               type="range"
               value={sliderValue}

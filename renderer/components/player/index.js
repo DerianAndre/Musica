@@ -1,8 +1,6 @@
-"use client";
+import styles from './index.module.scss';
 
-import styles from "./index.module.scss";
-
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import {
   RepeatOn,
   RepeatOff,
@@ -13,23 +11,23 @@ import {
   SkipPrevious,
   VolumeOff,
   VolumeUp,
-} from "../icons";
+} from '../icons';
 
-import { Howl } from "howler";
-import { useInterval, useLocalStorage, useReadLocalStorage } from "usehooks-ts";
-import PlayerInfo from "./player-info";
-import PlayerSeeker from "./player-seeker";
-import PLAYER_STATES from "./constants";
-import { PlayerContext } from "../../context/player";
-import { handlePlayRandom } from "../../utils/random";
+import { Howl } from 'howler';
+import { useInterval, useLocalStorage, useReadLocalStorage } from 'usehooks-ts';
+import PlayerInfo from './player-info';
+import PlayerSeeker from './player-seeker';
+import PLAYER_STATES from './constants';
+import { PlayerContext } from '../../context/player';
+import { handlePlayRandom } from '../../utils/random';
 
 const Player = () => {
   const sliderTime = useRef(null);
   const sliderVolume = useRef(null);
   const howl = useRef(null);
   const player = howl?.current || null;
-  const blurEnabled = useReadLocalStorage("musica-blur-enabled");
-  //const { libraryMemo } = useContext(PlayerContext);
+  const blurEnabled = useReadLocalStorage('musica-blur-enabled');
+  const [blur, setBlur] = useState(null);
   const [delay, setDelay] = useState(null);
 
   const shuffle = useRef(false);
@@ -37,16 +35,16 @@ const Player = () => {
 
   const [trigger, setTrigger] = useState(0); // * Use to force rerender
   const [seek, setSeek] = useState(0);
-  const [volume, setVolume] = useLocalStorage("volume", 1);
+  const [volume, setVolume] = useLocalStorage('volume', 1);
   const [state, setState] = useState(PLAYER_STATES.STOP);
   const [isMuted, setIsMuted] = useState(false);
-  const [metadata, setMetadata] = useState(false);
+  const [data, setData] = useState(false);
 
   //console.log(libraryMemo);
 
   const playerReset = () => {
     if (!howl.current || state === PLAYER_STATES.PLAY) return;
-    howl.current.stop();
+    howl?.current?.stop();
     howl.current = null;
     setDelay(null);
     setState(PLAYER_STATES.STOP);
@@ -103,12 +101,12 @@ const Player = () => {
     }
   };
 
-  const handlePlay = (file) => {
-    window.electron.player.play(file);
+  const handlePlay = (data, file) => {
+    window.electron.player.play({ data, file });
   };
 
   const handlePlayPause = () => {
-    if (!metadata || !player) return;
+    if (!data || !player) return;
 
     if (state !== PLAYER_STATES.PLAY) {
       setState(PLAYER_STATES.PLAY);
@@ -147,6 +145,7 @@ const Player = () => {
 
   const handlePlayerUpdate = () => {
     if (player && state !== PLAYER_STATES.PLAY) return;
+    // TODO change to ref to prevent re-renders
     setSeek(player?.seek());
   };
 
@@ -157,11 +156,11 @@ const Player = () => {
   useEffect(() => {
     window.electron.player.metadata((event, data) => {
       playerReset();
-      setMetadata(data);
+      setData(data);
 
       howl.current = new Howl({
         autoplay: false,
-        src: data?.file || null,
+        src: data?.metadata?.file || null,
         volume,
         loop: repeat.current,
         onplay: () => {
@@ -178,7 +177,7 @@ const Player = () => {
           window.electron.player.event(PLAYER_STATES.END);
           setState(PLAYER_STATES.STOP);
           setSeek(0);
-          player.seek(0);
+          player?.seek(0);
           if (shuffle.current) {
             //handlePlayRandom(library, handlePlay);
           }
@@ -204,76 +203,78 @@ const Player = () => {
     //})
   }, []);
 
+  useEffect(() => {
+    setBlur(blurEnabled);
+  }, [blurEnabled]);
+
   return (
     <div className={styles.player}>
       <div
-        className={`p-5 w-full flex flex-col gap-2 ${
-          blurEnabled ? styles["backdrop-true"] : styles["backdrop-false"]
+        className={`flex w-full flex-col gap-2 p-5 ${
+          blur ? styles['backdrop-true'] : styles['backdrop-false']
         }`}
       >
-        <div className={styles.wrapper}>
-          <PlayerSeeker
-            sliderTime={sliderTime}
-            sliderValue={sliderValue}
-            timeCurrent={timeCurrent}
-            timeDuration={timeDuration}
-            handleSliderTime={handleSliderTime}
-          />
+        <PlayerSeeker
+          sliderTime={sliderTime}
+          sliderValue={sliderValue}
+          timeCurrent={timeCurrent}
+          timeDuration={timeDuration}
+          handleSliderTime={handleSliderTime}
+        />
 
-          <div className="player flex w-full gap-5">
-            <PlayerInfo state={state} metadata={metadata} />
+        <div className="player flex w-full gap-5">
+          <PlayerInfo state={state} data={data} />
 
-            <div className="main-controls flex flex-1 items-center justify-center gap-2">
-              <button
-                className="btn-shuffle btn btn-ghost btn-circle btn-sm text-xl"
-                onClick={handleShuffle}
-              >
-                {shuffle.current ? <ShuffleOn /> : <ShuffleOff />}
-              </button>
-              <button className="btn-prev btn btn-ghost btn-circle btn-sm text-3xl">
-                <SkipPrevious />
-              </button>
-              <button
-                className="btn-play btn btn-circle btn-md text-4xl border-0 shadow-lg"
-                onClick={handlePlayPause}
-              >
-                <PlayPause state={state} />
-              </button>
-              <button className="btn-next btn btn-ghost btn-circle btn-sm text-3xl">
-                <SkipNext />
-              </button>
-              <button
-                className="btn-loop btn btn-ghost btn-circle btn-sm text-xl"
-                onClick={handleRepeat}
-              >
-                {repeat.current ? <RepeatOn /> : <RepeatOff />}
-              </button>
-            </div>
+          <div className="main-controls flex flex-1 items-center justify-center gap-2">
+            <button
+              className="btn-shuffle btn-ghost btn-sm btn-circle btn text-xl"
+              onClick={handleShuffle}
+            >
+              {shuffle.current ? <ShuffleOn /> : <ShuffleOff />}
+            </button>
+            <button className="btn-prev btn-ghost btn-sm btn-circle btn text-3xl">
+              <SkipPrevious />
+            </button>
+            <button
+              className="btn-play btn-md btn-circle btn border-0 text-4xl shadow-lg"
+              onClick={handlePlayPause}
+            >
+              <PlayPause state={state} />
+            </button>
+            <button className="btn-next btn-ghost btn-sm btn-circle btn text-3xl">
+              <SkipNext />
+            </button>
+            <button
+              className="btn-loop btn-ghost btn-sm btn-circle btn text-xl"
+              onClick={handleRepeat}
+            >
+              {repeat.current ? <RepeatOn /> : <RepeatOff />}
+            </button>
+          </div>
 
-            <div className="secondary-controls flex flex-1 items-center justify-end gap-2 group">
-              {metadata && (
-                <div className="slider-volume flex items-center opacity-0 hover:opacity-100 gap-2 transition ease-in">
-                  <div className="text-sm opacity-50">{volumeCurrent}%</div>
-                  <input
-                    className="range range-xs min-w-[75px] max-w-[125px]"
-                    type="range"
-                    min={0}
-                    max={1}
-                    step={0.01}
-                    ref={sliderVolume}
-                    value={volume}
-                    onChange={handleSliderVolume}
-                  />
-                </div>
-              )}
+          <div className="secondary-controls group flex flex-1 items-center justify-end gap-2">
+            {data && (
+              <div className="slider-volume flex items-center gap-2 opacity-0 transition ease-in hover:opacity-100">
+                <div className="text-sm opacity-50">{volumeCurrent}%</div>
+                <input
+                  className="range range-xs min-w-[75px] max-w-[125px]"
+                  type="range"
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  ref={sliderVolume}
+                  value={volume}
+                  onChange={handleSliderVolume}
+                />
+              </div>
+            )}
 
-              <button
-                className="btn-mute-toggle btn btn-circle btn-ghost btn-sm text-xl"
-                onClick={handleMute}
-              >
-                {volume <= 0.05 || isMuted ? <VolumeOff /> : <VolumeUp />}
-              </button>
-            </div>
+            <button
+              className="btn-mute-toggle btn-ghost btn-sm btn-circle btn text-xl"
+              onClick={handleMute}
+            >
+              {volume <= 0.05 || isMuted ? <VolumeOff /> : <VolumeUp />}
+            </button>
           </div>
         </div>
       </div>

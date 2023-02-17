@@ -38,7 +38,6 @@ const PlayerProvider = (props) => {
           albums: filteredAlbums,
         };
       }
-      //console.log(filtered);
 
       return filtered;
     }, {});
@@ -50,7 +49,6 @@ const PlayerProvider = (props) => {
     return new Promise((resolve, reject) => {
       import(`./../../../library/chunks/${chunk.file}.json`)
         .then((data) => {
-          console.log(data);
           setLibrary((old) => ({ ...old, [chunk.artist]: data?.default }));
         })
         .catch((error) => {

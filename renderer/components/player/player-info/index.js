@@ -1,38 +1,51 @@
-import PLAYER_STATES from "../constants";
+import Link from 'next/link';
+import { slugifyFile } from '../../../../main/utils/files';
+import PLAYER_STATES from '../constants';
 
-const PlayerInfo = ({ state, metadata }) => {
+const PlayerInfo = ({ state, data }) => {
+  const trackData = data?.data || {};
+  const metaData = data?.metadata || {};
+  const artist = slugifyFile(trackData.artist);
+  const album = slugifyFile(trackData.album);
+  const track = trackData.slug;
+
   const playerArtImage = (object) => {
     if (object?.data) {
       return URL.createObjectURL(
-        new Blob([object?.data], { type: object?.data?.format })
+        new Blob([object?.data], { type: object?.data?.format }),
       );
     } else {
-      return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+      return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
     }
   };
 
   return (
     <div className="track-info flex-1">
       <div className=" flex items-center justify-start gap-3">
-        <figure className="art select-none swap">
-          <img
-            className={`d-block rounded-sm max-w-none ${
-              state === PLAYER_STATES.PLAY && "shadow-inner"
-            }`}
-            src={playerArtImage(metadata?.common?.picture?.[0])}
-            width="75px"
-            height="75px"
-          />
-        </figure>
-        {metadata?.common?.title && (
+        <Link href={`/album/${slugifyFile(trackData.album)}`}>
+          <figure className="art swap select-none">
+            <img
+              className="d-block max-w-none rounded-sm"
+              src={playerArtImage(metaData?.common?.picture?.[0])}
+              width="75px"
+              height="75px"
+            />
+          </figure>
+        </Link>
+        {metaData?.common?.title && (
           <div className="info">
-            <h2 className="font-headings font-bold text-md">
-              {metadata?.common?.title}
-            </h2>
-            <h3 className="font-medium text-xs text-clip text-ellipsis opacity-60 w-full">
-              <span>{metadata?.common?.artist}</span>
+            <Link
+              href={`/artist/${artist}/${album}/${track}`}
+              className="text-md font-headings font-bold"
+            >
+              {metaData?.common?.title}
+            </Link>
+            <h3 className="w-full text-ellipsis text-clip text-xs font-medium opacity-60">
+              <Link href={`/artist/${artist}`}>{metaData?.common?.artist}</Link>
               <span> • </span>
-              <span>{metadata?.common?.album}</span>
+              <Link href={`/artist/${artist}/${album}`}>
+                {metaData?.common?.album}
+              </Link>
             </h3>
           </div>
         )}
