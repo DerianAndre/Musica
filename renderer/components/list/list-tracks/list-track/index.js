@@ -1,4 +1,4 @@
-import { timeFormat } from '~/renderer/utils';
+import { timeFormat } from '~/renderer/utils/index';
 import { slugifyFile } from '~/main/utils/files';
 import Link from 'next/link';
 import ListIntersection from '../../list-intersecton';
