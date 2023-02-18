@@ -34,14 +34,13 @@ const Player = () => {
   const shuffle = useRef(false);
   const repeat = useRef(false);
   const mute = useRef(false);
+  const [isMute, setIsMute] = useState(false); // ! For some reason state doesnt work in howler it must use a ref.current value in order to work...
 
   const [trigger, setTrigger] = useState(false); // * Use to force rerender
   const [seek, setSeek] = useState(0);
   const [volume, setVolume] = useLocalStorage('volume', 1);
   const [state, setState] = useState(PLAYER_STATES.STOP);
   const [data, setData] = useState(false);
-
-  //console.log(libraryMemo);
 
   const playerReset = () => {
     if (!howl.current || state === PLAYER_STATES.PLAY) return;
@@ -95,9 +94,11 @@ const Player = () => {
   };
 
   const handleMute = () => {
-    mute.current = !mute.current;
-    player?.mute(!mute.current);
-    reRender();
+    setIsMute((old) => {
+      mute.current = !old;
+      player?.mute(!old);
+      return !old;
+    });
   };
 
   const handlePlay = (data, file) => {
@@ -132,7 +133,6 @@ const Player = () => {
   };
 
   const handleRepeat = () => {
-    setTrigger((old) => old + 1);
     if (repeat.current) {
       repeat.current = false;
       player?.loop(false);
@@ -140,6 +140,7 @@ const Player = () => {
       repeat.current = true;
       player?.loop(true);
     }
+    reRender();
   };
 
   const handlePlayerUpdate = () => {
@@ -160,9 +161,9 @@ const Player = () => {
       howl.current = new Howl({
         autoplay: false,
         src: data?.metadata?.file || null,
-        volume,
-        mute,
+        mute: mute.current,
         loop: repeat.current,
+        volume,
         onplay: () => {
           window.electron.player.event(PLAYER_STATES.PLAY);
           setState(PLAYER_STATES.PLAY);
@@ -273,7 +274,7 @@ const Player = () => {
               className="btn-mute-toggle btn-ghost btn-sm btn-circle btn text-xl"
               onClick={handleMute}
             >
-              {volume > 0 && mute.current ? <VolumeUp /> : <VolumeOff />}
+              {volume > 0 && !isMute ? <VolumeUp /> : <VolumeOff />}
             </button>
             <ToggleTheme />
             <Link
