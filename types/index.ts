@@ -1,7 +1,7 @@
 export type Artist = {
   title: string;
   slug: string;
-  albums: object[];
+  albums: Album[];
 };
 
 export type Album = {

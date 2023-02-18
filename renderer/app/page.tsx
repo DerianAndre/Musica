@@ -18,9 +18,6 @@ const Home = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [toggleSearch, setToggleSearch] = useState<boolean>(false);
 
-  const handlePlay = (data: void): void => {
-    window.electron.player.play(data);
-  };
   const handleSearch = (): void => {
     setToggleSearch((old) => !old);
   };
@@ -49,7 +46,7 @@ const Home = () => {
             <div className="flex gap-3">
               <button
                 className="btn-xs btn gap-2"
-                onClick={() => handlePlayRandom(library, handlePlay)}
+                onClick={() => handlePlayRandom(library)}
               >
                 <Shuffle /> Random play
               </button>
@@ -79,12 +76,7 @@ const Home = () => {
             </div>
           </div>
         )}
-        <List
-          mode={mode}
-          tracks={tracks}
-          library={libraryMemo}
-          handlePlay={handlePlay}
-        />
+        <List mode={mode} tracks={tracks} library={libraryMemo} />
       </div>
     </main>
   );

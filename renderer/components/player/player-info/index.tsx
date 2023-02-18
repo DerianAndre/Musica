@@ -1,8 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
-import { slugifyFile } from '../../../../main/utils/files';
-import PLAYER_STATES from '../constants';
+import { slugifyFile } from '~/main/utils/files';
 
-const PlayerInfo = ({ state, data }) => {
+const PlayerInfo = ({ data }) => {
   const trackData = data?.data || {};
   const metaData = data?.metadata || {};
   const artist = slugifyFile(trackData.artist);
@@ -22,25 +22,26 @@ const PlayerInfo = ({ state, data }) => {
   return (
     <div className="track-info flex-1">
       <div className=" flex items-center justify-start gap-3">
-        <Link href={`/album/${slugifyFile(trackData.album)}`}>
+        <Link href={`/artist/${artist}/${album}`}>
           <figure className="art swap select-none">
             <img
               className="d-block max-w-none rounded-sm"
               src={playerArtImage(metaData?.common?.picture?.[0])}
               width="75px"
               height="75px"
+              alt={trackData.album}
             />
           </figure>
         </Link>
         {metaData?.common?.title && (
-          <div className="info">
+          <div className="info max-w-full">
             <Link
               href={`/artist/${artist}/${album}/${track}`}
               className="text-md font-headings font-bold"
             >
               {metaData?.common?.title}
             </Link>
-            <h3 className="w-full text-ellipsis text-clip text-xs font-medium opacity-60">
+            <h3 className="w-full truncate text-xs font-medium opacity-60">
               <Link href={`/artist/${artist}`}>{metaData?.common?.artist}</Link>
               <span> • </span>
               <Link href={`/artist/${artist}/${album}`}>

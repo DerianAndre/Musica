@@ -2,7 +2,7 @@ import React from 'react';
 import ListIntersection from '../list-intersecton';
 import ListArtist from './list-artist';
 
-const ListArtists = ({ library, handlePlay }) => {
+const ListArtists = ({ library }) => {
   if (!library) return;
 
   const artists = Object.keys(library).sort((a, b) => a - b);

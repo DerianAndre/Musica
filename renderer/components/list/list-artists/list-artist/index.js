@@ -3,9 +3,9 @@ import ListCover from '../../list-cover';
 
 const ListArtist = ({ artist, data }) => {
   return (
-    <div className="list-artist flex h-full">
+    <div className="list-artist flex h-full w-full">
       <Link
-        className="flex h-full flex-col items-center rounded p-3 transition hover:bg-base-content/[0.15] dark:hover:bg-base-content/[0.05] dark:hover:shadow-lg"
+        className="list-artist-link flex h-full w-full flex-col items-center rounded p-3 transition hover:bg-base-content/[0.15] dark:hover:bg-base-content/[0.05] dark:hover:shadow-lg"
         href={`/artist/${data?.slug}/`}
       >
         <ListCover

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
+import ToggleTheme from '~/renderer/components/theme-toggle';
 
 const PageSettings = () => {
   const [libraryPath, setLibraryPath] = useLocalStorage(
@@ -70,6 +71,7 @@ const PageSettings = () => {
             </div>
           </section>
         </div>
+        <ToggleTheme />
         <div className="mt-5 text-sm opacity-50">Derian Castillo</div>
       </div>
     </main>

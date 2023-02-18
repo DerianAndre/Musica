@@ -3,46 +3,53 @@
 import React, { useEffect, useState } from 'react';
 import { Artist, Album, Track } from '~/types';
 import loadChunk from '~/library/chunks';
-import Link from 'next/link';
+import ListIntersection from '~/renderer/components/list/list-intersecton';
+import ListAll from '~/renderer/components/list/list-all';
+import ListAllItem from '~/renderer/components/list/list-all/list-all-item';
 
-const PageAlbum = ({
+const PageArtist = ({
   params,
 }: {
   params: { artist: string; album: string };
 }) => {
   const { artist, album } = params;
 
-  const [dataArtist, setDataArtist] = useState<Artist>();
-
-  const [dataAlbum, setDataAlbum] = useState<Album>();
-
-  const getArtistData = async () => {
-    const artistChunk = await loadChunk({
-      chunk: undefined,
-      slug: artist,
-      setter: undefined,
-    });
-
-    setDataArtist(artistChunk);
-
-    const albumChunk = artistChunk?.albums?.find(
-      (item: Album) => item?.slug === album,
-    );
-
-    setDataAlbum(albumChunk);
-  };
+  const [data, setData] = useState<Artist>({
+    title: '',
+    slug: '',
+    albums: [],
+  });
 
   useEffect(() => {
-    if (!artist || !album) return;
+    if (!artist) return;
+
+    const getArtistData = async () => {
+      const data = await loadChunk({
+        chunk: undefined,
+        slug: artist,
+        setter: undefined,
+      });
+      setData(data);
+    };
+
     getArtistData();
-  }, [artist, album]);
+  }, [artist]);
 
   return (
     <div>
-      <Link href={`/artist/${dataArtist?.slug}`}>{dataArtist?.title}</Link>
-      <h3>{dataAlbum?.title}</h3>
+      <ListIntersection>
+        <ListAllItem
+          library={{
+            [data.title]: {
+              albums: [data?.albums?.find((item) => item.slug === album)],
+            },
+          }}
+          artist={data.title}
+          show={{ artist: false }}
+        />
+      </ListIntersection>
     </div>
   );
 };
 
-export default PageAlbum;
+export default PageArtist;

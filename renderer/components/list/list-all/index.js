@@ -1,8 +1,8 @@
-import React, { lazy } from "react";
-import ListIntersection from "../list-intersecton";
-import ListAllItem from "./list-all-item";
+import React, { lazy } from 'react';
+import ListIntersection from '../list-intersecton';
+import ListAllItem from './list-all-item';
 
-const List = ({ library, handlePlay }) => {
+const List = ({ library }) => {
   if (!library) return;
 
   const artists = Object.keys(library);
@@ -11,11 +11,8 @@ const List = ({ library, handlePlay }) => {
     <div className="list-all">
       {artists?.map((artist, index) => (
         <ListIntersection key={index + artist}>
-          <ListAllItem
-            library={library}
-            artist={artist}
-            handlePlay={handlePlay}
-          />
+          <ListAllItem library={library} artist={artist} />
+          <div className="divider mt-5 mb-10" />
         </ListIntersection>
       ))}
     </div>

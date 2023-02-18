@@ -2,7 +2,7 @@ import React, { Fragment, lazy } from 'react';
 import ListIntersection from '../list-intersecton';
 import ListAlbum from './list-album';
 
-const ListAlbums = ({ library, handlePlay }) => {
+const ListAlbums = ({ library }) => {
   if (!library) return;
 
   const albums = Object.values(library)
@@ -24,11 +24,7 @@ const ListAlbums = ({ library, handlePlay }) => {
       <div className="align-stretch grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 3xl:grid-cols-8 4xl:grid-cols-10">
         {albums?.map((album, index) => (
           <ListIntersection key={index + album.title}>
-            <ListAlbum
-              artist={album.albumartist}
-              album={album}
-              handlePlay={handlePlay}
-            />
+            <ListAlbum artist={album.albumartist} album={album} />
           </ListIntersection>
         ))}
       </div>

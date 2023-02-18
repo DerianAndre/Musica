@@ -1,3 +1,5 @@
+import { handlePlay } from '~/renderer/components/player/utils';
+
 const getRandomArtist = (library) => {
   if (!library) return null;
   const keys = Object.keys(library);
@@ -20,7 +22,7 @@ const getRandomTrack = (album) => {
   return randomTrack;
 };
 
-const handlePlayRandom = (library, handlePlay) => {
+const handlePlayRandom = (library) => {
   const artist = getRandomArtist(library);
   const album = getRandomAlbum(artist);
   const track = getRandomTrack(album);

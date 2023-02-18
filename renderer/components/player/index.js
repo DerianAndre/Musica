@@ -1,6 +1,9 @@
 import styles from './index.module.scss';
 
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Howl } from 'howler';
+import Link from 'next/link';
+
 import {
   RepeatOn,
   RepeatOff,
@@ -11,15 +14,12 @@ import {
   SkipPrevious,
   VolumeOff,
   VolumeUp,
+  Settings,
 } from '../icons';
-
-import { Howl } from 'howler';
 import { useInterval, useLocalStorage, useReadLocalStorage } from 'usehooks-ts';
-import PlayerInfo from './player-info';
+import PlayerInfo from './player-info/index';
 import PlayerSeeker from './player-seeker';
 import PLAYER_STATES from './constants';
-import { PlayerContext } from '../../context/player';
-import { handlePlayRandom } from '../../utils/random';
 
 const Player = () => {
   const sliderTime = useRef(null);
@@ -252,7 +252,7 @@ const Player = () => {
             </button>
           </div>
 
-          <div className="secondary-controls group flex flex-1 items-center justify-end gap-2">
+          <div className="secondary-controls group flex flex-1 items-center justify-end gap-1">
             {data && (
               <div className="slider-volume flex items-center gap-2 opacity-0 transition ease-in hover:opacity-100">
                 <div className="text-sm opacity-50">{volumeCurrent}%</div>
@@ -275,6 +275,13 @@ const Player = () => {
             >
               {volume <= 0.05 || isMuted ? <VolumeOff /> : <VolumeUp />}
             </button>
+
+            <Link
+              className="btn-settings btn-ghost btn-sm btn-circle btn text-xl"
+              href="/settings"
+            >
+              <Settings />
+            </Link>
           </div>
         </div>
       </div>

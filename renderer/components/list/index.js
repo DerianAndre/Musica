@@ -5,7 +5,7 @@ import ListArtists from './list-artists';
 import ListAlbums from './list-albums';
 import ListTracks from './list-tracks';
 
-const List = ({ library, tracks, mode, handlePlay }) => {
+const List = ({ library, tracks, mode }) => {
   if (!library) return;
 
   /*   const librarySorted = Object.fromEntries(
@@ -15,12 +15,12 @@ const List = ({ library, tracks, mode, handlePlay }) => {
   const components = {
     tracks: (
       <Suspense fallback={<>loading</>}>
-        <ListTracks library={library} tracks={tracks} handlePlay={handlePlay} />
+        <ListTracks library={library} tracks={tracks} />
       </Suspense>
     ),
-    artists: <ListArtists library={library} handlePlay={handlePlay} />,
-    albums: <ListAlbums library={library} handlePlay={handlePlay} />,
-    list: <ListAll library={library} handlePlay={handlePlay} />,
+    artists: <ListArtists library={library} />,
+    albums: <ListAlbums library={library} />,
+    list: <ListAll library={library} />,
   };
 
   return components[mode];

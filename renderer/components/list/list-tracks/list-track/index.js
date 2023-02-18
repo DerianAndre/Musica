@@ -8,19 +8,19 @@ const ListTrack = ({ track, handlePlay }) => {
   const album = slugifyFile(track?.album);
 
   return (
-    <div className="list-track">
-      <div className="align-items-center flex select-none gap-5 rounded text-xs transition duration-150 ease-in hover:bg-base-100">
+    <div className="list-track rounded transition">
+      <div className="align-items-stretch flex select-none gap-5 rounded text-xs">
         <div
           className="group w-36 flex-auto cursor-pointer text-start font-headings"
           onClick={() => handlePlay(track)}
         >
-          <div className="inline-block max-w-full truncate rounded py-2 px-3 group-hover:bg-base-300">
+          <div className="inline-block max-w-full truncate rounded py-2 px-3">
             {track?.title || 'Unkwon title'}
           </div>
         </div>
         <div className="hidden w-14 flex-auto sm:block">
           <Link
-            className="inline-block max-w-full truncate rounded py-2 px-3 hover:bg-base-300"
+            className="inline-block max-w-full truncate rounded py-2 px-3"
             href={`/artist/${artist}`}
           >
             {track?.artist || 'Unkwon artist'}
@@ -28,7 +28,7 @@ const ListTrack = ({ track, handlePlay }) => {
         </div>
         <div className="hidden w-14 flex-auto sm:block">
           <Link
-            className="inline-block max-w-full truncate rounded py-2 px-3 hover:bg-base-300"
+            className="inline-block max-w-full truncate rounded py-2 px-3"
             href={`/artist/${artist}/${album}`}
           >
             {track?.album || 'Unkwon album'}

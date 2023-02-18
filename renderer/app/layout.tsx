@@ -31,26 +31,14 @@ export default function RootLayout({
         <body>
           <div className="relative flex h-screen w-full flex-col">
             <header
-              className={`header flex w-full items-center justify-between px-10 pt-3 pb-1`}
+              className={`header flex w-full items-center justify-between px-5 pt-3 pb-1`}
             >
-              <h1 className="font-headings text-3xl font-semibold">Musica</h1>
-              <div className="flex items-center gap-1">
-                <Link
-                  className="btn-ghost btn-md btn-circle btn text-xl"
-                  href="/"
-                >
-                  <Home />
-                </Link>
-                <Link
-                  className="btn-ghost btn-md btn-circle btn text-xl"
-                  href="/settings"
-                >
-                  <Settings />
-                </Link>
-                <ToggleTheme />
-              </div>
+              <Link href="/">
+                <h1 className="font-headings text-3xl font-semibold">Musica</h1>
+              </Link>
+              <div className="flex items-center gap-1"></div>
             </header>
-            <main className="main relative grid h-full overflow-y-scroll px-10">
+            <main className="main relative grid h-full overflow-y-scroll px-5">
               <div className="wrapper mb-[200px] flex-1">{children}</div>
             </main>
             <Player />
