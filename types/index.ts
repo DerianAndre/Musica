@@ -1,3 +1,7 @@
+export type Library = {
+  [key: string]: Artist;
+};
+
 export type Artist = {
   title: string;
   slug: string;

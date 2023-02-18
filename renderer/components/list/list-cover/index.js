@@ -12,17 +12,16 @@ const ListCover = ({ album = {}, width, rounded = false }) => {
       return skeleton;
     }
   };
+
   return (
-    <div className="list-cover block w-full" style={{ maxWidth: width }}>
-      <img
-        className={`block aspect-[1/1] w-full select-none border border-base-content/[0.05] bg-base-300 text-[0] shadow-lg ${
-          rounded && 'rounded-full'
-        }`}
-        alt={album?.title || ''}
-        src={getImage()}
-        width={width}
-      />
-    </div>
+    <img
+      className={`cover-art block aspect-[1/1] w-full select-none border border-base-content/[0.05] bg-base-300 text-[0] shadow-lg ${
+        status.current
+      } ${rounded ? 'rounded-full' : ''}`}
+      alt={album?.title || ''}
+      src={getImage()}
+      style={{ maxWidth: width }}
+    />
   );
 };
 

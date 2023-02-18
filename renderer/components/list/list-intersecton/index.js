@@ -16,7 +16,7 @@ const ListIntersection = ({
       ref={ref}
       className={`item ${
         inView
-          ? 'has-loaded ease opacity-100'
+          ? 'has-loaded forwards animate-fadeIn'
           : 'is-loading block min-h-[30px] opacity-0'
       }`}
     >

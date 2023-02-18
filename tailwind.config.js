@@ -28,6 +28,15 @@ module.exports = {
       sans: ['"Open Sans"', ...defaultTheme.fontFamily.sans],
     },
     extend: {
+      animation: {
+        fadeIn: 'fadeIn 1s ease',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
+        },
+      },
       screens: {
         '3xl': '1700px',
         '4xl': '1850px',
