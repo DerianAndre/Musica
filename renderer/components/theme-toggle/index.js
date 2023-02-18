@@ -16,7 +16,7 @@ const ToggleTheme = () => {
 
   return (
     <button
-      className="swap btn-ghost swap-rotate btn-md btn-circle btn text-xl"
+      className="swap btn-ghost swap-rotate btn-sm btn-circle btn text-xl"
       onClick={toggleTheme}
     >
       {theme === 'dark' ? <DarkMode /> : <LightMode />}

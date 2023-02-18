@@ -20,6 +20,7 @@ import { useInterval, useLocalStorage, useReadLocalStorage } from 'usehooks-ts';
 import PlayerInfo from './player-info/index';
 import PlayerSeeker from './player-seeker';
 import PLAYER_STATES from './constants';
+import ToggleTheme from '../theme-toggle';
 
 const Player = () => {
   const sliderTime = useRef(null);
@@ -32,12 +33,12 @@ const Player = () => {
 
   const shuffle = useRef(false);
   const repeat = useRef(false);
+  const mute = useRef(false);
 
-  const [trigger, setTrigger] = useState(0); // * Use to force rerender
+  const [trigger, setTrigger] = useState(false); // * Use to force rerender
   const [seek, setSeek] = useState(0);
   const [volume, setVolume] = useLocalStorage('volume', 1);
   const [state, setState] = useState(PLAYER_STATES.STOP);
-  const [isMuted, setIsMuted] = useState(false);
   const [data, setData] = useState(false);
 
   //console.log(libraryMemo);
@@ -50,6 +51,8 @@ const Player = () => {
     setState(PLAYER_STATES.STOP);
     setSeek(0);
   };
+
+  const sliderValue = seek > 0 ? (seek / player.duration()) * 100 : 0;
 
   const timeFormat = (total) => {
     const min = Math.floor(total / 60);
@@ -70,7 +73,9 @@ const Player = () => {
     return ((value - 0) / (100 - 0)) * (duration - 0) + 0;
   };
 
-  const sliderValue = seek > 0 ? (seek / player.duration()) * 100 : 0;
+  const reRender = () => {
+    setTrigger((v) => !v);
+  };
 
   const handleSliderTime = (event) => {
     if (!player) return;
@@ -90,15 +95,9 @@ const Player = () => {
   };
 
   const handleMute = () => {
-    if (!player) return;
-
-    if (!isMuted) {
-      setIsMuted(true);
-      player?.mute(true);
-    } else {
-      setIsMuted(false);
-      player?.mute(false);
-    }
+    mute.current = !mute.current;
+    player?.mute(!mute.current);
+    reRender();
   };
 
   const handlePlay = (data, file) => {
@@ -124,12 +123,12 @@ const Player = () => {
   const handlePlayNext = () => {};
 
   const handleShuffle = () => {
-    setTrigger((old) => old + 1);
     if (shuffle.current) {
       shuffle.current = false;
     } else {
       shuffle.current = true;
     }
+    reRender;
   };
 
   const handleRepeat = () => {
@@ -162,6 +161,7 @@ const Player = () => {
         autoplay: false,
         src: data?.metadata?.file || null,
         volume,
+        mute,
         loop: repeat.current,
         onplay: () => {
           window.electron.player.event(PLAYER_STATES.PLAY);
@@ -273,9 +273,9 @@ const Player = () => {
               className="btn-mute-toggle btn-ghost btn-sm btn-circle btn text-xl"
               onClick={handleMute}
             >
-              {volume <= 0.05 || isMuted ? <VolumeOff /> : <VolumeUp />}
+              {volume > 0 && mute.current ? <VolumeUp /> : <VolumeOff />}
             </button>
-
+            <ToggleTheme />
             <Link
               className="btn-settings btn-ghost btn-sm btn-circle btn text-xl"
               href="/settings"
