@@ -3,7 +3,7 @@ import ListIntersection from '../list-intersecton';
 import ListTrack from './list-track';
 import { handlePlay } from '~/renderer/components/player/utils';
 
-const ListTracks = ({ library, tracks }) => {
+const ListTracks = ({ tracks }) => {
   if (!tracks) return;
 
   return (

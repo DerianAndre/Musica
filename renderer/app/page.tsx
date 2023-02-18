@@ -7,11 +7,12 @@ import { Shuffle } from '../components/icons';
 import { handlePlayRandom } from '../utils/random';
 import { PlayerContext } from '../context/player';
 
-const menu = ['tracks', 'artists', 'albums', 'list'];
+const ITEMS_MENU = ['tracks', 'artists', 'albums', 'list'];
+const ITEMS_SORT = ['title', 'artist', 'album', 'year'];
 
 const Home = () => {
   const refHome = useRef<null | HTMLDivElement>(null);
-  const { tracks, library, libraryMemo, libraryStatus } =
+  const { tracks, sortBy, library, libraryMemo, libraryStatus, setSortBy } =
     useContext(PlayerContext);
 
   const [mode, setMode] = useState<string>('tracks');
@@ -28,9 +29,10 @@ const Home = () => {
         <div className="sticky top-0 left-0 right-0 z-[9999] mb-5 bg-base-100">
           <div className="flex w-full items-center justify-between">
             <div className="tabs gap-5 font-headings font-semibold">
-              {menu.map((item) => (
+              {ITEMS_MENU.map((item) => (
                 <button
                   key={item}
+                  type="button"
                   className={`text-md tab tab-bordered px-0 uppercase ${
                     mode === item ? 'tab-active' : ''
                   }`}
@@ -44,7 +46,29 @@ const Home = () => {
               ))}
             </div>
             <div className="flex gap-3">
+              {mode === 'tracks' && (
+                <div className="sort-by flex items-center gap-1">
+                  <div className="text-xs">Sort by</div>
+                  <select
+                    name="sort-by"
+                    title="sort-by"
+                    className="select-bordered select select-xs rounded capitalize"
+                    onChange={(e) => setSortBy(e.target.value)}
+                  >
+                    {ITEMS_SORT.map((item, index) => (
+                      <option
+                        key={item + index}
+                        value={item}
+                        selected={sortBy === item}
+                      >
+                        {item}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
               <button
+                type="button"
                 className="btn-xs btn gap-2"
                 onClick={() => handlePlayRandom(library)}
               >
@@ -58,6 +82,7 @@ const Home = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
               <button
+                type="button"
                 className="btn-sm btn hidden gap-2"
                 onClick={handleSearch}
               >

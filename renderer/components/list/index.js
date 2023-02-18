@@ -8,16 +8,8 @@ import ListTracks from './list-tracks';
 const List = ({ library, tracks, mode }) => {
   if (!library) return;
 
-  /*   const librarySorted = Object.fromEntries(
-    Object.entries(library).sort(([a], [b]) => a.localeCompare(b))
-  ); */
-
   const components = {
-    tracks: (
-      <Suspense fallback={<>loading</>}>
-        <ListTracks library={library} tracks={tracks} />
-      </Suspense>
-    ),
+    tracks: <ListTracks tracks={tracks} />,
     artists: <ListArtists library={library} />,
     albums: <ListAlbums library={library} />,
     list: <ListAll library={library} />,

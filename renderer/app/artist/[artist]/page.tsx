@@ -38,10 +38,11 @@ const PageArtist = ({ params }: { params: { artist: string } }) => {
   return (
     <div>
       <h2 className="font-headings text-3xl font-semibold">{data.title}</h2>
-      <div className="flex gap-3 opacity-50">
+      <div className="flex gap-2 opacity-50">
         <div>
           {totalAlbums} {totalAlbums > 1 ? 'albums' : 'album'}
         </div>
+        •
         <div>
           {totalSongs} {totalSongs > 1 ? 'songs' : 'song'}
         </div>
