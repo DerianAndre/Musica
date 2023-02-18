@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import styles from './index.module.scss';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -223,10 +224,12 @@ const Player = () => {
           handleSliderTime={handleSliderTime}
         />
 
-        <div className="player flex w-full gap-5">
-          <PlayerInfo state={state} data={data} />
+        <div className="player flex w-full flex-wrap gap-5">
+          <div className="flex-1">
+            <PlayerInfo state={state} data={data} />
+          </div>
 
-          <div className="main-controls flex flex-1 items-center justify-center gap-2">
+          <div className="main-controls flex flex-1 items-center justify-end gap-2 md:justify-center">
             <button
               className="btn-shuffle btn-ghost btn-sm btn-circle btn text-xl"
               onClick={handleShuffle}
@@ -253,7 +256,7 @@ const Player = () => {
             </button>
           </div>
 
-          <div className="secondary-controls group flex flex-1 items-center justify-end gap-1">
+          <div className="secondary-controls group hidden flex-1 items-center justify-end gap-1 md:flex">
             {data && (
               <div className="slider-volume flex items-center gap-2 opacity-0 transition ease-in hover:opacity-100">
                 <div className="text-sm opacity-50">{volumeCurrent}%</div>

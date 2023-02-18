@@ -65,6 +65,7 @@
         var(--slider-thumb-border-color);
       border-radius: 50%;
       transition: border 0.25s ease;
+      box-shadow: 0 0 5px 1.5px rgba(black, 0.25);
       cursor: pointer;
       &:hover {
         width: var(--slider-thumb-hover-width);

@@ -1,10 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Artist, Album, Track } from '~/types';
+import { Artist } from '~/types';
 import loadChunk from '~/library/chunks';
 import ListIntersection from '~/renderer/components/list/list-intersecton';
-import ListAll from '~/renderer/components/list/list-all';
 import ListAllItem from '~/renderer/components/list/list-all/list-all-item';
 
 const PageArtist = ({

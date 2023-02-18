@@ -26,7 +26,7 @@ const PageSettings = () => {
     //window.electron.library.loading(() => {
     //  setStatus("loading");
     //});
-    window.electron.library.parsed((event, data) => {
+    window.electron.library.parsed((event: any, data: any) => {
       if (data.status === 'success') {
         setLibraryPath(data.path);
         setStatus('ready');
@@ -34,6 +34,7 @@ const PageSettings = () => {
         setStatus('error');
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

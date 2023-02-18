@@ -2,14 +2,14 @@
 import Link from 'next/link';
 import { slugifyFile } from '~/main/utils/files';
 
-const PlayerInfo = ({ data }) => {
+const PlayerInfo = ({ data }: any) => {
   const trackData = data?.data || {};
   const metaData = data?.metadata || {};
   const artist = slugifyFile(trackData.artist);
   const album = slugifyFile(trackData.album);
   const track = trackData.slug;
 
-  const playerArtImage = (object) => {
+  const playerArtImage = (object: any) => {
     if (object?.data) {
       return URL.createObjectURL(
         new Blob([object?.data], { type: object?.data?.format }),
@@ -20,10 +20,13 @@ const PlayerInfo = ({ data }) => {
   };
 
   return (
-    <div className="track-info flex-1">
-      <div className=" flex items-center justify-start gap-3">
-        <Link href={`/artist/${artist}/${album}`}>
-          <figure className="art swap select-none">
+    <div className="track-info">
+      <div className="flex items-center justify-start gap-3">
+        <Link
+          className="hidden sm:flex"
+          href={artist ? `/artist/${artist}/${album}` : '#'}
+        >
+          <figure className="track-art swap select-none">
             <img
               className="d-block max-w-none rounded-sm"
               src={playerArtImage(metaData?.common?.picture?.[0])}
@@ -34,14 +37,14 @@ const PlayerInfo = ({ data }) => {
           </figure>
         </Link>
         {metaData?.common?.title && (
-          <div className="info max-w-full">
+          <div className="track-metadata max-w-[250px]">
             <Link
               href={`/artist/${artist}/${album}/${track}`}
-              className="text-md font-headings font-bold"
+              className="text-md block max-h-[50px] overflow-hidden font-headings font-bold"
             >
               {metaData?.common?.title}
             </Link>
-            <h3 className="w-full truncate text-xs font-medium opacity-60">
+            <h3 className="w-fulltruncate text-xs font-medium opacity-60">
               <Link href={`/artist/${artist}`}>{metaData?.common?.artist}</Link>
               <span> • </span>
               <Link href={`/artist/${artist}/${album}`}>

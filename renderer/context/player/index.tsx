@@ -9,6 +9,7 @@ import loadLibrary from '~/library';
 import { Library, Track } from '~/types';
 
 type PlayerContext = {
+  background: string;
   library: Library;
   libraryMemo: Library;
   libraryStatus: string;
@@ -22,6 +23,7 @@ type PlayerContext = {
 };
 
 const PlayerContext = createContext<PlayerContext>({
+  background: '',
   library: {},
   libraryMemo: {},
   libraryStatus: 'loading',
@@ -35,12 +37,13 @@ const PlayerContext = createContext<PlayerContext>({
 });
 
 const PlayerProvider = (props: { children: ReactElement }) => {
-  const [library, setLibrary] = useState<{}>({});
+  const [library, setLibrary] = useState<Library>({});
   // TODO: To handle all tracks to be played
   const [playlist, setPlaylist] = useState<[]>([]);
   // TODO: Use to handle random mode from all, artist, album, or whatever
   const [playerMode, setPlayerMode] = useState<string>('normal');
   const [libraryStatus, setLibraryStatus] = useState<string>('loading');
+  const [background, setBackground] = useState<string>('');
 
   const libraryMemo = useMemo(() => {
     return Object.fromEntries(
@@ -73,11 +76,13 @@ const PlayerProvider = (props: { children: ReactElement }) => {
   return (
     <PlayerContext.Provider
       value={{
+        background,
         library,
         libraryMemo,
         libraryStatus,
         playerMode,
         playlist,
+        setBackground,
         setLibrary,
         setLibraryStatus,
         setPlayerMode,

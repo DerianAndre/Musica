@@ -1,3 +1,3 @@
-import PlayerContext from "./player";
+import { PlayerContext, PlayerProvider } from './player';
 
-export { PlayerContext };
+export { PlayerContext, PlayerProvider };

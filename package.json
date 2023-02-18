@@ -3,6 +3,8 @@
   "productName": "Musica",
   "private": true,
   "main": "main/index.js",
+  "version": "0.1.0",
+  "license": "MIT",
   "author": {
     "name": "Derian Castillo",
     "url": "https://derianandre.com"
@@ -16,11 +18,15 @@
     "parse": "node main/utils/parser.js"
   },
   "build": {
+    "appId": "com.derianandre.musica",
     "productName": "Musica",
     "copyright": "Copyright © year ${author.name}",
-    "appId": "com.derianandre.musica",
     "asar": true,
+    "directory": {
+      "output": "build"
+    },
     "files": [
+      "library",
       "main",
       "renderer/out"
     ],
