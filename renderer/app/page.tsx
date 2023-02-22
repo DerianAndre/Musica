@@ -12,8 +12,16 @@ const ITEMS_SORT = ['title', 'artist', 'album', 'year'];
 
 const Home = () => {
   const refHome = useRef<null | HTMLDivElement>(null);
-  const { tracks, sortBy, library, libraryMemo, libraryStatus, setSortBy } =
-    useContext(PlayerContext);
+  const {
+    tracks,
+    sortBy,
+    library,
+    libraryMemo,
+    libraryStatus,
+    handlePlayMode,
+    setSortBy,
+    setPlayerMode,
+  } = useContext(PlayerContext);
 
   const [mode, setMode] = useState<string>('tracks');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -27,7 +35,7 @@ const Home = () => {
     <main className="page-home">
       <div className="flex min-h-full flex-col" ref={refHome}>
         <div className="sticky top-0 left-0 right-0 z-[9999] mb-5 bg-base-100">
-          <div className="flex w-full items-center justify-between">
+          <div className="flex w-full flex-wrap items-center justify-between">
             <div className="tabs gap-5 font-headings font-semibold">
               {ITEMS_MENU.map((item) => (
                 <button
@@ -45,7 +53,7 @@ const Home = () => {
                 </button>
               ))}
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
               {mode === 'tracks' && (
                 <div className="sort-by flex items-center gap-1">
                   <div className="text-xs">Sort by</div>
@@ -53,14 +61,11 @@ const Home = () => {
                     name="sort-by"
                     title="sort-by"
                     className="select-bordered select select-xs rounded capitalize"
+                    value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
                   >
                     {ITEMS_SORT.map((item, index) => (
-                      <option
-                        key={item + index}
-                        value={item}
-                        selected={sortBy === item}
-                      >
+                      <option key={item + index} value={item}>
                         {item}
                       </option>
                     ))}
@@ -70,7 +75,7 @@ const Home = () => {
               <button
                 type="button"
                 className="btn-xs btn gap-2"
-                onClick={() => handlePlayRandom(library)}
+                onClick={() => handlePlayMode('random-all')}
               >
                 <Shuffle /> Random play
               </button>

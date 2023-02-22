@@ -1,4 +1,6 @@
-const handlePlay = (data: void): void => {
+import { Track } from '~/types';
+
+const handlePlay = (data: Track): void => {
   window.electron.player.play(data);
 };
 

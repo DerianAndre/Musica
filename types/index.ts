@@ -41,3 +41,9 @@ export type Track = {
   extension: string;
   path: string;
 };
+
+export type Playlist = {
+  slug?: string;
+  title?: string;
+  tracks?: Track[];
+};

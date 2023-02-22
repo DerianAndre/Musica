@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import styles from './index.module.scss';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Howl } from 'howler';
 import Link from 'next/link';
 
@@ -22,8 +22,11 @@ import PlayerInfo from './player-info/index';
 import PlayerSeeker from './player-seeker';
 import PLAYER_STATES from './constants';
 import ToggleTheme from '../theme-toggle';
+import { PlayerContext } from '~/renderer/context';
 
 const Player = () => {
+  const { playerMode, playRandom, handlePlayNext, handlePlayPrev } =
+    useContext(PlayerContext);
   const sliderTime = useRef(null);
   const sliderVolume = useRef(null);
   const howl = useRef(null);
@@ -118,19 +121,13 @@ const Player = () => {
     }
   };
 
-  // TODO
-  const handlePlayPrev = () => {};
-
-  // TODO
-  const handlePlayNext = () => {};
-
   const handleShuffle = () => {
     if (shuffle.current) {
       shuffle.current = false;
     } else {
       shuffle.current = true;
     }
-    reRender;
+    reRender();
   };
 
   const handleRepeat = () => {
@@ -180,8 +177,15 @@ const Player = () => {
           setState(PLAYER_STATES.STOP);
           setSeek(0);
           player?.seek(0);
+          console.log(playerMode);
+          if (playerMode === 'random-all') {
+            playRandom();
+          }
+          if (playerMode === 'playlist') {
+            handlePlayNext();
+          }
           if (shuffle.current) {
-            //handlePlayRandom(library, handlePlay);
+            playRandom();
           }
         },
         onstop: () => {
@@ -236,7 +240,10 @@ const Player = () => {
             >
               {shuffle.current ? <ShuffleOn /> : <ShuffleOff />}
             </button>
-            <button className="btn-prev btn-ghost btn-sm btn-circle btn text-3xl">
+            <button
+              className="btn-prev btn-ghost btn-sm btn-circle btn text-3xl"
+              onClick={handlePlayPrev}
+            >
               <SkipPrevious />
             </button>
             <button
@@ -245,7 +252,10 @@ const Player = () => {
             >
               <PlayPause state={state} />
             </button>
-            <button className="btn-next btn-ghost btn-sm btn-circle btn text-3xl">
+            <button
+              className="btn-next btn-ghost btn-sm btn-circle btn text-3xl"
+              onClick={handlePlayNext}
+            >
               <SkipNext />
             </button>
             <button

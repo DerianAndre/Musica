@@ -6,7 +6,9 @@ import {
   useState,
 } from 'react';
 import loadLibrary from '~/library';
-import { Library, Track } from '~/types';
+import { Library, Playlist, Track } from '~/types';
+import { handlePlayRandom } from '~/renderer/utils/random';
+import { handlePlay } from '~/renderer/components/player/utils';
 
 type PlayerContext = {
   background: string;
@@ -15,7 +17,12 @@ type PlayerContext = {
   libraryMemo: Library;
   libraryStatus: string;
   playerMode: string;
-  playlist: Track[];
+  playlist: Playlist;
+  playRandom: Function;
+  handlePlayPrev: Function;
+  handlePlayNext: Function;
+  handlePlayMode: Function;
+  handlePlayPlaylist: Function;
   setBackground: Function;
   setLibrary: Function;
   setLibraryStatus: Function;
@@ -32,7 +39,12 @@ const PlayerContext = createContext<PlayerContext>({
   libraryMemo: {},
   libraryStatus: 'loading',
   playerMode: 'normal',
-  playlist: [],
+  playlist: {},
+  playRandom: () => {},
+  handlePlayMode: () => {},
+  handlePlayPlaylist: () => {},
+  handlePlayPrev: () => {},
+  handlePlayNext: () => {},
   setSortBy: () => {},
   setBackground: () => {},
   setLibrary: () => {},
@@ -43,14 +55,13 @@ const PlayerContext = createContext<PlayerContext>({
 });
 
 const PlayerProvider = (props: { children: ReactElement }) => {
-  const [library, setLibrary] = useState<Library>({});
-  const [sortBy, setSortBy] = useState<string>('title');
-  // TODO: To handle all tracks to be played
-  const [playlist, setPlaylist] = useState<[]>([]);
-  // TODO: Use to handle random mode from all, artist, album, or whatever
-  const [playerMode, setPlayerMode] = useState<string>('normal');
-  const [libraryStatus, setLibraryStatus] = useState<string>('loading');
   const [background, setBackground] = useState<string>('');
+  const [library, setLibrary] = useState<Library>({});
+  const [libraryStatus, setLibraryStatus] = useState<string>('loading');
+  const [playerMode, setPlayerMode] = useState<string>('normal');
+  const [playlist, setPlaylist] = useState<Playlist>({});
+  const [playlistIndex, setPlaylistIndex] = useState<number>(0);
+  const [sortBy, setSortBy] = useState<string>('title');
 
   const libraryMemo: Library = useMemo(() => {
     return Object.fromEntries(
@@ -84,6 +95,77 @@ const PlayerProvider = (props: { children: ReactElement }) => {
     return result;
   }, [library, sortBy]);
 
+  const handlePlayMode = (mode: string): void => {
+    console.log('mode', mode);
+    if (mode === 'random-all') {
+      handlePlayRandom(libraryMemo);
+    }
+    setPlayerMode(mode);
+  };
+
+  const handlePlayPlaylist = (playlist: Playlist): void => {
+    setPlayerMode('playlist');
+    setPlaylist(playlist);
+    setPlaylistIndex(0);
+    handlePlay(playlist?.tracks[0]);
+  };
+
+  /*   const handlePlay = (track: Track): void => {
+    // handlePlay
+    // should have index if is from album
+  }; */
+
+  const handlePlayPrev = (): void => {
+    console.log(playerMode);
+    if (playerMode === 'random-all') {
+      playRandom();
+      return;
+    }
+    if (
+      !playlist.tracks ||
+      playlist.tracks.length === 0 ||
+      playlist.tracks.length === 1
+    )
+      return;
+    const playlistLength = playlist?.tracks?.length - 1;
+    if (playlistIndex === 0) {
+      setPlaylistIndex(playlistLength);
+      handlePlay(playlist?.tracks[playlistLength]);
+    } else {
+      setPlaylistIndex((index) => index - 1);
+      handlePlay(playlist?.tracks[playlistIndex]);
+    }
+  };
+
+  const handlePlayNext = (): void => {
+    if (playerMode === 'random-all') {
+      playRandom();
+      return;
+    }
+    if (
+      !playlist.tracks ||
+      playlist.tracks.length === 0 ||
+      playlist.tracks.length === 1
+    )
+      return;
+    const playlistLength = playlist?.tracks?.length - 1;
+    if (playlistIndex === playlistLength) {
+      handlePlay(playlist?.tracks[0]);
+      setPlaylistIndex(0);
+    } else {
+      handlePlay(playlist?.tracks[playlistIndex + 1]);
+      setPlaylistIndex((index) => index + 1);
+    }
+  };
+
+  const handlePlaylistRandom = (): void => {
+    // Create a big playlist with random tracks and play it
+  };
+
+  const playRandom = (): void => {
+    handlePlayRandom(library);
+  };
+
   useEffect(() => {
     loadLibrary({ setLibrary, setStatus: setLibraryStatus });
   }, []);
@@ -98,9 +180,14 @@ const PlayerProvider = (props: { children: ReactElement }) => {
         libraryStatus,
         playerMode,
         playlist,
+        playRandom,
+        handlePlayMode,
+        handlePlayPlaylist,
         setBackground,
         setLibrary,
         setLibraryStatus,
+        handlePlayPrev,
+        handlePlayNext,
         setPlayerMode,
         setPlaylist,
         setSortBy,
