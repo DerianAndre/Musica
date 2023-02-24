@@ -4,14 +4,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Artist, Playlist } from '~/types';
 import loadChunk from '~/library/chunks';
 import ListIntersection from '~/renderer/components/list/list-intersecton';
-import ListAllItem from '~/renderer/components/list/list-all/list-all-item';
+import ListAllItem from '~/renderer/components/list/list-all/list-all-item/index';
 import { PlayerContext } from '~/renderer/context';
 import { MdPlayArrow } from 'react-icons/md';
 import { albumsToTracks, sortAlbums } from '~/renderer/utils';
 import { Shuffle } from '~/renderer/components/icons/index';
 import { shufflePlaylist } from '~/renderer/utils/random';
 import PageCover from '~/renderer/components/page-cover';
-import Link from 'next/link';
 import GoBack from '~/renderer/components/go-back/index';
 
 const PageArtist = ({ params }: { params: { artist: string } }) => {
@@ -23,17 +22,17 @@ const PageArtist = ({ params }: { params: { artist: string } }) => {
     slug: 'artist',
     albums: [],
   });
+
   const [artistPlaylist, setArtistPlaylist] = useState<Playlist>({
     title: 'Playlist',
     slug: 'playlist',
     tracks: [],
   });
 
-  const totalAlbums = data.albums.length;
-  const totalSongs = data.albums.reduce(
-    (current, item) => item?.tracks?.length + current,
-    0,
-  );
+  const totalAlbums = data.albums.length || 0;
+  const totalSongs =
+    data.albums.reduce((current, item) => item?.tracks?.length + current, 0) ||
+    0;
 
   useEffect(() => {
     if (!artist) return;

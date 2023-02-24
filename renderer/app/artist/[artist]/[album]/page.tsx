@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Album, Artist, Playlist } from '~/types';
 import loadChunk from '~/library/chunks';
 import ListIntersection from '~/renderer/components/list/list-intersecton';
-import ListAllItem from '~/renderer/components/list/list-all/list-all-item';
+import ListAllItem from '~/renderer/components/list/list-all/list-all-item/index';
 import { PlayerContext } from '~/renderer/context';
 import { MdPlayArrow } from 'react-icons/md';
 import { shufflePlaylist } from '~/renderer/utils/random';
@@ -33,6 +33,9 @@ const PageArtist = ({
     slug: 'playlist',
     tracks: [],
   });
+
+  const totalDuration = data.albums.length || 0;
+  const totalSongs = dataAlbum?.tracks.length || 0;
 
   useEffect(() => {
     if (!artist || !album) return;
@@ -68,6 +71,16 @@ const PageArtist = ({
     <>
       <PageCover cover={dataAlbum?.cover} />
       <GoBack />
+      <h2 className="font-headings text-3xl font-semibold">
+        {dataAlbum?.title}
+      </h2>
+      <div className="mb-3 flex gap-2 opacity-50">
+        <div>{data?.title}</div> •
+        <div>
+          {totalSongs} {totalSongs > 1 ? 'songs' : 'song'}
+        </div>{' '}
+        •<div>{dataAlbum?.year}</div> • <div>{dataAlbum?.genre}</div> •
+      </div>
       <div className="flex gap-2">
         <button
           className="btn-sm btn gap-2"
@@ -92,7 +105,7 @@ const PageArtist = ({
             },
           }}
           artist={data?.title}
-          show={{ artist: false }}
+          show={{ artist: false, info: false }}
         />
       </ListIntersection>
     </>

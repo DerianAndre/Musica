@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
+import GoBack from '~/renderer/components/go-back';
 import ToggleTheme from '~/renderer/components/theme-toggle/index';
 
 const PageSettings = () => {
@@ -39,8 +40,9 @@ const PageSettings = () => {
 
   return (
     <main className="page-settings">
+      <GoBack />
       <div className="flex flex-col">
-        <h2 className="mb-3 text-2xl font-bold">Settings</h2>
+        <h2 className="text-2xl font-bold">Settings</h2>
         <div className="divide-y divide-base-300">
           <section className="my-3 py-2">
             <h3 className="mb-3 text-xl font-bold">Library</h3>

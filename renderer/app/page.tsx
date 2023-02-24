@@ -33,14 +33,16 @@ const Home = () => {
     <main className="page-home">
       <div className="flex min-h-full flex-col" ref={refHome}>
         <div className="sticky top-0 left-0 right-0 z-[9999] mb-5 bg-base-100/[0.85] py-3 backdrop-blur">
-          <div className="flex w-full flex-wrap items-center justify-between">
-            <div className="tabs tabs-boxed bg-transparent p-0 font-headings font-semibold">
+          <div className="flex w-full flex-wrap items-center justify-between gap-2">
+            <div className="swap tabs tabs-boxed bg-base-content/[0.15] font-headings font-semibold dark:bg-base-content/[0.05]">
               {ITEMS_MENU.map((item) => (
                 <button
                   key={item}
                   type="button"
-                  className={`tab uppercase ${
-                    mode === item ? 'tab-active' : ''
+                  className={`tab capitalize ${
+                    mode === item
+                      ? 'tab-active !rounded !bg-base-100 !text-base-content'
+                      : ''
                   }`}
                   onClick={() => {
                     refHome.current?.scrollIntoView();
@@ -58,7 +60,7 @@ const Home = () => {
                   <select
                     name="sort-by"
                     title="sort-by"
-                    className="select-bordered select select-xs rounded capitalize"
+                    className="select-bordered select select-sm rounded capitalize"
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
                   >
@@ -72,7 +74,7 @@ const Home = () => {
               )}
               <button
                 type="button"
-                className="btn-xs btn gap-2"
+                className="btn-sm btn gap-2"
                 onClick={() =>
                   handlePlayPlaylist(getRandomTracksPlaylist(tracks))
                 }

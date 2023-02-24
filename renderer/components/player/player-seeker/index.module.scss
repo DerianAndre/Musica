@@ -1,21 +1,21 @@
 .slider {
   --slider-gradient: linear-gradient(90deg, #007fbf, #582080, #f20079);
-  --slider-gradient-thumb: linear-gradient(45deg, #582080, #f20079);
+  --slider-gradient-thumb: linear-gradient(30deg, #0040bf, #582080, #f20079);
   --slider-height: 15px;
   --slider-track-height: 5px;
-  --slider-track-background: hsl(var(--bc));
+  --slider-track-background: hsl(220, 4%, 85%);
   --slider-progress-height: 5px;
   --slider-progress-background: var(--slider-gradient);
   --slider-thumb-bg: var(--slider-gradient-thumb);
-  --slider-thumb-width: 20px;
-  --slider-thumb-height: 20px;
-  --slider-thumb-border-width: 4px;
-  --slider-thumb-border-color: white;
+  --slider-thumb-width: 22px;
+  --slider-thumb-height: 22px;
+  --slider-thumb-border-width: 3.5px;
+  --slider-thumb-border-color: hsl(var(--b1));
   --slider-thumb-hover-bg: var(--slider-gradient-thumb);
-  --slider-thumb-hover-width: 20px;
-  --slider-thumb-hover-height: 20px;
+  --slider-thumb-hover-width: 22px;
+  --slider-thumb-hover-height: 22px;
   --slider-thumb-hover-border-width: 2px;
-  --slider-thumb-hover-border-color: white;
+  --slider-thumb-hover-border-color: hsl(var(--b1));
 
   position: relative;
   width: 100%;
@@ -30,18 +30,20 @@
     bottom: 0;
     border-radius: 999rem;
     transform: translateY(-50%);
-    pointer-events: none;
+    cursor: pointer;
   }
+  // Current progress
   &::before {
-    left: 0;
+    left: 2px;
     height: var(--slider-progress-height);
-    width: 100%;
+    right: 2px;
     background: var(--slider-progress-background);
   }
+  // Progress track
   &::after {
-    right: -1px;
+    right: 1px;
     height: calc(var(--slider-track-height) + 2px);
-    width: calc(100% - var(--slider-value) + 1px);
+    width: calc(100% - var(--slider-value) - 1px);
     background: var(--slider-track-background);
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
@@ -75,5 +77,13 @@
           var(--slider-thumb-hover-border-color);
       }
     }
+  }
+}
+
+html[data-theme='dark'] {
+  .slider {
+    --slider-track-background: hsl(221, 20%, 16%);
+    --slider-thumb-border-color: hsl(222, 5%, 50%);
+    --slider-thumb-hover-border-color: hsl(222, 5%, 50%);
   }
 }
