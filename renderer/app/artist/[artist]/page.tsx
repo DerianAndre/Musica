@@ -8,9 +8,11 @@ import ListAllItem from '~/renderer/components/list/list-all/list-all-item';
 import { PlayerContext } from '~/renderer/context';
 import { MdPlayArrow } from 'react-icons/md';
 import { albumsToTracks, sortAlbums } from '~/renderer/utils';
-import { Shuffle } from '~/renderer/components/icons';
+import { Shuffle } from '~/renderer/components/icons/index';
 import { shufflePlaylist } from '~/renderer/utils/random';
 import PageCover from '~/renderer/components/page-cover';
+import Link from 'next/link';
+import GoBack from '~/renderer/components/go-back/index';
 
 const PageArtist = ({ params }: { params: { artist: string } }) => {
   const { artist } = params;
@@ -60,6 +62,7 @@ const PageArtist = ({ params }: { params: { artist: string } }) => {
   return (
     <>
       <PageCover cover={data?.albums[0]?.cover} />
+      <GoBack />
       <h2 className="font-headings text-3xl font-semibold">{data.title}</h2>
       <div className="mb-3 flex gap-2 opacity-50">
         <div>

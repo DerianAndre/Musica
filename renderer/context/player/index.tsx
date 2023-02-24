@@ -1,3 +1,4 @@
+'use client';
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   createContext,
@@ -10,7 +11,10 @@ import {
 import loadLibrary from '~/library';
 import { Howl } from 'howler';
 import { Player, Library, Playlist, Track } from '~/types';
-import { handlePlayRandom } from '~/renderer/utils/random/index';
+import {
+  getRandomTracksPlaylist,
+  handlePlayRandom,
+} from '~/renderer/utils/random/index';
 import { handlePlay } from '~/renderer/components/player/utils';
 import { PLAYER_STATES } from '~/renderer/components/player/constants';
 
@@ -57,6 +61,7 @@ const PlayerProvider = ({ children }: IProps) => {
   const [playlistIndex, setPlaylistIndex] = useState<number>(0);
   const [sortBy, setSortBy] = useState<string>('title');
 
+  const player = howl.current;
   const shuffle = useRef(false);
   const repeat = useRef(false);
 
@@ -92,7 +97,6 @@ const PlayerProvider = ({ children }: IProps) => {
   }, [library, sortBy]);
 
   const handlePlayMode = (mode: string): void => {
-    console.log('mode', mode);
     if (mode === 'random-all') {
       handlePlayRandom(libraryMemo);
     }
@@ -105,17 +109,22 @@ const PlayerProvider = ({ children }: IProps) => {
     setPlayerMode('playlist');
     setPlaylist(playlist);
     setPlaylistIndex(0);
-    handlePlay(playlist.tracks[0]);
+    handlePlay(playlist?.tracks[0]);
   };
 
   const handlePlayPause = (): void => {
-    if (!howl.current) return;
+    if (playerState === PLAYER_STATES.STOP) {
+      handlePlayPlaylist(getRandomTracksPlaylist(tracks));
+      return;
+    }
+
+    if (!player) return;
 
     if (playerState !== PLAYER_STATES.PLAY) {
-      howl.current.play();
+      player.play();
       setPlayerState(PLAYER_STATES.PLAY);
     } else {
-      howl.current.pause();
+      player.pause();
       setPlayerState(PLAYER_STATES.PAUSE);
     }
   };
@@ -180,15 +189,9 @@ const PlayerProvider = ({ children }: IProps) => {
   }, []);
 
   useEffect(() => {
-    const playerReset = () => {
-      if (!howl.current || playerState === PLAYER_STATES.PLAY) return;
-      howl.current.stop();
-      howl.current = null;
-    };
-
     window.electron.player.metadata(
       (event: object, data: { metadata: { file: string } }) => {
-        playerReset();
+        if (howl.current) howl.current.unload();
 
         howl.current = new Howl({
           autoplay: true,

@@ -15,8 +15,11 @@ const PlayerSeeker = ({ player, playerState }: IProps) => {
   const [playerDelay, setPlayerDelay] = useState<number | null>(null);
   const [playerSeek, setPlayerSeek] = useState<number>(0);
 
-  const sliderValue: number =
-    playerSeek > 0 ? (playerSeek / player?.duration()) * 100 : 0;
+  const sliderValue: number = player
+    ? playerSeek > 0
+      ? (playerSeek / player?.duration()) * 100
+      : 0
+    : 0;
 
   const timeCurrent = timeFormat(Math.floor(playerSeek));
 

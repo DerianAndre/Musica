@@ -20,7 +20,7 @@ import { useEventListener, useReadLocalStorage } from 'usehooks-ts';
 import PlayerInfo from './player-info/index';
 import PlayerSeeker from './player-seeker/index';
 import { PLAYER_STATES } from './constants';
-import ToggleTheme from '../theme-toggle';
+import ToggleTheme from '../theme-toggle/index';
 import { PlayerContext } from '~/renderer/context';
 import PlayerVolume from './player-volume';
 
@@ -28,12 +28,12 @@ const Player = () => {
   const { howl, playerState, handlePlayPause, handlePlayNext, handlePlayPrev } =
     useContext(PlayerContext);
 
+  const player = howl?.current || null;
+
   const blurEnabled = useReadLocalStorage<boolean>(
     'musica-settings-blur',
   ) as boolean;
   const [blur, setBlur] = useState<boolean>(false);
-
-  const player = howl?.current || null;
   const shuffle = useRef<boolean>(false);
   const repeat = useRef<boolean>(false);
 
@@ -131,7 +131,7 @@ const Player = () => {
             </button>
             <button
               type="button"
-              title="Play-pause"
+              title={playerState === PLAYER_STATES.PAUSE ? 'Play' : 'Pause'}
               className="btn-play btn-md btn-circle btn border-0 text-4xl shadow-lg"
               onClick={() => handlePlayPause()}
             >
@@ -159,6 +159,7 @@ const Player = () => {
             <PlayerVolume player={player} playerState={playerState} />
             <ToggleTheme />
             <Link
+              title="Settings"
               className="btn-settings btn-ghost btn-sm btn-circle btn text-xl"
               href="/settings"
             >

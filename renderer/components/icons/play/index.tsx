@@ -10,7 +10,7 @@ const Play = () => {
           <circle fill="none" cx="50" cy="50" r="50" />
         </clipPath>
       </defs>
-      <g class="cls-3" clipPath="url(#clip-path)">
+      <g clipPath="url(#clip-path)">
         <image
           width="230"
           height="230"

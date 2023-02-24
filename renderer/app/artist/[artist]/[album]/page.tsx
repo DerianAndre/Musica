@@ -8,8 +8,9 @@ import ListAllItem from '~/renderer/components/list/list-all/list-all-item';
 import { PlayerContext } from '~/renderer/context';
 import { MdPlayArrow } from 'react-icons/md';
 import { shufflePlaylist } from '~/renderer/utils/random';
-import { Shuffle } from '~/renderer/components/icons';
+import { Shuffle } from '~/renderer/components/icons/index';
 import PageCover from '~/renderer/components/page-cover';
+import GoBack from '~/renderer/components/go-back';
 
 const PageArtist = ({
   params,
@@ -66,6 +67,7 @@ const PageArtist = ({
   return (
     <>
       <PageCover cover={dataAlbum?.cover} />
+      <GoBack />
       <div className="flex gap-2">
         <button
           className="btn-sm btn gap-2"

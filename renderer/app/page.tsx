@@ -3,7 +3,7 @@ import '../scss/globals.scss';
 import React, { useRef, useContext, useState } from 'react';
 import Link from 'next/link';
 import List from '../components/list';
-import { Shuffle } from '../components/icons';
+import { Shuffle } from '../components/icons/index';
 import { PlayerContext } from '../context/player';
 import { getRandomTracksPlaylist } from '../utils/random';
 
@@ -32,14 +32,14 @@ const Home = () => {
   return (
     <main className="page-home">
       <div className="flex min-h-full flex-col" ref={refHome}>
-        <div className="sticky top-0 left-0 right-0 z-[9999] mb-5 bg-base-100">
+        <div className="sticky top-0 left-0 right-0 z-[9999] mb-5 bg-base-100/[0.85] py-3 backdrop-blur">
           <div className="flex w-full flex-wrap items-center justify-between">
-            <div className="tabs gap-5 font-headings font-semibold">
+            <div className="tabs tabs-boxed bg-transparent p-0 font-headings font-semibold">
               {ITEMS_MENU.map((item) => (
                 <button
                   key={item}
                   type="button"
-                  className={`text-md tab tab-bordered px-0 uppercase ${
+                  className={`tab uppercase ${
                     mode === item ? 'tab-active' : ''
                   }`}
                   onClick={() => {
@@ -73,9 +73,8 @@ const Home = () => {
               <button
                 type="button"
                 className="btn-xs btn gap-2"
-                onClick={
-                  () => handlePlayPlaylist(getRandomTracksPlaylist(tracks))
-                  //handlePlayMode('random-all')
+                onClick={() =>
+                  handlePlayPlaylist(getRandomTracksPlaylist(tracks))
                 }
               >
                 <Shuffle /> Random play

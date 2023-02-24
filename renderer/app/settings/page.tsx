@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
-import ToggleTheme from '~/renderer/components/theme-toggle';
+import ToggleTheme from '~/renderer/components/theme-toggle/index';
 
 const PageSettings = () => {
   const [libraryPath, setLibraryPath] = useLocalStorage(

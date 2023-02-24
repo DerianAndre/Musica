@@ -27,6 +27,13 @@
       }
     ]
   },
-  "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "components/player/index.tsxx",
+    "components/player/index.tsxx"
+  ],
   "exclude": ["../node_modules", "../.next", "dist"]
 }

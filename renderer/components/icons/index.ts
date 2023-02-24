@@ -11,16 +11,17 @@ import {
   MdShuffle,
   MdDarkMode,
   MdLightMode,
-  MdLoop,
+  MdOutlineArrowBackIos,
   MdRepeat,
   MdRepeatOn,
-} from "react-icons/md";
-import Play from "./play";
-import PlayPause from "./play-pause";
+} from 'react-icons/md';
+import Play from './play/index';
+import PlayPause from './play-pause/index';
 
 export {
   Play,
   PlayPause,
+  MdOutlineArrowBackIos as Back,
   MdPause as Pause,
   MdSkipNext as SkipNext,
   MdSkipPrevious as SkipPrevious,

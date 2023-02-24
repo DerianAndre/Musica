@@ -1,12 +1,19 @@
 export interface Player {
-  play: Function;
-  pause: Function;
-  seek: Function;
   duration: Function;
-  mute: Function;
-  volume: Function;
+  load: Function;
   loop: Function;
+  mute: Function;
+  off: Function;
+  on: Function;
+  once: Function;
+  pause: Function;
+  play: Function;
+  playing: Function;
+  seek: Function;
+  state: Function;
   stop: Function;
+  unload: Function;
+  volume: Function;
 }
 
 export type Library = {

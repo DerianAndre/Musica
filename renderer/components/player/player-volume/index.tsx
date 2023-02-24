@@ -21,8 +21,9 @@ const PlayerVolume = ({ player, playerState }: IProps) => {
     1,
   );
 
-  const volumePercentage: string =
-    isLoading && playerVolume ? (playerVolume * 100).toFixed(0) : '100';
+  const volumePercentage: string = isLoading
+    ? (playerVolume * 100).toFixed(0)
+    : '100';
 
   const handleSliderVolume = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.valueAsNumber;
@@ -65,6 +66,7 @@ const PlayerVolume = ({ player, playerState }: IProps) => {
       </div>
 
       <button
+        title="Toggle mute"
         type="button"
         className="btn-mute-toggle btn-ghost btn-sm btn-circle btn text-xl"
         onClick={handleMute}
