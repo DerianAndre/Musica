@@ -4,8 +4,8 @@ import React, { useRef, useContext, useState } from 'react';
 import Link from 'next/link';
 import List from '../components/list';
 import { Shuffle } from '../components/icons';
-import { handlePlayRandom } from '../utils/random';
 import { PlayerContext } from '../context/player';
+import { getRandomTracksPlaylist } from '../utils/random';
 
 const ITEMS_MENU = ['tracks', 'artists', 'albums', 'list'];
 const ITEMS_SORT = ['title', 'artist', 'album', 'year'];
@@ -15,12 +15,10 @@ const Home = () => {
   const {
     tracks,
     sortBy,
-    library,
     libraryMemo,
     libraryStatus,
-    handlePlayMode,
     setSortBy,
-    setPlayerMode,
+    handlePlayPlaylist,
   } = useContext(PlayerContext);
 
   const [mode, setMode] = useState<string>('tracks');
@@ -75,7 +73,10 @@ const Home = () => {
               <button
                 type="button"
                 className="btn-xs btn gap-2"
-                onClick={() => handlePlayMode('random-all')}
+                onClick={
+                  () => handlePlayPlaylist(getRandomTracksPlaylist(tracks))
+                  //handlePlayMode('random-all')
+                }
               >
                 <Shuffle /> Random play
               </button>

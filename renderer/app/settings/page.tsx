@@ -10,7 +10,7 @@ const PageSettings = () => {
     '<No folder selected>',
   );
   const [blurEnabled, setBlurEnabled] = useLocalStorage(
-    'musica-blur-enabled',
+    'musica-settings-blur',
     true,
   );
   const [status, setStatus] = useState('ready');

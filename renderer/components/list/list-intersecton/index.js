@@ -1,11 +1,7 @@
 import React, { Suspense } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-const ListIntersection = ({
-  children,
-  threshold = 0.5,
-  triggerOnce = true,
-}) => {
+const ListIntersection = ({ children, threshold = 0, triggerOnce = true }) => {
   const [ref, inView] = useInView({
     threshold,
     triggerOnce,

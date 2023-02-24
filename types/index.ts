@@ -1,3 +1,14 @@
+export interface Player {
+  play: Function;
+  pause: Function;
+  seek: Function;
+  duration: Function;
+  mute: Function;
+  volume: Function;
+  loop: Function;
+  stop: Function;
+}
+
 export type Library = {
   [key: string]: Artist;
 };

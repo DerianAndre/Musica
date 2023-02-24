@@ -2,9 +2,7 @@
 import './layout.module.scss';
 import { useEffect } from 'react';
 import Link from 'next/link';
-import ToggleTheme from '../components/theme-toggle';
-import { Home, Settings } from '../components/icons';
-import Player from '../components/player';
+import Player from '../components/player/index';
 import { PlayerProvider } from '~/renderer/context/player/';
 
 export default function RootLayout({
@@ -12,18 +10,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  useEffect(() => {
-    if (
-      localStorage.getItem('color-theme') === 'dark' ||
-      (!('color-theme' in localStorage) &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, []);
-
   return (
     <PlayerProvider>
       <html>

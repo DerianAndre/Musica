@@ -1,67 +1,64 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   createContext,
-  ReactElement,
+  ReactNode,
   useEffect,
+  useRef,
   useMemo,
   useState,
 } from 'react';
 import loadLibrary from '~/library';
-import { Library, Playlist, Track } from '~/types';
-import { handlePlayRandom } from '~/renderer/utils/random';
+import { Howl } from 'howler';
+import { Player, Library, Playlist, Track } from '~/types';
+import { handlePlayRandom } from '~/renderer/utils/random/index';
 import { handlePlay } from '~/renderer/components/player/utils';
+import { PLAYER_STATES } from '~/renderer/components/player/constants';
 
-type PlayerContext = {
-  background: string;
+interface HowlRef {
+  current: Player | null;
+}
+
+interface PlayerContext {
+  howl: HowlRef | null;
   sortBy: string;
   library: Library;
   libraryMemo: Library;
   libraryStatus: string;
   playerMode: string;
   playlist: Playlist;
-  playRandom: Function;
+  handlePlayPause: Function;
   handlePlayPrev: Function;
   handlePlayNext: Function;
   handlePlayMode: Function;
   handlePlayPlaylist: Function;
-  setBackground: Function;
   setLibrary: Function;
   setLibraryStatus: Function;
+  setPlayerState: Function;
   setPlayerMode: Function;
   setPlaylist: Function;
   setSortBy: Function;
-  tracks: object;
-};
+  playerState: string;
+  tracks: Track[];
+}
 
-const PlayerContext = createContext<PlayerContext>({
-  background: '',
-  sortBy: 'title',
-  library: {},
-  libraryMemo: {},
-  libraryStatus: 'loading',
-  playerMode: 'normal',
-  playlist: {},
-  playRandom: () => {},
-  handlePlayMode: () => {},
-  handlePlayPlaylist: () => {},
-  handlePlayPrev: () => {},
-  handlePlayNext: () => {},
-  setSortBy: () => {},
-  setBackground: () => {},
-  setLibrary: () => {},
-  setLibraryStatus: () => {},
-  setPlayerMode: () => {},
-  setPlaylist: () => {},
-  tracks: {},
-});
+interface IProps {
+  children: ReactNode;
+}
 
-const PlayerProvider = (props: { children: ReactElement }) => {
-  const [background, setBackground] = useState<string>('');
+const PlayerContext = createContext<PlayerContext>(null!);
+
+const PlayerProvider = ({ children }: IProps) => {
+  const howl = useRef<Player | null>(null!);
   const [library, setLibrary] = useState<Library>({});
   const [libraryStatus, setLibraryStatus] = useState<string>('loading');
   const [playerMode, setPlayerMode] = useState<string>('normal');
+  const [playerState, setPlayerState] = useState(PLAYER_STATES.STOP);
   const [playlist, setPlaylist] = useState<Playlist>({});
   const [playlistIndex, setPlaylistIndex] = useState<number>(0);
   const [sortBy, setSortBy] = useState<string>('title');
+
+  const shuffle = useRef(false);
+  const repeat = useRef(false);
 
   const libraryMemo: Library = useMemo(() => {
     return Object.fromEntries(
@@ -84,7 +81,6 @@ const PlayerProvider = (props: { children: ReactElement }) => {
       }
     }
     result?.sort((a, b) => {
-      // TODO fix TS
       if (sortBy === 'year') {
         return b[sortBy] - a[sortBy];
       }
@@ -104,24 +100,29 @@ const PlayerProvider = (props: { children: ReactElement }) => {
   };
 
   const handlePlayPlaylist = (playlist: Playlist): void => {
+    if (!playlist || !playlist.tracks) return;
+
     setPlayerMode('playlist');
     setPlaylist(playlist);
     setPlaylistIndex(0);
-    handlePlay(playlist?.tracks[0]);
+    handlePlay(playlist.tracks[0]);
   };
 
-  /*   const handlePlay = (track: Track): void => {
-    // handlePlay
-    // should have index if is from album
-  }; */
+  const handlePlayPause = (): void => {
+    if (!howl.current) return;
+
+    if (playerState !== PLAYER_STATES.PLAY) {
+      howl.current.play();
+      setPlayerState(PLAYER_STATES.PLAY);
+    } else {
+      howl.current.pause();
+      setPlayerState(PLAYER_STATES.PAUSE);
+    }
+  };
 
   const handlePlayPrev = (): void => {
-    console.log(playerMode);
-    if (playerMode === 'random-all') {
-      playRandom();
-      return;
-    }
     if (
+      !playlist ||
       !playlist.tracks ||
       playlist.tracks.length === 0 ||
       playlist.tracks.length === 1
@@ -138,17 +139,15 @@ const PlayerProvider = (props: { children: ReactElement }) => {
   };
 
   const handlePlayNext = (): void => {
-    if (playerMode === 'random-all') {
-      playRandom();
-      return;
-    }
     if (
+      !playlist ||
       !playlist.tracks ||
       playlist.tracks.length === 0 ||
       playlist.tracks.length === 1
     )
       return;
     const playlistLength = playlist?.tracks?.length - 1;
+
     if (playlistIndex === playlistLength) {
       handlePlay(playlist?.tracks[0]);
       setPlaylistIndex(0);
@@ -158,43 +157,114 @@ const PlayerProvider = (props: { children: ReactElement }) => {
     }
   };
 
-  const handlePlaylistRandom = (): void => {
-    // Create a big playlist with random tracks and play it
+  const handleShuffle = () => {
+    if (shuffle.current) {
+      shuffle.current = false;
+    } else {
+      shuffle.current = true;
+    }
   };
 
-  const playRandom = (): void => {
-    handlePlayRandom(library);
+  const handleRepeat = () => {
+    if (repeat.current) {
+      repeat.current = false;
+      howl?.current?.loop(false);
+    } else {
+      repeat.current = true;
+      howl?.current?.loop(true);
+    }
   };
 
   useEffect(() => {
     loadLibrary({ setLibrary, setStatus: setLibraryStatus });
   }, []);
 
+  useEffect(() => {
+    const playerReset = () => {
+      if (!howl.current || playerState === PLAYER_STATES.PLAY) return;
+      howl.current.stop();
+      howl.current = null;
+    };
+
+    window.electron.player.metadata(
+      (event: object, data: { metadata: { file: string } }) => {
+        playerReset();
+
+        howl.current = new Howl({
+          autoplay: true,
+          src: data.metadata.file || null,
+          loop: repeat.current,
+          onplay: () => {
+            setPlayerState(PLAYER_STATES.PLAY);
+            window.electron.player.event({ state: PLAYER_STATES.PLAY });
+          },
+          onpause: () => {
+            setPlayerState(PLAYER_STATES.PAUSE);
+            window.electron.player.event({ state: PLAYER_STATES.PAUSE });
+          },
+          onend: () => {
+            setPlayerState(PLAYER_STATES.END);
+            window.electron.player.event({ state: PLAYER_STATES.END });
+          },
+          onstop: () => {
+            setPlayerState(PLAYER_STATES.STOP);
+            window.electron.player.event({ state: PLAYER_STATES.STOP });
+          },
+          onmute: () => {},
+          onvolume: () => {},
+          onplayerror: (id: number, message: number) => {
+            setPlayerState(PLAYER_STATES.ERROR);
+            window.electron.player.event({
+              state: PLAYER_STATES.ERROR,
+              error: {
+                id,
+                message,
+              },
+            });
+            console.error('player-play-error', { id, message });
+          },
+          onloaderror: (id: number, message: number) => {
+            setPlayerState(PLAYER_STATES.ERROR);
+            window.electron.player.event({
+              state: PLAYER_STATES.ERROR,
+              error: {
+                id,
+                message,
+              },
+            });
+            console.error('player-load-error', { id, message });
+          },
+        });
+      },
+    );
+  }, []);
+
   return (
     <PlayerContext.Provider
       value={{
-        background,
-        sortBy,
+        handlePlayMode,
+        handlePlayNext,
+        handlePlayPause,
+        handlePlayPlaylist,
+        handlePlayPrev,
+        howl,
         library,
         libraryMemo,
         libraryStatus,
         playerMode,
+        playerState,
         playlist,
-        playRandom,
-        handlePlayMode,
-        handlePlayPlaylist,
-        setBackground,
         setLibrary,
         setLibraryStatus,
-        handlePlayPrev,
-        handlePlayNext,
         setPlayerMode,
+        setPlayerState,
         setPlaylist,
         setSortBy,
+        sortBy,
         tracks,
       }}
     >
-      {props.children}
+      {children}
     </PlayerContext.Provider>
   );
 };
