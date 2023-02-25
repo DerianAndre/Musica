@@ -1,15 +1,21 @@
 import { handlePlay } from '~/renderer/components/player/utils';
+import { formatDuration, formatTotalTime } from '~/renderer/utils';
 
 const ListTrack = ({ track }) => {
   return (
     <div className="list-track transition" onClick={() => handlePlay(track)}>
       <div className="list-tracks align-items-center flex cursor-pointer select-none gap-3 rounded p-2 align-bottom text-sm">
-        <div className="flex-initial">
-          <div className="relative">
-            <span className="opacity-50">{track?.track}</span>
-          </div>
+        <div className="w-6 opacity-50">{track?.track}</div>
+        <div className="min-w-[150px] flex-1 truncate">{track?.title}</div>
+        <div className="w-14 flex-initial truncate text-center opacity-50">
+          {track?.year}
         </div>
-        <div className="flex-1">{track?.title}</div>
+        <div className="w-28 flex-initial truncate text-center opacity-75">
+          {track?.genre}
+        </div>
+        <div className="w-14 flex-initial truncate opacity-50">
+          {formatDuration(track?.duration)}
+        </div>
       </div>
     </div>
   );

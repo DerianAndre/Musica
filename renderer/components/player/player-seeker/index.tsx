@@ -1,7 +1,7 @@
 import styles from './index.module.scss';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { timeFormat } from '~/renderer/utils';
+import { formatDuration } from '~/renderer/utils';
 import { PLAYER_STATES } from '../constants';
 import { Player } from '~/types';
 import { useInterval } from 'usehooks-ts';
@@ -22,9 +22,9 @@ const PlayerSeeker = ({ player, playerState }: IProps) => {
     return !value || value > 100 ? 0 : value;
   };
 
-  const timeCurrent: string = timeFormat(Math.floor(playerSeek));
+  const timeCurrent: string = formatDuration(Math.floor(playerSeek));
 
-  const timeDuration: string = timeFormat(player?.duration() || 0);
+  const timeDuration: string = formatDuration(player?.duration() || 0);
 
   const customStyle: object = {
     '--slider-value': `${sliderValue()}%`,

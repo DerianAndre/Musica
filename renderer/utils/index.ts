@@ -1,12 +1,85 @@
-import { Album, Playlist, Track } from '../../types/index';
+import { Artist, Album, Playlist, Track } from '../../types/index';
 
-const timeFormat = (totalSeconds: number): string => {
+const formatDuration = (totalSeconds: number): string => {
   if (!totalSeconds) return '00:00';
   const min = Math.floor(totalSeconds / 60);
   const sec = Math.floor(totalSeconds % 60);
   const minutes = min < 10 ? `0${min}` : `${min}`;
   const seconds = sec < 10 ? `0${sec}` : `${sec}`;
   return `${minutes}:${seconds}`;
+};
+
+const formatTotalTime = (durationInSeconds: number): string => {
+  if (durationInSeconds < 0) {
+    throw new Error('Duration must be non-negative');
+  }
+
+  if (durationInSeconds < 60) {
+    const seconds = durationInSeconds === 1 ? 'sec' : 'secs';
+    return `${Math.round(durationInSeconds)} ${seconds}`;
+  }
+
+  const totalSeconds = Math.round(durationInSeconds);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  if (minutes < 60) {
+    const mins = minutes === 1 ? 'min' : 'mins';
+    const secs = seconds === 1 ? 'sec' : 'secs';
+    return `${minutes} ${mins}, ${seconds} ${secs}`;
+  }
+
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+
+  const hrs = hours === 1 ? 'hour' : 'hours';
+  const mins = remainingMinutes === 1 ? 'min' : 'mins';
+  const secs = seconds === 1 ? 'sec' : 'secs';
+
+  return `${hours} ${hrs}, ${remainingMinutes} ${mins}, ${seconds} ${secs}`;
+};
+
+const formatTotal = (
+  total: number,
+  plural: string,
+  singular: string,
+): string => {
+  return `${total} ${total > 1 ? plural : singular}`;
+};
+
+const getArtistTotalAlbums = (artist: Artist | undefined): number => {
+  return artist?.albums?.length || 0;
+};
+
+const getArtistTotalDuration = (artist: Artist | undefined): number => {
+  return (
+    artist?.albums?.reduce(
+      (current, item) => current + getAlbumTotalDuration(item),
+      0,
+    ) || 0
+  );
+};
+
+const getArtistTotalTracks = (artist: Artist | undefined): number => {
+  return (
+    artist?.albums?.reduce(
+      (current: number, item: Album) => item?.tracks?.length + current,
+      0,
+    ) || 0
+  );
+};
+
+const getAlbumTotalDuration = (album: Album | undefined): number => {
+  return (
+    album?.tracks?.reduce(
+      (current: number, item: Track) => current + item.duration,
+      0,
+    ) || 0
+  );
+};
+
+const getAlbumTotalTracks = (album: Album | undefined): number => {
+  return album?.tracks?.length || 0;
 };
 
 const sortAlbums = (albums: Album[]): Album[] => {
@@ -38,4 +111,16 @@ const getImage = (cover: string): string => {
   }
 };
 
-export { albumsToTracks, timeFormat, sortAlbums, getImage };
+export {
+  albumsToTracks,
+  formatDuration,
+  formatTotal,
+  formatTotalTime,
+  getAlbumTotalDuration,
+  getAlbumTotalTracks,
+  getArtistTotalAlbums,
+  getArtistTotalTracks,
+  getArtistTotalDuration,
+  getImage,
+  sortAlbums,
+};

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useContext, useEffect, useState } from 'react';
-import { Album, Artist, Playlist } from '~/types';
+import { Album, Artist, Library, Playlist } from '~/types';
 import loadChunk from '~/library/chunks';
 import ListIntersection from '~/renderer/components/list/list-intersecton';
 import ListAllItem from '~/renderer/components/list/list-all/list-all-item/index';
@@ -11,6 +11,13 @@ import { shufflePlaylist } from '~/renderer/utils/random';
 import { Shuffle } from '~/renderer/components/icons/index';
 import PageCover from '~/renderer/components/page-cover';
 import GoBack from '~/renderer/components/go-back';
+import {
+  formatTotal,
+  formatTotalTime,
+  getAlbumTotalDuration,
+  getAlbumTotalTracks,
+} from '~/renderer/utils';
+import Link from 'next/link';
 
 const PageArtist = ({
   params,
@@ -20,7 +27,7 @@ const PageArtist = ({
   const { artist, album } = params;
   const { handlePlayPlaylist } = useContext(PlayerContext);
 
-  const [data, setData] = useState<Artist>({
+  const [dataArtist, setDataArtist] = useState<Artist>({
     title: 'Artist',
     slug: 'artist',
     albums: [],
@@ -34,8 +41,8 @@ const PageArtist = ({
     tracks: [],
   });
 
-  const totalDuration = data.albums.length || 0;
-  const totalSongs = dataAlbum?.tracks.length || 0;
+  const totalDuration = getAlbumTotalDuration(dataAlbum);
+  const totalTracks = getAlbumTotalTracks(dataAlbum);
 
   useEffect(() => {
     if (!artist || !album) return;
@@ -47,7 +54,7 @@ const PageArtist = ({
         setter: undefined,
       });
 
-      setData(data);
+      setDataArtist(data);
 
       const dataAlbum = data?.albums?.find(
         (item: Album) => item?.slug === album,
@@ -70,41 +77,54 @@ const PageArtist = ({
   return (
     <>
       <PageCover cover={dataAlbum?.cover} />
+
       <GoBack />
-      <h2 className="font-headings text-3xl font-semibold">
-        {dataAlbum?.title}
-      </h2>
-      <div className="mb-3 flex gap-2 opacity-50">
-        <div>{data?.title}</div> •
-        <div>
-          {totalSongs} {totalSongs > 1 ? 'songs' : 'song'}
-        </div>{' '}
-        •<div>{dataAlbum?.year}</div> • <div>{dataAlbum?.genre}</div> •
-      </div>
-      <div className="flex gap-2">
-        <button
-          className="btn-sm btn gap-2"
-          type="button"
-          onClick={() => handlePlayPlaylist(albumPlaylist)}
-        >
-          <MdPlayArrow /> Play album
-        </button>
-        <button
-          className="btn-sm btn gap-2"
-          type="button"
-          onClick={() => handlePlayPlaylist(shufflePlaylist(albumPlaylist))}
-        >
-          <Shuffle /> Play shuffle
-        </button>
-      </div>
+
+      <header>
+        <h2 className="font-headings text-3xl font-semibold">
+          {dataAlbum?.title}
+        </h2>
+        <div className="mb-3 flex gap-2 opacity-50">
+          <div>
+            <Link href={`/artist/${artist}`}>{dataArtist?.title}</Link>
+          </div>
+          <span>•</span>
+          <div>{dataAlbum?.year}</div>
+          <span>•</span>
+          <div>{dataAlbum?.genre}</div>
+          <span>•</span>
+          <div>{formatTotal(totalTracks, 'tracks', 'track')}</div>
+          <span>•</span>
+          <div>{formatTotalTime(totalDuration)}</div>
+        </div>
+        <div className="flex gap-2">
+          <button
+            className="btn-sm btn gap-2"
+            type="button"
+            onClick={() => handlePlayPlaylist(albumPlaylist)}
+          >
+            <MdPlayArrow /> Play album
+          </button>
+          <button
+            className="btn-sm btn gap-2"
+            type="button"
+            onClick={() => handlePlayPlaylist(shufflePlaylist(albumPlaylist))}
+          >
+            <Shuffle /> Play shuffle
+          </button>
+        </div>
+      </header>
+
       <ListIntersection>
         <ListAllItem
-          library={{
-            [data?.title]: {
-              albums: [dataAlbum],
-            },
-          }}
-          artist={data?.title}
+          library={
+            {
+              [dataArtist?.title]: {
+                albums: [dataAlbum],
+              },
+            } as Library
+          }
+          artist={dataArtist?.title}
           show={{ artist: false, info: false }}
         />
       </ListIntersection>

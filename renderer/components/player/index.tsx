@@ -104,19 +104,16 @@ const Player = () => {
       >
         <PlayerSeeker player={player} playerState={playerState} />
 
-        <div className="player flex w-full flex-wrap gap-5">
-          <div className="flex-1">
+        <div className="player flex w-full gap-5">
+          <div className="flex-1 truncate">
             <PlayerInfo data={data} />
           </div>
 
-          <div
-            className="main-controls flex flex-1 items-center justify-end gap-2 md:justify-center"
-            disabled={!!(playerState === PLAYER_STATES.ERROR)}
-          >
+          <div className="main-controls flex flex-none items-center justify-end gap-2 md:justify-center">
             <button
               type="button"
               title="Shuffle"
-              className="btn-shuffle btn-ghost btn-sm btn-circle btn text-xl"
+              className="btn-shuffle btn-ghost btn-sm btn-circle btn hidden text-xl sm:flex"
               onClick={() => handleShuffle()}
             >
               {shuffle.current ? <ShuffleOn /> : <ShuffleOff />}
@@ -148,23 +145,16 @@ const Player = () => {
             <button
               type="button"
               title="Repeat"
-              className="btn-loop btn-ghost btn-sm btn-circle btn text-xl"
+              className="btn-loop btn-ghost btn-sm btn-circle btn hidden text-xl sm:flex"
               onClick={() => handleRepeat()}
             >
               {repeat.current ? <RepeatOn /> : <RepeatOff />}
             </button>
           </div>
 
-          <div className="secondary-controls group hidden flex-1 items-center justify-end gap-1 md:flex">
+          <div className="secondary-controls group  hidden flex-1 items-center justify-end gap-1 truncate md:flex">
             <PlayerVolume player={player} playerState={playerState} />
             <ToggleTheme />
-            <Link
-              title="Settings"
-              className="btn-settings btn-ghost btn-sm btn-circle btn text-xl"
-              href="/settings"
-            >
-              <Settings />
-            </Link>
           </div>
         </div>
       </div>

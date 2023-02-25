@@ -4,8 +4,14 @@ import ListCover from '../../list-cover';
 import ListIntersection from '../../list-intersecton';
 import Link from 'next/link';
 import { slugifyFile } from '~/main/utils/files';
-import { sortAlbums } from '~/renderer/utils';
+import {
+  formatTotal,
+  getAlbumTotalDuration,
+  getAlbumTotalTracks,
+  sortAlbums,
+} from '~/renderer/utils';
 import { Library } from '~/types';
+import { formatTotalTime } from '~/renderer/utils';
 
 interface IProps {
   library: Library;
@@ -26,21 +32,35 @@ const ListAllItem = ({ library, artist, show }: IProps) => {
         {albums?.map((album) => (
           <Fragment key={album?.title}>
             <ListIntersection>
-              <div className="flex flex-wrap gap-5 py-5">
-                <div className="w-full flex-none md:w-[200px]">
+              <div className="flex flex-col flex-wrap gap-5 py-5 md:flex-row">
+                <div className="w-[200px] flex-initial">
                   <Link href={`/artist/${slugifyFile(artist)}/${album?.slug}`}>
                     <ListCover album={album} width="200px" />
                   </Link>
                 </div>
-                <div className="flex-auto">
+                <div className="flex-1 flex-col truncate">
                   {display.info && (
-                    <div className="list-info">
+                    <div className="list-info mb-3">
                       <h3 className="font-headings text-2xl font-semibold">
                         {album?.title}
                       </h3>
-                      <h4 className="mb-4 font-headings opacity-50">
-                        {album?.year} • {album?.genre}
-                      </h4>
+                      <div className="flex gap-2 opacity-50">
+                        <div>{album?.year}</div>
+                        <span>•</span>
+                        <div>{album?.genre}</div>
+                        <span>•</span>
+                        <div>
+                          {formatTotal(
+                            getAlbumTotalTracks(album),
+                            'tracks',
+                            'track',
+                          )}
+                        </div>
+                        <span>•</span>
+                        <div>
+                          {formatTotalTime(getAlbumTotalDuration(album))}
+                        </div>
+                      </div>
                     </div>
                   )}
                   <div className="flex flex-col gap-1 [&>.item:nth-child(odd)]:bg-base-200/50 [&>.item]:rounded hover:[&>.item]:bg-base-300/50">

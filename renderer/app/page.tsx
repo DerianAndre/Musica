@@ -3,7 +3,7 @@ import '../scss/globals.scss';
 import React, { useRef, useContext, useState } from 'react';
 import Link from 'next/link';
 import List from '../components/list';
-import { Shuffle } from '../components/icons/index';
+import { Settings, Shuffle } from '../components/icons/index';
 import { PlayerContext } from '../context/player';
 import { getRandomTracksPlaylist } from '../utils/random';
 
@@ -57,11 +57,11 @@ const Home = () => {
             </div>
 
             {mode === 'tracks' && (
-              <div className="library-search flex max-w-[400px] flex-1 justify-center">
+              <div className="library-search flex min-w-[200px] max-w-[400px] flex-1 justify-center">
                 <div className="relative w-full">
                   <input
                     type="search"
-                    className="input input-sm w-full bg-base-content/[0.1] pr-12"
+                    className="input input-sm w-full rounded-full bg-base-content/[0.1] py-[1.2rem] pr-12"
                     placeholder="Search..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -73,7 +73,7 @@ const Home = () => {
                   <button
                     title="search"
                     type="button"
-                    className="btn-ghost btn-sm btn absolute top-0 right-0 bg-transparent"
+                    className="btn-ghost btn-sm btn-circle btn absolute top-1/2 right-2 -translate-y-1/2 transform bg-transparent"
                     onClick={handleSearch}
                   >
                     <svg
@@ -95,7 +95,7 @@ const Home = () => {
               </div>
             )}
 
-            <div className="library-actions flex w-[310px] flex-wrap justify-end gap-3">
+            <div className="library-actions flex w-[310px] flex-wrap justify-end gap-2">
               {mode === 'tracks' && (
                 <div className="sort-by flex items-center gap-1">
                   <div className="text-xs">Sort by</div>
@@ -117,13 +117,20 @@ const Home = () => {
               <button
                 title="Random"
                 type="button"
-                className="btn-sm btn gap-2"
+                className="btn-sm btn-circle btn text-xl"
                 onClick={() =>
                   handlePlayPlaylist(getRandomTracksPlaylist(tracks))
                 }
               >
                 <Shuffle />
               </button>
+              <Link
+                title="Settings"
+                className="btn-sm btn-circle btn text-xl"
+                href="/settings"
+              >
+                <Settings />
+              </Link>
             </div>
           </div>
         </div>

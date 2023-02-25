@@ -1,4 +1,4 @@
-import { timeFormat } from '~/renderer/utils/index';
+import { formatDuration } from '~/renderer/utils/index';
 import { slugifyFile } from '~/main/utils/files';
 import Link from 'next/link';
 import ListIntersection from '../../list-intersecton';
@@ -46,7 +46,7 @@ const ListTrack = ({ track, handlePlay }) => {
         </div>
         <div className="w-14 flex-initial text-end">
           <div className="inline-block max-w-full truncate py-2 px-3">
-            {timeFormat(track?.duration) || '00:00'}
+            {formatDuration(track?.duration) || '00:00'}
           </div>
         </div>
       </div>

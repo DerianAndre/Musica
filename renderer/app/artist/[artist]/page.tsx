@@ -7,7 +7,15 @@ import ListIntersection from '~/renderer/components/list/list-intersecton';
 import ListAllItem from '~/renderer/components/list/list-all/list-all-item/index';
 import { PlayerContext } from '~/renderer/context';
 import { MdPlayArrow } from 'react-icons/md';
-import { albumsToTracks, sortAlbums } from '~/renderer/utils';
+import {
+  albumsToTracks,
+  formatTotal,
+  formatTotalTime,
+  getArtistTotalAlbums,
+  getArtistTotalDuration,
+  getArtistTotalTracks,
+  sortAlbums,
+} from '~/renderer/utils';
 import { Shuffle } from '~/renderer/components/icons/index';
 import { shufflePlaylist } from '~/renderer/utils/random';
 import PageCover from '~/renderer/components/page-cover';
@@ -17,7 +25,7 @@ const PageArtist = ({ params }: { params: { artist: string } }) => {
   const { artist } = params;
   const { handlePlayPlaylist } = useContext(PlayerContext);
 
-  const [data, setData] = useState<Artist>({
+  const [dataArtist, setDataArtist] = useState<Artist>({
     title: 'Artist',
     slug: 'artist',
     albums: [],
@@ -29,10 +37,9 @@ const PageArtist = ({ params }: { params: { artist: string } }) => {
     tracks: [],
   });
 
-  const totalAlbums = data.albums.length || 0;
-  const totalSongs =
-    data.albums.reduce((current, item) => item?.tracks?.length + current, 0) ||
-    0;
+  const totalAlbums = getArtistTotalAlbums(dataArtist);
+  const totalTracks = getArtistTotalTracks(dataArtist);
+  const totalDuration = getArtistTotalDuration(dataArtist);
 
   useEffect(() => {
     if (!artist) return;
@@ -44,7 +51,7 @@ const PageArtist = ({ params }: { params: { artist: string } }) => {
         setter: undefined,
       });
 
-      setData(data);
+      setDataArtist(data);
 
       const playlist: Playlist = {
         slug: artist,
@@ -60,38 +67,40 @@ const PageArtist = ({ params }: { params: { artist: string } }) => {
 
   return (
     <>
-      <PageCover cover={data?.albums[0]?.cover} />
+      <PageCover cover={dataArtist?.albums[0]?.cover} />
       <GoBack />
-      <h2 className="font-headings text-3xl font-semibold">{data.title}</h2>
-      <div className="mb-3 flex gap-2 opacity-50">
-        <div>
-          {totalAlbums} {totalAlbums > 1 ? 'albums' : 'album'}
+      <header>
+        <h2 className="font-headings text-3xl font-semibold">
+          {dataArtist.title}
+        </h2>
+        <div className="mb-3 flex gap-2 opacity-50">
+          <div>{formatTotal(totalAlbums, 'albums', 'album')}</div>
+          <span>•</span>
+          <div>{formatTotal(totalTracks, 'tracks', 'track')}</div>
+          <span>•</span>
+          <div>{formatTotalTime(totalDuration)}</div>
         </div>
-        •
-        <div>
-          {totalSongs} {totalSongs > 1 ? 'songs' : 'song'}
+        <div className="flex gap-2">
+          <button
+            className="btn-sm btn gap-2"
+            type="button"
+            onClick={() => handlePlayPlaylist(artistPlaylist)}
+          >
+            <MdPlayArrow /> Play artist
+          </button>
+          <button
+            className="btn-sm btn gap-2"
+            type="button"
+            onClick={() => handlePlayPlaylist(shufflePlaylist(artistPlaylist))}
+          >
+            <Shuffle /> Play shuffle
+          </button>
         </div>
-      </div>
-      <div className="flex gap-2">
-        <button
-          className="btn-sm btn gap-2"
-          type="button"
-          onClick={() => handlePlayPlaylist(artistPlaylist)}
-        >
-          <MdPlayArrow /> Play artist
-        </button>
-        <button
-          className="btn-sm btn gap-2"
-          type="button"
-          onClick={() => handlePlayPlaylist(shufflePlaylist(artistPlaylist))}
-        >
-          <Shuffle /> Play shuffle
-        </button>
-      </div>
+      </header>
       <ListIntersection>
         <ListAllItem
-          library={{ [data.title]: data }}
-          artist={data.title}
+          library={{ [dataArtist.title]: dataArtist }}
+          artist={dataArtist.title}
           show={{ artist: false }}
         />
       </ListIntersection>

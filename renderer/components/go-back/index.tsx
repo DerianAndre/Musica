@@ -8,7 +8,7 @@ const GoBack = () => {
 
   return (
     <button
-      className="btn-sm btn my-2 text-lg"
+      className="btn-sm btn-circle btn mt-4 mb-2 text-lg"
       title="Go back"
       type="button"
       onClick={() => router.back()}

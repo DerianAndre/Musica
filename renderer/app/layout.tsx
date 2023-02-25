@@ -17,7 +17,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <html>
         <head />
         <body className="relative flex h-screen w-full flex-col">
-          <main className="main relative grid h-full overflow-y-scroll px-5">
+          <main className="main relative h-full overflow-y-scroll px-5">
             <div className="main-wrapper mb-[200px] flex-1">{children}</div>
           </main>
           <Player />
