@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import ListAllTrack from '../list-all-track';
+import ListAllTrack from '../list-all-track/index';
 import ListCover from '../../list-cover';
 import ListIntersection from '../../list-intersecton';
 import Link from 'next/link';
@@ -16,7 +16,7 @@ import { formatTotalTime } from '~/renderer/utils';
 interface IProps {
   library: Library;
   artist: string;
-  show: object;
+  show?: object;
 }
 
 const ListAllItem = ({ library, artist, show }: IProps) => {

@@ -2,7 +2,7 @@
 import '../scss/globals.scss';
 import React, { useRef, useContext, useState } from 'react';
 import Link from 'next/link';
-import List from '../components/list';
+import List from '../components/list/index';
 import { Settings, Shuffle } from '../components/icons/index';
 import { PlayerContext } from '../context/player';
 import { getRandomTracksPlaylist } from '../utils/random';

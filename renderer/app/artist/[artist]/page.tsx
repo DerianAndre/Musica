@@ -21,7 +21,11 @@ import { shufflePlaylist } from '~/renderer/utils/random';
 import PageCover from '~/renderer/components/page-cover';
 import GoBack from '~/renderer/components/go-back/index';
 
-const PageArtist = ({ params }: { params: { artist: string } }) => {
+interface IProps {
+  params: { artist: string };
+}
+
+const PageArtist = ({ params }: IProps) => {
   const { artist } = params;
   const { handlePlayPlaylist } = useContext(PlayerContext);
 

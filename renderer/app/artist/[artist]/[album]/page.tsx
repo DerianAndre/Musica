@@ -19,11 +19,11 @@ import {
 } from '~/renderer/utils';
 import Link from 'next/link';
 
-const PageArtist = ({
-  params,
-}: {
+interface IProps {
   params: { artist: string; album: string };
-}) => {
+}
+
+const PageArtist = ({ params }: IProps) => {
   const { artist, album } = params;
   const { handlePlayPlaylist } = useContext(PlayerContext);
 

@@ -1,7 +1,8 @@
 import { handlePlay } from '~/renderer/components/player/utils';
-import { formatDuration, formatTotalTime } from '~/renderer/utils';
+import { formatDuration } from '~/renderer/utils';
+import { Track } from '~/types';
 
-const ListTrack = ({ track }) => {
+const ListTrack = ({ track }: { track: Track }) => {
   return (
     <div className="list-track transition" onClick={() => handlePlay(track)}>
       <div className="list-tracks align-items-center flex cursor-pointer select-none gap-3 rounded p-2 align-bottom text-sm">
@@ -20,4 +21,5 @@ const ListTrack = ({ track }) => {
     </div>
   );
 };
+
 export default ListTrack;

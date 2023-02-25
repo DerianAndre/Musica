@@ -3,7 +3,7 @@ import ListIntersection from '../list-intersecton';
 import ListAlbum from './list-album';
 
 const ListAlbums = ({ library }) => {
-  if (!library) return;
+  if (!library) return <></>;
 
   const albums = Object.values(library)
     .flatMap((item) => {

@@ -1,9 +1,10 @@
 import React, { lazy } from 'react';
+import { Artist, Library } from '~/types';
 import ListIntersection from '../list-intersecton';
 import ListAllItem from './list-all-item';
 
-const List = ({ library }) => {
-  if (!library) return;
+const List = ({ library }: { library: Library }) => {
+  if (!library) return <></>;
 
   const artists = Object.keys(library);
 
