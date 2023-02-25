@@ -56,8 +56,9 @@ const parseFolder = async (root) => {
         const {
           container = null,
           codec = null,
-          duration = null,
-          bitrate = null,
+          duration = 0,
+          bitrate = 0,
+          samplerate = 0,
         } = format;
 
         const trackNo = track.no ? track.no : date;
@@ -77,6 +78,7 @@ const parseFolder = async (root) => {
           codec,
           duration,
           bitrate,
+          samplerate,
           extension: fileExtension,
           path: filePath,
         };

@@ -1,39 +1,58 @@
 import loadChunk from './chunks';
 
-const loadLibrary = async ({ mode = 'full', setLibrary, setStatus }) => {
+const loadLibrary = async ({ mode = 'full', setLibrary, setLibraryStatus }) => {
   if (mode === 'full') {
-    await loadFull({ setLibrary, setStatus });
+    await loadFull({ setLibrary, setLibraryStatus });
     return;
   }
-  await loadChunks({ setLibrary, setStatus });
+  await loadChunks({ setLibrary, setLibraryStatus });
   return;
 };
-const loadFull = async ({ setLibrary, setStatus }) => {
+
+const loadList = async ({ setList, setListStatus }) => {
   try {
-    setStatus('loading');
-    await import(`./index.json`)
+    setListStatus('loading');
+    await import(`./list.json`)
       .then((data) => {
-        setLibrary(data?.default);
-        setStatus('ready');
+        setList(data?.default);
+        setListStatus('ready');
       })
       .catch((error) => {
-        setStatus('error');
+        setListStatus('error');
         console.error(error);
       });
   } catch (error) {
-    setStatus('error');
+    setListStatus('error');
     console.error(error);
   }
 };
 
-const loadChunks = async ({ setLibrary, setStatus }) => {
+const loadFull = async ({ setLibrary, setLibraryStatus }) => {
+  try {
+    setLibraryStatus('loading');
+    await import(`./index.json`)
+      .then((data) => {
+        setLibrary(data?.default);
+        setLibraryStatus('ready');
+      })
+      .catch((error) => {
+        setLibraryStatus('error');
+        console.error(error);
+      });
+  } catch (error) {
+    setLibraryStatus('error');
+    console.error(error);
+  }
+};
+
+const loadChunks = async ({ setLibrary, setLibraryStatus }) => {
   try {
     let list = [];
 
     await import(`./list.json`)
       .then((data) => {
         list = data?.default;
-        setStatus('loading');
+        setLibraryStatus('loading');
       })
       .catch((error) => {
         console.error(error);
@@ -47,7 +66,7 @@ const loadChunks = async ({ setLibrary, setStatus }) => {
     } catch (error) {
       console.error(error);
     } finally {
-      setStatus('ready');
+      setLibraryStatus('ready');
     }
   } catch (error) {
     console.log(error);
@@ -55,3 +74,5 @@ const loadChunks = async ({ setLibrary, setStatus }) => {
 };
 
 export default loadLibrary;
+
+export { loadList };

@@ -89,7 +89,7 @@ const PageArtist = ({ params }: IProps) => {
             <Link href={`/artist/${artist}`}>{dataArtist?.title}</Link>
           </div>
           <span>•</span>
-          <div>{dataAlbum?.year}</div>
+          <div>{String(dataAlbum?.year)}</div>
           <span>•</span>
           <div>{dataAlbum?.genre}</div>
           <span>•</span>

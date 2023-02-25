@@ -16,6 +16,15 @@ export interface Player {
   volume: Function;
 }
 
+export type List = ListItem[];
+
+export type ListItem = {
+  artist: string;
+  file: string;
+  path: string;
+  [key: string]: any;
+};
+
 export type Library = {
   [key: string]: Artist;
 };
@@ -32,13 +41,14 @@ export type Album = {
   artist: string;
   albumartist: string;
   albumsort: string;
-  year: string;
-  originalyear: null;
+  year: string | Number | null;
+  originalyear: string | Number | null;
   date: string;
-  originaldate: null;
+  originaldate: string | null;
   genre: string[];
   cover: string;
   tracks: Track[];
+  [key: string]: any;
 };
 
 export type Track = {
@@ -51,17 +61,20 @@ export type Track = {
   album: string;
   title: string;
   genre: string[];
-  year: null;
+  year: string | Number | null;
   container: string;
   codec: string;
   duration: number;
   bitrate: number;
+  samplerate: number;
   extension: string;
   path: string;
+  [key: string]: any;
 };
 
 export type Playlist = {
   slug?: string;
   title?: string;
   tracks?: Track[];
+  [key: string]: any;
 };

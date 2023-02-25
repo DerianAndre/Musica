@@ -1,6 +1,31 @@
 import { Artist, Album, Playlist, Track } from '../../types/index';
 
-const formatDuration = (totalSeconds: number): string => {
+const formatBitrate = (
+  sizeInBytes: number = 0,
+  outputUnit: string = 'kb/s',
+): string => {
+  const byteUnits = ['b/s', 'kb/s', 'Mb/s', 'Gb/s', 'Tb/s'];
+
+  const byteUnitIndex = byteUnits.indexOf(outputUnit);
+
+  if (byteUnitIndex === -1) {
+    throw new Error(`Invalid output unit: ${outputUnit}`);
+  }
+
+  let i = 0;
+  let fileSize = sizeInBytes;
+  while (fileSize >= 1024 && i < byteUnits.length - 1) {
+    fileSize /= 1024;
+    i++;
+  }
+
+  const value = fileSize.toFixed();
+  const unit = byteUnits[i];
+
+  return `${value} ${unit}`;
+};
+
+const formatDuration = (totalSeconds: number = 0): string => {
   if (!totalSeconds) return '00:00';
   const min = Math.floor(totalSeconds / 60);
   const sec = Math.floor(totalSeconds % 60);
@@ -9,7 +34,34 @@ const formatDuration = (totalSeconds: number): string => {
   return `${minutes}:${seconds}`;
 };
 
-const formatTotalTime = (durationInSeconds: number): string => {
+const formatSamplerate = (
+  frequencyInHertz: number = 0,
+  outputUnit: string = 'Hz',
+): string => {
+  if (frequencyInHertz < 0) {
+    throw new Error('Frequency must be non-negative');
+  }
+  const hertzUnits = ['Hz', 'kHz', 'MHz', 'GHz'];
+
+  const hertzUnitIndex = hertzUnits.indexOf(outputUnit);
+  if (hertzUnitIndex === -1) {
+    throw new Error(`Invalid output unit: ${outputUnit}`);
+  }
+
+  let i = 0;
+  let frequency = frequencyInHertz;
+  while (frequency >= 1000 && i < hertzUnits.length - 1) {
+    frequency /= 1000;
+    i++;
+  }
+
+  const value = frequency.toFixed(1);
+  const unit = hertzUnits[i];
+
+  return `${value} ${unit}`;
+};
+
+const formatTotalTime = (durationInSeconds: number = 0): string => {
   if (durationInSeconds < 0) {
     throw new Error('Duration must be non-negative');
   }
@@ -113,7 +165,9 @@ const getImage = (cover: string): string => {
 
 export {
   albumsToTracks,
+  formatBitrate,
   formatDuration,
+  formatSamplerate,
   formatTotal,
   formatTotalTime,
   getAlbumTotalDuration,

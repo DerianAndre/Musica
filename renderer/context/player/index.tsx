@@ -8,9 +8,9 @@ import {
   useMemo,
   useState,
 } from 'react';
-import loadLibrary from '~/library';
+import loadLibrary, { loadList } from '~/library';
 import { Howl } from 'howler';
-import { Player, Library, Playlist, Track } from '~/types';
+import { List, Library, Playlist, Track } from '~/types';
 import {
   getRandomTracksPlaylist,
   handlePlayRandom,
@@ -19,12 +19,14 @@ import { handlePlay } from '~/renderer/components/player/utils';
 import { PLAYER_STATES } from '~/renderer/components/player/constants';
 
 interface HowlRef {
-  current: Player | null;
+  current: Howl | null;
 }
 
 interface PlayerContext {
-  howl: HowlRef | null;
+  howl: HowlRef;
   sortBy: string;
+  list: List;
+  listStatus: string;
   library: Library;
   libraryMemo: Library;
   libraryStatus: string;
@@ -54,12 +56,14 @@ interface IProps {
 const PlayerContext = createContext<PlayerContext>(null!);
 
 const PlayerProvider = ({ children }: IProps) => {
-  const howl = useRef<Player | null>(null!);
+  const howl = useRef<Howl | null>(null!);
   const player = howl.current;
   const shuffle = useRef(false);
   const repeat = useRef(false);
 
   const [library, setLibrary] = useState<Library>({});
+  const [list, setList] = useState<List>([]);
+  const [listStatus, setListStatus] = useState<string>('loading');
   const [libraryStatus, setLibraryStatus] = useState<string>('loading');
   const [playerMode, setPlayerMode] = useState<string>('normal');
   const [playerState, setPlayerState] = useState(PLAYER_STATES.STOP);
@@ -97,13 +101,11 @@ const PlayerProvider = ({ children }: IProps) => {
       }
     }
 
-    filteredTracks.sort((a, b) => {
+    filteredTracks?.sort((a: Track, b: Track) => {
       if (sortBy === 'year') {
-        return b[sortBy] - a[sortBy];
+        return Number(b[sortBy]) - Number(a[sortBy]);
       }
-      return String(a[sortBy || 'title'])?.localeCompare(
-        String(b[sortBy || 'title']),
-      );
+      return Number(String(a[sortBy]).localeCompare(String(b[sortBy])));
     });
 
     return filteredTracks;
@@ -198,7 +200,8 @@ const PlayerProvider = ({ children }: IProps) => {
   };
 
   useEffect(() => {
-    loadLibrary({ setLibrary, setStatus: setLibraryStatus });
+    loadLibrary({ setLibrary, setLibraryStatus });
+    loadList({ setList, setListStatus });
   }, []);
 
   useEffect(() => {
@@ -208,7 +211,7 @@ const PlayerProvider = ({ children }: IProps) => {
 
         howl.current = new Howl({
           autoplay: true,
-          src: data.metadata.file || null,
+          src: data.metadata.file || [],
           loop: repeat.current,
           onplay: () => {
             setPlayerState(PLAYER_STATES.PLAY);
@@ -228,7 +231,7 @@ const PlayerProvider = ({ children }: IProps) => {
           },
           onmute: () => {},
           onvolume: () => {},
-          onplayerror: (id: number, message: number) => {
+          onplayerror: (id, message) => {
             setPlayerState(PLAYER_STATES.ERROR);
             window.electron.player.event({
               state: PLAYER_STATES.ERROR,
@@ -239,7 +242,7 @@ const PlayerProvider = ({ children }: IProps) => {
             });
             console.error('player-play-error', { id, message });
           },
-          onloaderror: (id: number, message: number) => {
+          onloaderror: (id, message) => {
             setPlayerState(PLAYER_STATES.ERROR);
             window.electron.player.event({
               state: PLAYER_STATES.ERROR,
@@ -264,6 +267,8 @@ const PlayerProvider = ({ children }: IProps) => {
         handlePlayPlaylist,
         handlePlayPrev,
         howl,
+        list,
+        listStatus,
         library,
         libraryMemo,
         libraryStatus,

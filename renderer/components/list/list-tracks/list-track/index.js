@@ -1,7 +1,6 @@
 import { formatDuration } from '~/renderer/utils/index';
 import { slugifyFile } from '~/main/utils/files';
 import Link from 'next/link';
-import ListIntersection from '../../list-intersecton';
 
 const ListTrack = ({ track, handlePlay }) => {
   const artist = slugifyFile(track?.artist);

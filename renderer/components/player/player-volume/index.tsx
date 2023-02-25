@@ -1,12 +1,12 @@
 'use client';
 
+import { Howl } from 'howler';
 import React, { useEffect, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
-import { Player } from '~/types';
 import { VolumeOff, VolumeUp } from '../../icons';
 
 interface IProps {
-  player: Player | null;
+  player: Howl | null;
   playerState: string;
 }
 

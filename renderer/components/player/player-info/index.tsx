@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
 import { slugifyFile } from '~/main/utils/files';
+import { formatBitrate, formatSamplerate } from '~/renderer/utils';
 
 const PlayerInfo = ({ data }: any) => {
   const trackData = data?.data || {};
@@ -17,60 +18,6 @@ const PlayerInfo = ({ data }: any) => {
     } else {
       return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
     }
-  };
-  const formatBitrate = (
-    sizeInBytes: number,
-    outputUnit: string = 'kb/s',
-  ): string => {
-    if (sizeInBytes <= 0) {
-      throw new Error('File size must be positive');
-    }
-    const byteUnits = ['b/s', 'kb/s', 'Mb/s', 'Gb/s', 'Tb/s'];
-
-    const byteUnitIndex = byteUnits.indexOf(outputUnit);
-
-    if (byteUnitIndex === -1) {
-      throw new Error(`Invalid output unit: ${outputUnit}`);
-    }
-
-    let i = 0;
-    let fileSize = sizeInBytes;
-    while (fileSize >= 1024 && i < byteUnits.length - 1) {
-      fileSize /= 1024;
-      i++;
-    }
-
-    const value = fileSize.toFixed();
-    const unit = byteUnits[i];
-
-    return `${value} ${unit}`;
-  };
-
-  const formatSamplerate = (
-    frequencyInHertz: number,
-    outputUnit: string = 'Hz',
-  ): string => {
-    if (frequencyInHertz < 0) {
-      throw new Error('Frequency must be non-negative');
-    }
-    const hertzUnits = ['Hz', 'kHz', 'MHz', 'GHz'];
-
-    const hertzUnitIndex = hertzUnits.indexOf(outputUnit);
-    if (hertzUnitIndex === -1) {
-      throw new Error(`Invalid output unit: ${outputUnit}`);
-    }
-
-    let i = 0;
-    let frequency = frequencyInHertz;
-    while (frequency >= 1000 && i < hertzUnits.length - 1) {
-      frequency /= 1000;
-      i++;
-    }
-
-    const value = frequency.toFixed(1);
-    const unit = hertzUnits[i];
-
-    return `${value} ${unit}`;
   };
 
   return (
@@ -100,15 +47,17 @@ const PlayerInfo = ({ data }: any) => {
             </Link>
             <h3 className="w-full truncate text-sm font-medium opacity-75">
               <Link href={`/artist/${artist}`}>{metaData?.common?.artist}</Link>
-              <span> • </span>
+              <span className="opacity-50"> • </span>
               <Link href={`/artist/${artist}/${album}`}>
                 {metaData?.common?.album}
               </Link>
             </h3>
             <div className="w-full truncate text-xs font-normal opacity-50">
-              {metaData?.format?.container} •{' '}
-              {formatBitrate(metaData?.format?.bitrate)} •{' '}
-              {formatSamplerate(metaData?.format?.sampleRate)}
+              <span>{metaData?.format?.codec}</span>
+              <span className="opacity-50"> • </span>
+              <span>{formatBitrate(metaData?.format?.bitrate)}</span>
+              <span className="opacity-50"> • </span>
+              <span>{formatSamplerate(metaData?.format?.sampleRate)}</span>
             </div>
           </div>
         )}
