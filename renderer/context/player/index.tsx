@@ -30,6 +30,7 @@ interface PlayerContext {
   libraryStatus: string;
   playerMode: string;
   playlist: Playlist;
+  search: string;
   handlePlayPause: Function;
   handlePlayPrev: Function;
   handlePlayNext: Function;
@@ -41,6 +42,7 @@ interface PlayerContext {
   setPlayerMode: Function;
   setPlaylist: Function;
   setSortBy: Function;
+  setSearch: Function;
   playerState: string;
   tracks: Track[];
 }
@@ -53,6 +55,10 @@ const PlayerContext = createContext<PlayerContext>(null!);
 
 const PlayerProvider = ({ children }: IProps) => {
   const howl = useRef<Player | null>(null!);
+  const player = howl.current;
+  const shuffle = useRef(false);
+  const repeat = useRef(false);
+
   const [library, setLibrary] = useState<Library>({});
   const [libraryStatus, setLibraryStatus] = useState<string>('loading');
   const [playerMode, setPlayerMode] = useState<string>('normal');
@@ -60,11 +66,7 @@ const PlayerProvider = ({ children }: IProps) => {
   const [playlist, setPlaylist] = useState<Playlist>({});
   const [playlistIndex, setPlaylistIndex] = useState<number>(0);
   const [sortBy, setSortBy] = useState<string>('title');
-
-  const player = howl.current;
-  const shuffle = useRef(false);
-  const repeat = useRef(false);
-
+  const [search, setSearch] = useState<string>('');
   const libraryMemo: Library = useMemo(() => {
     return Object.fromEntries(
       Object.entries(library)?.sort(([a], [b]) => a.localeCompare(b)),
@@ -72,20 +74,30 @@ const PlayerProvider = ({ children }: IProps) => {
   }, [library]);
 
   const tracks: Track[] = useMemo(() => {
-    const result: Track[] = [];
+    const searchRegex = new RegExp(search, 'i');
+    const filteredTracks: Track[] = [];
+
     for (const key in library) {
       const item = library[key];
       if (item.albums) {
         for (const album of item.albums) {
           if (album?.tracks) {
             for (const track of album.tracks) {
-              result.push({ ...track, album: album.title });
+              if (
+                !searchRegex.test(track.title) &&
+                !searchRegex.test(album.title) &&
+                !searchRegex.test(item.title)
+              ) {
+                continue;
+              }
+              filteredTracks.push({ ...track, album: album.title });
             }
           }
         }
       }
     }
-    result?.sort((a, b) => {
+
+    filteredTracks.sort((a, b) => {
       if (sortBy === 'year') {
         return b[sortBy] - a[sortBy];
       }
@@ -93,8 +105,9 @@ const PlayerProvider = ({ children }: IProps) => {
         String(b[sortBy || 'title']),
       );
     });
-    return result;
-  }, [library, sortBy]);
+
+    return filteredTracks;
+  }, [library, search, sortBy]);
 
   const handlePlayMode = (mode: string): void => {
     if (mode === 'random-all') {
@@ -257,11 +270,13 @@ const PlayerProvider = ({ children }: IProps) => {
         playerMode,
         playerState,
         playlist,
+        search,
         setLibrary,
         setLibraryStatus,
         setPlayerMode,
         setPlayerState,
         setPlaylist,
+        setSearch,
         setSortBy,
         sortBy,
         tracks,

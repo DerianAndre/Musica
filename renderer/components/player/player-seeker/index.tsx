@@ -15,23 +15,25 @@ const PlayerSeeker = ({ player, playerState }: IProps) => {
   const [playerDelay, setPlayerDelay] = useState<number | null>(null);
   const [playerSeek, setPlayerSeek] = useState<number>(0);
 
-  const sliderValue: number = player
-    ? playerSeek > 0
-      ? (playerSeek / player?.duration()) * 100
-      : 0
-    : 0;
+  const sliderValue = (): number => {
+    if (!player) return 0;
+    const duration = Number(player.duration());
+    const value = Number(((playerSeek / duration) * 100).toFixed(2));
+    return !value || value > 100 ? 0 : value;
+  };
 
-  const timeCurrent = timeFormat(Math.floor(playerSeek));
+  const timeCurrent: string = timeFormat(Math.floor(playerSeek));
 
-  const timeDuration = timeFormat(player?.duration() || 0);
+  const timeDuration: string = timeFormat(player?.duration() || 0);
 
   const customStyle: object = {
-    '--slider-value': `${String(sliderValue)}%`,
+    '--slider-value': `${sliderValue()}%`,
   };
 
   const playerSeekMap = (value: number): number => {
-    const duration = player?.duration() || 0;
-    return ((value - 0) / (100 - 0)) * (duration - 0) + 0;
+    const duration = player?.duration() || 1;
+    const calculation = ((value - 0) / (100 - 0)) * (duration - 0) + 0;
+    return calculation;
   };
 
   const handleSliderTime = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +73,7 @@ const PlayerSeeker = ({ player, playerState }: IProps) => {
               id="slider"
               className="w-full"
               type="range"
-              value={sliderValue}
+              value={sliderValue()}
               min={0}
               max={100}
               step={0.05}
