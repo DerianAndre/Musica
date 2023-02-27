@@ -8,9 +8,9 @@ const GoBack = () => {
   const router = useRouter();
 
   return (
-    <div className="flex gap-2">
+    <div className="mt-5 mb-4 flex gap-2">
       <button
-        className="btn-ghost btn-sm btn-circle btn mt-4 mb-2 bg-base-content/[0.1] text-lg"
+        className="btn-ghost btn-sm btn-circle btn bg-base-content/[0.1] text-lg"
         title="Go back"
         type="button"
         onClick={() => router.back()}
@@ -20,7 +20,7 @@ const GoBack = () => {
       <Link
         href="/"
         title="Go Home"
-        className="btn-ghost btn-sm btn-circle btn mt-4 mb-2 bg-base-content/[0.1] text-lg"
+        className="btn-ghost btn-sm btn-circle btn bg-base-content/[0.1] text-lg"
       >
         <Home />
       </Link>
