@@ -1,13 +1,27 @@
 'use client';
 import '../scss/globals.scss';
-import React, { useRef, useContext, useState, useMemo, useEffect } from 'react';
+import React, { useRef, useContext, useState } from 'react';
 import Link from 'next/link';
 import List from '../components/list/index';
-import { Search, Settings, Shuffle } from '../components/icons/index';
+import {
+  Album,
+  Artist,
+  ListAll,
+  Search,
+  Settings,
+  Shuffle,
+  Track,
+} from '../components/icons/index';
 import { PlayerContext } from '../context/player';
 import { getRandomTracksPlaylist } from '../utils/random';
 
-const ITEMS_MENU = ['tracks', 'artists', 'albums', 'list'];
+const ITEMS_MENU = [
+  { text: 'Tracks', slug: 'tracks', icon: <Track /> },
+  { text: 'Artists', slug: 'artists', icon: <Artist /> },
+  { text: 'Albums', slug: 'albums', icon: <Album /> },
+  { text: 'List', slug: 'list', icon: <ListAll /> },
+];
+
 const ITEMS_SORT = ['title', 'artist', 'album', 'year'];
 
 const Home = () => {
@@ -33,23 +47,28 @@ const Home = () => {
         <div className="sticky top-0 left-0 right-0 z-[9999] mb-5 bg-base-100/[0.85] py-3 backdrop-blur">
           <div className="flex w-full flex-wrap items-center justify-between gap-2">
             <div className="library-mode flex w-[310px]">
-              <div className="tabs tabs-boxed w-full bg-base-content/[0.15] font-headings font-semibold dark:bg-base-content/[0.05]">
+              <div className="tabs tabs-boxed bg-base-content/[0.15] font-headings font-semibold dark:bg-base-content/[0.05]">
                 {ITEMS_MENU.map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    className={`tab capitalize ${
-                      mode === item
-                        ? 'tab-active !rounded !bg-base-100 !text-base-content'
-                        : ''
-                    }`}
-                    onClick={() => {
-                      refHome.current?.scrollIntoView();
-                      setMode(item);
-                    }}
+                  <div
+                    className="tooltip tooltip-right"
+                    data-tip={item.text}
+                    key={item.slug}
                   >
-                    {item}
-                  </button>
+                    <button
+                      type="button"
+                      className={`tab mx-1 px-1 capitalize ${
+                        mode === item.slug
+                          ? 'tab-active !rounded !bg-base-100 !text-base-content'
+                          : ''
+                      }`}
+                      onClick={() => {
+                        refHome.current?.scrollIntoView();
+                        setMode(item.slug);
+                      }}
+                    >
+                      <span className="text-2xl">{item.icon}</span>
+                    </button>
+                  </div>
                 ))}
               </div>
             </div>

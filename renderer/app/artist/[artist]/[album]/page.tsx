@@ -12,6 +12,7 @@ import { Shuffle } from '~/renderer/components/icons/index';
 import PageCover from '~/renderer/components/page-cover';
 import GoBack from '~/renderer/components/go-back';
 import {
+  formatGenre,
   formatTotal,
   formatTotalTime,
   getAlbumTotalDuration,
@@ -56,7 +57,7 @@ const PageArtist = ({ params }: IProps) => {
           <span>•</span>
           <div>{String(dataAlbum?.year)}</div>
           <span>•</span>
-          <div>{dataAlbum?.genre}</div>
+          <div>{formatGenre(dataAlbum?.genre)}</div>
           <span>•</span>
           <div>{formatTotal(totalTracks, 'tracks', 'track')}</div>
           <span>•</span>

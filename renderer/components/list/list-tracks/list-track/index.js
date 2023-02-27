@@ -1,4 +1,4 @@
-import { formatDuration } from '~/renderer/utils/index';
+import { formatDuration, formatGenre } from '~/renderer/utils/index';
 import { slugifyFile } from '~/main/utils/files';
 import Link from 'next/link';
 
@@ -35,7 +35,7 @@ const ListTrack = ({ track, handlePlay }) => {
         </div>
         <div className="hidden w-7 flex-auto lg:block">
           <div className="inline-block max-w-full truncate py-2 px-3">
-            {track?.genre || 'Unkwon genre'}
+            {formatGenre(track?.genre)}
           </div>
         </div>
         <div className="hidden w-14 flex-initial md:block">

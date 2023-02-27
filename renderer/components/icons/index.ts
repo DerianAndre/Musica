@@ -16,6 +16,10 @@ import {
   MdOutlineArrowBackIos,
   MdRepeat,
   MdRepeatOn,
+  MdAlbum,
+  MdAudiotrack,
+  MdOutlineLineWeight,
+  MdPerson,
 } from 'react-icons/md';
 import Play from './play/index';
 import PlayPause from './play-pause/index';
@@ -41,4 +45,8 @@ export {
   MdShuffle as Shuffle,
   MdDarkMode as DarkMode,
   MdLightMode as LightMode,
+  MdAlbum as Album,
+  MdAudiotrack as Track,
+  MdOutlineLineWeight as ListAll,
+  MdPerson as Artist,
 };

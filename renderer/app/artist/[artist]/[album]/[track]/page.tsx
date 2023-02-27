@@ -10,6 +10,7 @@ import {
   formatBitrate,
   formatSamplerate,
   formatTotalTime,
+  formatGenre,
 } from '~/renderer/utils';
 
 const PageTrack = ({
@@ -58,7 +59,7 @@ const PageTrack = ({
               </tr>
               <tr>
                 <td className="font-bold">Genre</td>
-                <td>{String(dataTrack?.genre)}</td>
+                <td>{formatGenre(dataTrack?.genre)}</td>
               </tr>
               <tr>
                 <td className="font-bold">Duration</td>
@@ -71,6 +72,10 @@ const PageTrack = ({
               <tr>
                 <td className="font-bold">Samplerate</td>
                 <td>{formatSamplerate(dataTrack?.samplerate)}</td>
+              </tr>
+              <tr>
+                <td className="font-bold">Bits/sample</td>
+                <td>{dataTrack?.bitsPerSample || 0} bits</td>
               </tr>
               <tr>
                 <td className="font-bold">Codec</td>

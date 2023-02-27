@@ -53,11 +53,13 @@ const PlayerInfo = ({ data }: any) => {
               </Link>
             </h3>
             <div className="w-full truncate text-xs font-normal opacity-50">
-              <span>{metaData?.format?.codec}</span>
+              <span>{metaData?.format?.container}</span>
               <span className="opacity-50"> • </span>
               <span>{formatBitrate(metaData?.format?.bitrate)}</span>
               <span className="opacity-50"> • </span>
               <span>{formatSamplerate(metaData?.format?.sampleRate)}</span>
+              <span className="opacity-50"> • </span>
+              <span>{metaData?.format?.bitsPerSample || 0} bits</span>
             </div>
           </div>
         )}

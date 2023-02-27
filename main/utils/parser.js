@@ -59,14 +59,21 @@ const parseFolder = async (root) => {
           duration = 0,
           bitrate = 0,
           samplerate = 0,
+          bitsPerSample = 0,
         } = format;
 
         const trackNo = track.no ? track.no : date;
 
+        const trackPadded = formatTrackNo(trackNo);
+
+        const fileSlug = slugifyFile(
+          `${artist}_${year}_${album}_${trackPadded}_${title}_${fileExtension}`,
+        );
+
         const musicFileObject = {
-          slug: slugifyFile(file),
+          slug: fileSlug,
           trackNo,
-          track: formatTrackNo(trackNo),
+          track: trackPadded,
           artist,
           albumartist,
           artists,
@@ -79,6 +86,7 @@ const parseFolder = async (root) => {
           duration,
           bitrate,
           samplerate,
+          bitsPerSample,
           extension: fileExtension,
           path: filePath,
         };

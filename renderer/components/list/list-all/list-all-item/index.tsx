@@ -5,6 +5,7 @@ import ListIntersection from '../../list-intersecton';
 import Link from 'next/link';
 import { slugifyFile } from '~/main/utils/files';
 import {
+  formatGenre,
   formatTotal,
   getAlbumTotalDuration,
   getAlbumTotalTracks,
@@ -54,7 +55,7 @@ const ListAllItem = ({ library, artist, show }: IProps) => {
                       <div className="flex gap-2 opacity-50">
                         <div>{String(album?.year)}</div>
                         <span>•</span>
-                        <div>{album?.genre}</div>
+                        <div>{formatGenre(album?.genre)}</div>
                         <span>•</span>
                         <div>
                           {formatTotal(

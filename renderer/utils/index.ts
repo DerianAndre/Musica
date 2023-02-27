@@ -34,6 +34,19 @@ const formatDuration = (totalSeconds: number = 0): string => {
   return `${minutes}:${seconds}`;
 };
 
+const formatGenre = (genre: string | string[] | undefined): string => {
+  console.log(genre);
+  return !genre
+    ? 'Unkown genre'
+    : typeof genre === 'string'
+    ? genre.replaceAll('/', ', ').replaceAll(' , ', ', ').replaceAll(';', ', ')
+    : genre
+        .join(', ')
+        .replaceAll('/', ', ')
+        .replaceAll(' , ', ', ')
+        .replaceAll(';', ', ');
+};
+
 const formatSamplerate = (
   frequencyInHertz: number = 0,
   outputUnit: string = 'Hz',
@@ -174,6 +187,7 @@ export {
   albumsToTracks,
   formatBitrate,
   formatDuration,
+  formatGenre,
   formatSamplerate,
   formatTotal,
   formatTotalTime,
