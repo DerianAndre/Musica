@@ -142,11 +142,11 @@ const getAlbumTotalTracks = (album: Album | undefined): number => {
 };
 
 const sortAlbums = (albums: Album[]): Album[] => {
-  return albums.sort((a: Album, b: Album) => {
-    if (a.title < b.title) {
+  return albums?.sort((a: Album, b: Album) => {
+    if (a?.title < b?.title) {
       return -1;
     }
-    if (a.title > b.title) {
+    if (a?.title > b?.title) {
       return 1;
     }
     return 0;
@@ -154,7 +154,7 @@ const sortAlbums = (albums: Album[]): Album[] => {
 };
 
 const albumsToTracks = (albums: Album[]): Track[] => {
-  return albums.reduce((acc: Track[], album: Album) => {
+  return albums?.reduce((acc: Track[], album: Album) => {
     return [...acc, ...album.tracks];
   }, []);
 };

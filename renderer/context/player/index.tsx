@@ -232,6 +232,7 @@ const PlayerProvider = ({ children }: IProps) => {
           onmute: () => {},
           onvolume: () => {},
           onplayerror: (id, message) => {
+            if (playerState !== PLAYER_STATES.PLAY) return;
             setPlayerState(PLAYER_STATES.ERROR);
             window.electron.player.event({
               state: PLAYER_STATES.ERROR,
@@ -243,6 +244,7 @@ const PlayerProvider = ({ children }: IProps) => {
             console.error('player-play-error', { id, message });
           },
           onloaderror: (id, message) => {
+            if (playerState !== PLAYER_STATES.PLAY) return;
             setPlayerState(PLAYER_STATES.ERROR);
             window.electron.player.event({
               state: PLAYER_STATES.ERROR,

@@ -48,7 +48,7 @@ const PageArtist = ({ params }: IProps) => {
       <GoBack />
       <header>
         <h2 className="font-headings text-3xl font-semibold">
-          {dataArtist.title}
+          {dataArtist?.title}
         </h2>
         <div className="mb-3 flex gap-2 opacity-50">
           <div>{formatTotal(totalAlbums, 'albums', 'album')}</div>
@@ -76,8 +76,8 @@ const PageArtist = ({ params }: IProps) => {
       </header>
       <ListIntersection>
         <ListAllItem
-          library={{ [dataArtist.title]: dataArtist }}
-          artist={dataArtist.title}
+          library={{ [dataArtist?.title]: dataArtist }}
+          artist={dataArtist?.title}
           show={{ artist: false }}
         />
       </ListIntersection>
