@@ -202,12 +202,14 @@ const parseLibrary = async (dir, libraryPath, libraryFile, callback) => {
       const chunksList = [];
       Object.keys(jsonLibrarySorted).forEach((item) => {
         const chunkPath = `${libraryPath}/chunks/`;
-        const chunkFile = `${slugifyFile(item)}.json`;
+        const chunkSlug = slugifyFile(item);
+        const chunkFile = `${chunkSlug}.json`;
         const chunkFullPath = chunkPath + chunkFile;
 
         chunksList.push({
           artist: item,
-          file: slugifyFile(item),
+          slug: chunkSlug,
+          file: chunkFile,
           path: chunkFullPath,
         });
 

@@ -21,12 +21,15 @@ interface IProps {
 
 const ListAllItem = ({ library, artist, show }: IProps) => {
   const display = { artist: true, info: true, ...show };
-  const albums = sortAlbums(library[artist]?.albums);
+  const dataArtist = library[artist];
+  const albums = sortAlbums(dataArtist?.albums);
 
   return (
     <div>
       {display.artist && (
-        <h2 className="font-headings text-3xl font-semibold">{artist}</h2>
+        <h2 className="font-headings text-3xl font-semibold">
+          <Link href={`/artist/${dataArtist?.slug}`}>{artist}</Link>
+        </h2>
       )}
       <div className="divide-y divide-black/[0.1] dark:divide-white/[0.05]">
         {albums?.map((album) => (
@@ -34,7 +37,7 @@ const ListAllItem = ({ library, artist, show }: IProps) => {
             <ListIntersection>
               <div className="flex flex-col flex-wrap gap-5 py-5 md:flex-row">
                 <div className="w-[200px] flex-initial">
-                  <Link href={`/artist/${slugifyFile(artist)}/${album?.slug}`}>
+                  <Link href={`/artist/${dataArtist?.slug}/${album?.slug}`}>
                     <ListCover album={album} width="200px" />
                   </Link>
                 </div>
@@ -42,10 +45,14 @@ const ListAllItem = ({ library, artist, show }: IProps) => {
                   {display.info && (
                     <div className="list-info mb-3">
                       <h3 className="font-headings text-2xl font-semibold">
-                        {album?.title}
+                        <Link
+                          href={`/artist/${dataArtist?.slug}/${album?.slug}`}
+                        >
+                          {album?.title}
+                        </Link>
                       </h3>
                       <div className="flex gap-2 opacity-50">
-                        <div>{album?.year}</div>
+                        <div>{String(album?.year)}</div>
                         <span>•</span>
                         <div>{album?.genre}</div>
                         <span>•</span>

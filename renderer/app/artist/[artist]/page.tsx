@@ -27,47 +27,20 @@ interface IProps {
 
 const PageArtist = ({ params }: IProps) => {
   const { artist } = params;
-  const { handlePlayPlaylist } = useContext(PlayerContext);
+  const { library, list, handlePlayPlaylist } = useContext(PlayerContext);
 
-  const [dataArtist, setDataArtist] = useState<Artist>({
-    title: 'Artist',
-    slug: 'artist',
-    albums: [],
-  });
+  const listArtist = list.find((item) => item.slug === artist);
+  const dataArtist = library[listArtist?.artist || ''];
 
-  const [artistPlaylist, setArtistPlaylist] = useState<Playlist>({
-    title: 'Playlist',
-    slug: 'playlist',
-    tracks: [],
-  });
+  const artistPlaylist: Playlist = {
+    slug: artist,
+    title: dataArtist?.title,
+    tracks: albumsToTracks(sortAlbums(dataArtist?.albums)),
+  };
 
   const totalAlbums = getArtistTotalAlbums(dataArtist);
   const totalTracks = getArtistTotalTracks(dataArtist);
   const totalDuration = getArtistTotalDuration(dataArtist);
-
-  useEffect(() => {
-    if (!artist) return;
-
-    const getArtistData = async () => {
-      const data = await loadChunk({
-        chunk: undefined,
-        slug: artist,
-        setter: undefined,
-      });
-
-      setDataArtist(data);
-
-      const playlist: Playlist = {
-        slug: artist,
-        title: data?.title,
-        tracks: albumsToTracks(sortAlbums(data?.albums)),
-      };
-
-      setArtistPlaylist(playlist);
-    };
-
-    getArtistData();
-  }, [artist]);
 
   return (
     <>

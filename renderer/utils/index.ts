@@ -75,10 +75,9 @@ const formatTotalTime = (durationInSeconds: number = 0): string => {
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
 
-  if (minutes < 60) {
-    const mins = minutes === 1 ? 'min' : 'mins';
+  if (minutes === 0) {
     const secs = seconds === 1 ? 'sec' : 'secs';
-    return `${minutes} ${mins}, ${seconds} ${secs}`;
+    return `${seconds} ${secs}`;
   }
 
   const hours = Math.floor(minutes / 60);
@@ -88,7 +87,15 @@ const formatTotalTime = (durationInSeconds: number = 0): string => {
   const mins = remainingMinutes === 1 ? 'min' : 'mins';
   const secs = seconds === 1 ? 'sec' : 'secs';
 
-  return `${hours} ${hrs}, ${remainingMinutes} ${mins}, ${seconds} ${secs}`;
+  if (hours === 0) {
+    return `${remainingMinutes} ${mins}${
+      seconds === 0 ? '' : `, ${seconds} ${secs}`
+    }`;
+  }
+
+  return `${hours} ${hrs}, ${remainingMinutes} ${mins}${
+    seconds === 0 ? '' : `, ${seconds} ${secs}`
+  }`;
 };
 
 const formatTotal = (

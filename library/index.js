@@ -1,11 +1,11 @@
 import loadChunk from './chunks';
 
 const loadLibrary = async ({ mode = 'full', setLibrary, setLibraryStatus }) => {
-  if (mode === 'full') {
-    await loadFull({ setLibrary, setLibraryStatus });
+  if (mode === 'chunks') {
+    await loadChunks({ setLibrary, setLibraryStatus });
     return;
   }
-  await loadChunks({ setLibrary, setLibraryStatus });
+  await loadFull({ setLibrary, setLibraryStatus });
   return;
 };
 

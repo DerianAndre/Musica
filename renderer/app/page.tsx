@@ -1,9 +1,9 @@
 'use client';
 import '../scss/globals.scss';
-import React, { useRef, useContext, useState } from 'react';
+import React, { useRef, useContext, useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import List from '../components/list/index';
-import { Settings, Shuffle } from '../components/icons/index';
+import { Search, Settings, Shuffle } from '../components/icons/index';
 import { PlayerContext } from '../context/player';
 import { getRandomTracksPlaylist } from '../utils/random';
 
@@ -14,6 +14,7 @@ const Home = () => {
   const refHome = useRef<null | HTMLDivElement>(null);
   const {
     tracks,
+    search,
     sortBy,
     libraryMemo,
     libraryStatus,
@@ -23,11 +24,8 @@ const Home = () => {
   } = useContext(PlayerContext);
 
   const [mode, setMode] = useState<string>('tracks');
-  const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const handleSearch = (): void => {
-    setSearch(searchTerm);
-  };
+  const handleSearch = () => {};
 
   return (
     <main className="page-home">
@@ -61,35 +59,18 @@ const Home = () => {
                 <div className="relative w-full">
                   <input
                     type="search"
-                    className="input input-sm w-full rounded-full bg-base-content/[0.1] py-[1.2rem] pr-12"
+                    className="input input-sm w-full rounded-full bg-base-content/[0.15] py-[1.2rem] pl-5 pr-12 dark:bg-base-content/[0.05]"
                     placeholder="Search..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    onBlur={handleSearch}
-                    onKeyDown={(e) => {
-                      e.key === 'Enter' && handleSearch();
-                    }}
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
                   />
                   <button
                     title="search"
                     type="button"
-                    className="btn-ghost btn-sm btn-circle btn absolute top-1/2 right-2 -translate-y-1/2 transform bg-transparent"
+                    className="btn-ghost btn-sm btn-circle btn absolute top-1/2 right-2 !-translate-y-1/2 transform bg-transparent text-xl"
                     onClick={handleSearch}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                      />
-                    </svg>
+                    <Search />
                   </button>
                 </div>
               </div>
@@ -97,12 +78,12 @@ const Home = () => {
 
             <div className="library-actions flex w-[310px] flex-wrap justify-end gap-2">
               {mode === 'tracks' && (
-                <div className="sort-by flex items-center gap-1">
+                <div className="sort-by border-content-base/[0.15] flex items-center gap-2 rounded bg-base-content/[0.15] px-2 dark:bg-base-content/[0.05]">
                   <div className="text-xs">Sort by</div>
                   <select
                     name="sort-by"
                     title="sort-by"
-                    className="select-bordered select select-sm rounded capitalize"
+                    className="select select-xs rounded capitalize"
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
                   >

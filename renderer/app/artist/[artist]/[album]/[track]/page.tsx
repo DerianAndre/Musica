@@ -19,7 +19,7 @@ const PageTrack = ({
 }) => {
   const { artist, album, track } = params;
   const { library, list } = useContext(PlayerContext);
-  const listArtist = list.find((item) => item.file === artist);
+  const listArtist = list.find((item) => item.slug === artist);
   const dataArtist = library[listArtist?.artist || ''];
   const dataAlbum = dataArtist?.albums?.find((item) => item.slug === album);
   const dataTrack = dataAlbum?.tracks?.find((item) => item.slug === track);
