@@ -20,11 +20,8 @@
   "build": {
     "appId": "com.derianandre.musica",
     "productName": "Musica",
-    "copyright": "Copyright © year ${author.name}",
+    "copyright": "Copyright © 2023 Derian Castillo",
     "asar": true,
-    "directory": {
-      "output": "build"
-    },
     "files": [
       "library",
       "main",
@@ -45,7 +42,7 @@
     "eslint": "^8.33.0",
     "eslint-config-next": "^13.1.6",
     "music-metadata": "^7.13.3",
-    "next": "^13.2.2-canary.1",
+    "next": "^13.2.2",
     "node-dir": "^0.1.17",
     "postcss": "^8.4.21",
     "prettier-plugin-tailwindcss": "^0.2.3",
