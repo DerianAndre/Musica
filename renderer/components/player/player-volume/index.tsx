@@ -7,15 +7,18 @@ import { VolumeOff, VolumeUp } from '../../icons';
 
 interface IProps {
   player: Howl | null;
+  playerMuted: Boolean;
   playerState: string;
+  handleToggleMute: React.MouseEventHandler;
 }
 
-const PlayerVolume = ({ player, playerState }: IProps) => {
+const PlayerVolume = ({
+  player,
+  playerState,
+  playerMuted,
+  handleToggleMute,
+}: IProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [playerMuted, setPlayerMuted] = useLocalStorage<boolean>(
-    'musica-player-muted',
-    false,
-  );
   const [playerVolume, setPlayerVolume] = useLocalStorage<number>(
     'musica-player-volume',
     1,
@@ -32,15 +35,10 @@ const PlayerVolume = ({ player, playerState }: IProps) => {
     player?.volume(value);
   };
 
-  const handleMute = () => {
-    setPlayerMuted((v) => !v);
-  };
-
   useEffect(() => {
     if (!player) return;
-    player?.mute(playerMuted);
     player?.volume(playerVolume);
-  }, [player, playerState, playerMuted, playerVolume]);
+  }, [player, playerState, playerVolume]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -69,7 +67,7 @@ const PlayerVolume = ({ player, playerState }: IProps) => {
         title="Toggle mute"
         type="button"
         className="btn-mute-toggle btn-ghost btn-sm btn-circle btn text-xl"
-        onClick={handleMute}
+        onClick={handleToggleMute}
       >
         {playerVolume > 0 && !playerMuted ? <VolumeUp /> : <VolumeOff />}
       </button>

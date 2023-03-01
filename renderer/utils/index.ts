@@ -35,7 +35,6 @@ const formatDuration = (totalSeconds: number = 0): string => {
 };
 
 const formatGenre = (genre: string | string[] | undefined): string => {
-  console.log(genre);
   return !genre
     ? 'Unkown genre'
     : typeof genre === 'string'
@@ -54,15 +53,17 @@ const formatSamplerate = (
   if (frequencyInHertz < 0) {
     throw new Error('Frequency must be non-negative');
   }
-  const hertzUnits = ['Hz', 'kHz', 'MHz', 'GHz'];
 
+  const hertzUnits = ['Hz', 'kHz', 'MHz', 'GHz'];
   const hertzUnitIndex = hertzUnits.indexOf(outputUnit);
+
   if (hertzUnitIndex === -1) {
     throw new Error(`Invalid output unit: ${outputUnit}`);
   }
 
   let i = 0;
   let frequency = frequencyInHertz;
+
   while (frequency >= 1000 && i < hertzUnits.length - 1) {
     frequency /= 1000;
     i++;
@@ -95,7 +96,6 @@ const formatTotalTime = (durationInSeconds: number = 0): string => {
 
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
-
   const hrs = hours === 1 ? 'hour' : 'hours';
   const mins = remainingMinutes === 1 ? 'min' : 'mins';
   const secs = seconds === 1 ? 'sec' : 'secs';

@@ -17,6 +17,7 @@ import {
 } from '~/renderer/utils/random/index';
 import { handlePlay } from '~/renderer/components/player/utils';
 import { PLAYER_STATES } from '~/renderer/components/player/constants';
+import { useLocalStorage } from 'usehooks-ts';
 
 interface HowlRef {
   current: Howl | null;
@@ -30,6 +31,7 @@ interface PlayerContext {
   library: Library;
   libraryMemo: Library;
   libraryStatus: string;
+  playerMuted: Boolean;
   playerMode: string;
   playlist: Playlist;
   search: string;
@@ -38,6 +40,7 @@ interface PlayerContext {
   handlePlayNext: Function;
   handlePlayMode: Function;
   handlePlayPlaylist: Function;
+  handleToggleMute: Function;
   setLibrary: Function;
   setLibraryStatus: Function;
   setPlayerState: Function;
@@ -65,6 +68,10 @@ const PlayerProvider = ({ children }: IProps) => {
   const [list, setList] = useState<List>([]);
   const [listStatus, setListStatus] = useState<string>('loading');
   const [libraryStatus, setLibraryStatus] = useState<string>('loading');
+  const [playerMuted, setPlayerMuted] = useLocalStorage<boolean>(
+    'musica-player-muted',
+    false,
+  );
   const [playerMode, setPlayerMode] = useState<string>('normal');
   const [playerState, setPlayerState] = useState(PLAYER_STATES.STOP);
   const [playlist, setPlaylist] = useState<Playlist>({});
@@ -181,7 +188,11 @@ const PlayerProvider = ({ children }: IProps) => {
     }
   };
 
-  const handleShuffle = () => {
+  const handleToggleMute = () => {
+    setPlayerMuted((v) => !v);
+  };
+
+  const handleToggleShuffle = () => {
     if (shuffle.current) {
       shuffle.current = false;
     } else {
@@ -189,7 +200,7 @@ const PlayerProvider = ({ children }: IProps) => {
     }
   };
 
-  const handleRepeat = () => {
+  const handleToggleRepeat = () => {
     if (repeat.current) {
       repeat.current = false;
       howl?.current?.loop(false);
@@ -203,6 +214,11 @@ const PlayerProvider = ({ children }: IProps) => {
     loadLibrary({ setLibrary, setLibraryStatus });
     loadList({ setList, setListStatus });
   }, []);
+
+  useEffect(() => {
+    if (!player) return;
+    player?.mute(playerMuted);
+  }, [player, playerMuted]);
 
   useEffect(() => {
     window.electron.player.metadata(
@@ -268,12 +284,14 @@ const PlayerProvider = ({ children }: IProps) => {
         handlePlayPause,
         handlePlayPlaylist,
         handlePlayPrev,
+        handleToggleMute,
         howl,
         list,
         listStatus,
         library,
         libraryMemo,
         libraryStatus,
+        playerMuted,
         playerMode,
         playerState,
         playlist,
