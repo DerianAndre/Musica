@@ -112,7 +112,7 @@ const formatTotalTime = (durationInSeconds: number = 0): string => {
 };
 
 const formatTotal = (
-  total: number,
+  total: number | undefined = 0,
   plural: string,
   singular: string,
 ): string => {

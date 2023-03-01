@@ -20,6 +20,7 @@ import { Shuffle } from '~/renderer/components/icons/index';
 import { shufflePlaylist } from '~/renderer/utils/random';
 import PageCover from '~/renderer/components/page-cover';
 import GoBack from '~/renderer/components/go-back/index';
+import HeaderInfo from '~/renderer/components/header-info';
 
 interface IProps {
   params: { artist: string };
@@ -50,13 +51,11 @@ const PageArtist = ({ params }: IProps) => {
         <h2 className="font-headings text-3xl font-semibold">
           {dataArtist?.title}
         </h2>
-        <div className="mb-3 flex gap-2 opacity-50">
-          <div>{formatTotal(totalAlbums, 'albums', 'album')}</div>
-          <span>•</span>
-          <div>{formatTotal(totalTracks, 'tracks', 'track')}</div>
-          <span>•</span>
-          <div>{formatTotalTime(totalDuration)}</div>
-        </div>
+        <HeaderInfo
+          totalAlbums={totalAlbums}
+          totalTracks={totalTracks}
+          totalDuration={totalDuration}
+        />
         <div className="flex gap-2">
           <button
             className="btn-sm btn gap-2"

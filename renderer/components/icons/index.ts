@@ -20,7 +20,14 @@ import {
   MdAudiotrack,
   MdOutlineLineWeight,
   MdPerson,
+  MdCalendarToday,
+  MdOutlineAdjust,
+  MdOutlineHourglassTop,
+  MdQueueMusic,
 } from 'react-icons/md';
+
+import { BsCalendar2, BsHourglassSplit } from 'react-icons/bs';
+
 import Play from './play/index';
 import PlayPause from './play-pause/index';
 
@@ -29,7 +36,6 @@ export {
   PlayPause,
   MdSearch as Search,
   MdArrowBack as Back,
-  //MdOutlineArrowBackIos as Back,
   MdPause as Pause,
   MdSkipNext as SkipNext,
   MdSkipPrevious as SkipPrevious,
@@ -49,4 +55,10 @@ export {
   MdAudiotrack as Track,
   MdOutlineLineWeight as ListAll,
   MdPerson as Artist,
+  MdOutlineAdjust as Genre,
+  MdQueueMusic as TotalTracks,
+  //MdCalendarToday as Year,
+  //MdOutlineHourglassTop as TotalDuration,
+  BsCalendar2 as Year,
+  BsHourglassSplit as TotalDuration,
 };

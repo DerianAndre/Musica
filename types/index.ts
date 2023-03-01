@@ -41,8 +41,8 @@ export type Album = {
   artist: string;
   albumartist: string;
   albumsort: string;
-  year: string | Number | null;
-  originalyear: string | Number | null;
+  year: string | number | null;
+  originalyear: string | number | null;
   date: string;
   originaldate: string | null;
   genre: string[];
@@ -61,7 +61,7 @@ export type Track = {
   album: string;
   title: string;
   genre: string[];
-  year: string | Number | null;
+  year: string | number | null;
   container: string;
   codec: string;
   duration: number;

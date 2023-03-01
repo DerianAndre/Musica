@@ -3,16 +3,13 @@ import ListAllTrack from '../list-all-track/index';
 import ListCover from '../../list-cover';
 import ListIntersection from '../../list-intersecton';
 import Link from 'next/link';
-import { slugifyFile } from '~/main/utils/files';
 import {
-  formatGenre,
-  formatTotal,
   getAlbumTotalDuration,
   getAlbumTotalTracks,
   sortAlbums,
 } from '~/renderer/utils';
 import { Library } from '~/types';
-import { formatTotalTime } from '~/renderer/utils';
+import HeaderInfo from '~/renderer/components/header-info';
 
 interface IProps {
   library: Library;
@@ -52,23 +49,12 @@ const ListAllItem = ({ library, artist, show }: IProps) => {
                           {album?.title}
                         </Link>
                       </h3>
-                      <div className="flex gap-2 opacity-50">
-                        <div>{String(album?.year)}</div>
-                        <span>•</span>
-                        <div>{formatGenre(album?.genre)}</div>
-                        <span>•</span>
-                        <div>
-                          {formatTotal(
-                            getAlbumTotalTracks(album),
-                            'tracks',
-                            'track',
-                          )}
-                        </div>
-                        <span>•</span>
-                        <div>
-                          {formatTotalTime(getAlbumTotalDuration(album))}
-                        </div>
-                      </div>
+                      <HeaderInfo
+                        year={album?.year}
+                        genre={album?.genre}
+                        totalTracks={getAlbumTotalTracks(album)}
+                        totalDuration={getAlbumTotalDuration(album)}
+                      />
                     </div>
                   )}
                   <div className="flex flex-col gap-1 [&>.item:nth-child(odd)]:bg-base-200/50 [&>.item]:rounded hover:[&>.item]:bg-base-300/50">

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import React, { useContext } from 'react';
 import GoBack from '~/renderer/components/go-back';
+import HeaderInfo from '~/renderer/components/header-info';
 import PageCover from '~/renderer/components/page-cover';
 import { PlayerContext } from '~/renderer/context';
 import {
@@ -33,11 +34,12 @@ const PageTrack = ({
         <h2 className="font-headings text-3xl font-semibold">
           {dataTrack?.title}
         </h2>
-        <div className="mb-3 flex gap-2 opacity-50">
-          <Link href={`/artist/${artist}/`}>{dataArtist?.title}</Link>
-          <span>•</span>
-          <Link href={`/artist/${artist}/${album}`}>{dataAlbum?.title}</Link>
-        </div>
+        <HeaderInfo
+          artist={{ slug: artist, title: dataArtist?.title }}
+          album={{ slug: album, title: dataAlbum?.title }}
+          genre={dataAlbum?.genre}
+        />
+
         <div className="overflow-x-auto">
           <table className="table-zebra table-compact table w-full opacity-75">
             <tbody>
