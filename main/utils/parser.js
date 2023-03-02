@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const Utils = require('./index');
 const MM = require('music-metadata');
 const { getCoverFile, slugifyFile } = require('./index');
 
@@ -143,9 +144,7 @@ const saveCover = (coverPath, cover) => {
   const cachePath = './library/cache';
   const filePath = cachePath + '/' + coverPath;
 
-  if (!fs.existsSync(cachePath)) {
-    fs.mkdirSync(cachePath);
-  }
+  Utils.checkFolder(cachePath);
 
   if (!fs.existsSync(filePath)) {
     console.log(`[i] Library parser: Saving cover in cache ${filePath}`);

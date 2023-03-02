@@ -2,7 +2,6 @@ const Utils = require('./utils');
 const Parser = require('./utils/parser');
 
 // Native
-const fs = require('fs');
 const { join } = require('path');
 const { format } = require('url');
 
@@ -19,6 +18,9 @@ const isDev = require('electron-is-dev');
 const prepareNext = require('electron-next');
 
 let mainWindow;
+
+// Check library
+Utils.checkLibrary();
 
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
@@ -39,12 +41,13 @@ app.on('ready', async () => {
   });
 
   const forceRemoveMenu = false;
+
   !isDev || (forceRemoveMenu && mainWindow.removeMenu());
 
   const url = isDev
     ? 'http://localhost:8000'
     : format({
-        pathname: join(__dirname, '../renderer/out/index.html'),
+        pathname: join(__dirname, './renderer/out/index.html'),
         protocol: 'file:',
         slashes: true,
       });
@@ -92,11 +95,14 @@ ipcMain.on('library-select', async (event) => {
   );
 });
 
+// Player: Play file
 ipcMain.on('player-play-file', async (event, payload) => {
-  console.log(`[i] Electron: Event <player-play-file> "${payload?.slug}"`);
+  const { path, slug } = payload;
+  console.log(`[i] Electron: Event <player-play-file> "${path || slug}"`);
   await Utils.readFile(payload, event);
 });
 
+// Player: Events
 ipcMain.on('player-event', async (event, data) => {
   console.log(`[i] Electron: Player event <${JSON.stringify(data)}>`);
   event.sender.send('player-on', data);

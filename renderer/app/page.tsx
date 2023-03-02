@@ -41,9 +41,26 @@ const Home = () => {
 
   const handleSearch = () => {};
 
+  if (libraryStatus === 'empty') {
+    return (
+      <main className="page-home">
+        <div className="flex h-[calc(100vh-200px)] flex-col items-center justify-center">
+          <h2 className="mb-4 font-headings text-3xl">
+            No library or music found!
+          </h2>
+          <div className="div">
+            <Link className="btn px-10" href="settings">
+              Add your library
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="page-home">
-      <div className="flex min-h-full flex-col" ref={refHome}>
+      <div className="flex flex-col" ref={refHome}>
         <div className="sticky top-0 left-0 right-0 z-[9999] -mx-5 mb-5 bg-base-100/[0.85] px-5 py-3 px-2 backdrop-blur">
           <div className="flex w-full flex-wrap items-center justify-between gap-2">
             <div className="library-mode flex w-[310px]">
@@ -134,16 +151,6 @@ const Home = () => {
             </div>
           </div>
         </div>
-        {libraryStatus === 'empty' && (
-          <div className="flex h-full flex-1 flex-col items-center justify-center place-self-stretch">
-            <h2 className="mb-4 font-headings text-3xl">No library found!</h2>
-            <div className="div">
-              <Link className="btn px-10" href="settings">
-                Add your library
-              </Link>
-            </div>
-          </div>
-        )}
         <List mode={mode} tracks={tracks} library={libraryMemo} />
       </div>
     </main>

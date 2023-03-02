@@ -24,6 +24,7 @@ You can create the production app using `npm run build:prod` (not working right 
 ## Future features
  - [ ] URL Streaming
  - [ ] Visualizations (like winamp)
+ - [ ] Lyrics
 
 ## To-dos
  - [ ] Refactors

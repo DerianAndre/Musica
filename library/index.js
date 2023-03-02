@@ -14,7 +14,12 @@ const loadList = async ({ setList, setListStatus }) => {
     setListStatus('loading');
     await import(`./list.json`)
       .then((data) => {
+        const json = data?.default;
         setList(data?.default);
+        if (Object.keys(json).length === 0) {
+          setListStatus('empty');
+          return;
+        }
         setListStatus('ready');
       })
       .catch((error) => {
@@ -32,7 +37,12 @@ const loadFull = async ({ setLibrary, setLibraryStatus }) => {
     setLibraryStatus('loading');
     await import(`./index.json`)
       .then((data) => {
+        const json = data?.default;
         setLibrary(data?.default);
+        if (Object.keys(json).length === 0) {
+          setLibraryStatus('empty');
+          return;
+        }
         setLibraryStatus('ready');
       })
       .catch((error) => {
