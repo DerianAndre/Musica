@@ -111,6 +111,23 @@ const formatTotalTime = (durationInSeconds: number = 0): string => {
   }`;
 };
 
+const isHiRes = (
+  bitDepth: number | undefined | null,
+  sampleRate: number | undefined | null,
+  codec: string | undefined | null,
+) => {
+  if (!bitDepth || !sampleRate || !codec) return false;
+
+  const acceptedFormats = ['wav', 'flac', 'alac', 'aiff', 'dsd'];
+
+  //if (!acceptedFormats.includes(codec.toLowerCase())) return false;
+
+  const minBitDepth = 24;
+  const minSampleRate = 96000; // 44100
+
+  return bitDepth >= minBitDepth && sampleRate >= minSampleRate;
+};
+
 const formatTotal = (
   total: number | undefined = 0,
   plural: string,
@@ -185,6 +202,7 @@ const getImage = (cover: string): string => {
 
 export {
   albumsToTracks,
+  isHiRes,
   formatBitrate,
   formatDuration,
   formatGenre,

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
 import { slugifyFile } from '~/main/utils/files';
-import { formatBitrate, formatSamplerate } from '~/renderer/utils';
+import { formatBitrate, formatSamplerate, isHiRes } from '~/renderer/utils';
 
 const PlayerInfo = ({ data }: any) => {
   const trackData = data?.data || {};
@@ -60,6 +60,17 @@ const PlayerInfo = ({ data }: any) => {
               <span>{formatSamplerate(metaData?.format?.sampleRate)}</span>
               <span className="opacity-50"> • </span>
               <span>{metaData?.format?.bitsPerSample || 0} bits</span>
+
+              {isHiRes(
+                metaData?.format?.bitsPerSample,
+                metaData?.format?.sampleRate,
+                metaData?.format?.container,
+              ) && (
+                <>
+                  <span className="opacity-50"> • </span>
+                  <span>Hi-Res</span>
+                </>
+              )}
             </div>
           </div>
         )}

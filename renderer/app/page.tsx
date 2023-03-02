@@ -44,7 +44,7 @@ const Home = () => {
   return (
     <main className="page-home">
       <div className="flex min-h-full flex-col" ref={refHome}>
-        <div className="sticky top-0 left-0 right-0 z-[9999] mb-5 bg-base-100/[0.85] py-3 backdrop-blur">
+        <div className="sticky top-0 left-0 right-0 z-[9999] -mx-5 mb-5 bg-base-100/[0.85] px-5 py-3 px-2 backdrop-blur">
           <div className="flex w-full flex-wrap items-center justify-between gap-2">
             <div className="library-mode flex w-[310px]">
               <div className="tabs tabs-boxed bg-base-content/[0.15] font-headings font-semibold dark:bg-base-content/[0.05]">
