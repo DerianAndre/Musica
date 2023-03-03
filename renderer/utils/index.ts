@@ -1,10 +1,10 @@
-import { Artist, Album, Playlist, Track } from '../../types/index';
+import { Artist, Album, Playlist, Track } from '../../types';
 
 const formatBitrate = (
   sizeInBytes: number = 0,
-  outputUnit: string = 'kb/s',
+  outputUnit: string = 'kbps',
 ): string => {
-  const byteUnits = ['b/s', 'kb/s', 'Mb/s', 'Gb/s', 'Tb/s'];
+  const byteUnits = ['bps', 'kbps', 'Mbps', 'Gbps'];
 
   const byteUnitIndex = byteUnits.indexOf(outputUnit);
 
@@ -34,9 +34,9 @@ const formatDuration = (totalSeconds: number = 0): string => {
   return `${minutes}:${seconds}`;
 };
 
-const formatGenre = (genre: string | string[] | undefined): string => {
+const formatGenre = (genre?: string | string[]): string => {
   return !genre
-    ? 'Unkown genre'
+    ? '-'
     : typeof genre === 'string'
     ? genre.replaceAll('/', ', ').replaceAll(' , ', ', ').replaceAll(';', ', ')
     : genre
@@ -111,36 +111,25 @@ const formatTotalTime = (durationInSeconds: number = 0): string => {
   }`;
 };
 
-const isHiRes = (
-  bitDepth: number | undefined | null,
-  sampleRate: number | undefined | null,
-  codec: string | undefined | null,
-) => {
-  if (!bitDepth || !sampleRate || !codec) return false;
-
-  const acceptedFormats = ['wav', 'flac', 'alac', 'aiff', 'dsd'];
-
-  //if (!acceptedFormats.includes(codec.toLowerCase())) return false;
-
-  const minBitDepth = 24;
-  const minSampleRate = 96000; // 44100
-
-  return bitDepth >= minBitDepth && sampleRate >= minSampleRate;
-};
-
 const formatTotal = (
-  total: number | undefined = 0,
+  total: number = 0,
   plural: string,
   singular: string,
 ): string => {
   return `${total} ${total > 1 ? plural : singular}`;
 };
 
-const getArtistTotalAlbums = (artist: Artist | undefined): number => {
+const getAlbumPlaylist = (dataArtist: Artist, dataAlbum: Album): Playlist => ({
+  slug: dataAlbum?.slug,
+  title: dataArtist?.title,
+  tracks: dataAlbum?.tracks,
+});
+
+const getArtistTotalAlbums = (artist?: Artist): number => {
   return artist?.albums?.length || 0;
 };
 
-const getArtistTotalDuration = (artist: Artist | undefined): number => {
+const getArtistTotalDuration = (artist?: Artist): number => {
   return (
     artist?.albums?.reduce(
       (current, item) => current + getAlbumTotalDuration(item),
@@ -149,7 +138,42 @@ const getArtistTotalDuration = (artist: Artist | undefined): number => {
   );
 };
 
-const getArtistTotalTracks = (artist: Artist | undefined): number => {
+const getAudioQuality = (
+  bitDepth?: number | null,
+  sampleRate?: number | null,
+  codec?: string | null,
+): string => {
+  if (!bitDepth || !sampleRate || !codec) return 'Unknown';
+
+  const formatSpecs = {
+    SD: {
+      minBitDepth: 16,
+      minSampleRate: 22050,
+    },
+    CD: {
+      minBitDepth: 16,
+      minSampleRate: 44100,
+    },
+    'Hi-Res': {
+      minBitDepth: 24,
+      minSampleRate: 96000,
+    },
+  };
+
+  let audioQuality = 'Trash';
+
+  Object.entries(formatSpecs).forEach(
+    ([quality, { minBitDepth, minSampleRate }]) => {
+      if (bitDepth >= minBitDepth && sampleRate >= minSampleRate) {
+        audioQuality = quality;
+      }
+    },
+  );
+
+  return audioQuality;
+};
+
+const getArtistTotalTracks = (artist?: Artist): number => {
   return (
     artist?.albums?.reduce(
       (current: number, item: Album) => item?.tracks?.length + current,
@@ -158,7 +182,7 @@ const getArtistTotalTracks = (artist: Artist | undefined): number => {
   );
 };
 
-const getAlbumTotalDuration = (album: Album | undefined): number => {
+const getAlbumTotalDuration = (album?: Album): number => {
   return (
     album?.tracks?.reduce(
       (current: number, item: Track) => current + item.duration,
@@ -167,7 +191,7 @@ const getAlbumTotalDuration = (album: Album | undefined): number => {
   );
 };
 
-const getAlbumTotalTracks = (album: Album | undefined): number => {
+const getAlbumTotalTracks = (album?: Album): number => {
   return album?.tracks?.length || 0;
 };
 
@@ -189,7 +213,7 @@ const albumsToTracks = (albums: Album[]): Track[] => {
   }, []);
 };
 
-const getImage = (cover: string): string => {
+const getImage = (cover?: string): string => {
   const skeleton =
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
   try {
@@ -202,13 +226,14 @@ const getImage = (cover: string): string => {
 
 export {
   albumsToTracks,
-  isHiRes,
   formatBitrate,
   formatDuration,
   formatGenre,
   formatSamplerate,
   formatTotal,
   formatTotalTime,
+  getAudioQuality,
+  getAlbumPlaylist,
   getAlbumTotalDuration,
   getAlbumTotalTracks,
   getArtistTotalAlbums,

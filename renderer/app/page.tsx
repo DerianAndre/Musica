@@ -2,7 +2,7 @@
 import '../scss/globals.scss';
 import React, { useRef, useContext, useState } from 'react';
 import Link from 'next/link';
-import List from '../components/list/index';
+import List from '../components/list';
 import {
   Album,
   Artist,
@@ -11,9 +11,10 @@ import {
   Settings,
   Shuffle,
   Track,
-} from '../components/icons/index';
+} from '../components/icons';
 import { PlayerContext } from '../context/player';
 import { getRandomTracksPlaylist } from '../utils/random';
+import { Loader } from '../components';
 
 const ITEMS_MENU = [
   { text: 'Tracks', slug: 'tracks', icon: <Track /> },
@@ -27,7 +28,7 @@ const ITEMS_SORT = ['title', 'artist', 'album', 'year'];
 const Home = () => {
   const refHome = useRef<null | HTMLDivElement>(null);
   const {
-    tracks,
+    libraryTracks,
     search,
     sortBy,
     libraryMemo,
@@ -40,6 +41,16 @@ const Home = () => {
   const [mode, setMode] = useState<string>('tracks');
 
   const handleSearch = () => {};
+
+  if (libraryStatus === 'loading') {
+    return (
+      <main className="page-home">
+        <div className="flex h-[calc(100vh-200px)] flex-col items-center justify-center">
+          <Loader />
+        </div>
+      </main>
+    );
+  }
 
   if (libraryStatus === 'empty') {
     return (
@@ -61,7 +72,7 @@ const Home = () => {
   return (
     <main className="page-home">
       <div className="flex flex-col" ref={refHome}>
-        <div className="sticky top-0 left-0 right-0 z-[9999] -mx-5 mb-5 bg-base-100/[0.85] px-5 py-3 px-2 backdrop-blur">
+        <div className="sticky top-0 left-0 right-0 z-[9999] -mx-5 bg-base-100/[0.85] px-5 py-3 px-2 backdrop-blur">
           <div className="flex w-full flex-wrap items-center justify-between gap-2">
             <div className="library-mode flex w-[310px]">
               <div className="tabs tabs-boxed bg-base-content/[0.15] font-headings font-semibold dark:bg-base-content/[0.05]">
@@ -90,7 +101,7 @@ const Home = () => {
               </div>
             </div>
 
-            {mode === 'tracks' && (
+            {true && (
               <div className="library-search flex min-w-[200px] max-w-[400px] flex-1 justify-center">
                 <div className="relative w-full">
                   <input
@@ -136,7 +147,7 @@ const Home = () => {
                 type="button"
                 className="btn-sm btn-circle btn text-xl"
                 onClick={() =>
-                  handlePlayPlaylist(getRandomTracksPlaylist(tracks))
+                  handlePlayPlaylist(getRandomTracksPlaylist(libraryTracks))
                 }
               >
                 <Shuffle />
@@ -151,7 +162,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <List mode={mode} tracks={tracks} library={libraryMemo} />
+        <List mode={mode} tracks={libraryTracks} library={libraryMemo} />
       </div>
     </main>
   );

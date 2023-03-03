@@ -10,11 +10,11 @@ import {
 } from 'react';
 import loadLibrary, { loadList } from '~/library';
 import { Howl } from 'howler';
-import { List, Library, Playlist, Track } from '~/types';
+import { List, Library, Playlist, Track, Album, Artist } from '~/types';
 import {
   getRandomTracksPlaylist,
   handlePlayRandom,
-} from '~/renderer/utils/random/index';
+} from '~/renderer/utils/random';
 import { handlePlay } from '~/renderer/components/player/utils';
 import { PLAYER_STATES } from '~/renderer/components/player/constants';
 import { useLocalStorage } from 'usehooks-ts';
@@ -24,32 +24,34 @@ interface HowlRef {
 }
 
 interface PlayerContext {
+  handlePlayMode: Function;
+  handlePlayNext: Function;
+  handlePlayPause: Function;
+  handlePlayPlaylist: Function;
+  handlePlayPrev: Function;
+  handleToggleMute: Function;
   howl: HowlRef;
-  sortBy: string;
-  list: List;
-  listStatus: string;
   library: Library;
+  libraryAlbums: Album[];
+  libraryArtists: Artist[];
   libraryMemo: Library;
   libraryStatus: string;
-  playerMuted: Boolean;
+  libraryTracks: Track[];
+  list: List;
+  listStatus: string;
   playerMode: string;
+  playerMuted: Boolean;
+  playerState: string;
   playlist: Playlist;
   search: string;
-  handlePlayPause: Function;
-  handlePlayPrev: Function;
-  handlePlayNext: Function;
-  handlePlayMode: Function;
-  handlePlayPlaylist: Function;
-  handleToggleMute: Function;
   setLibrary: Function;
   setLibraryStatus: Function;
-  setPlayerState: Function;
   setPlayerMode: Function;
+  setPlayerState: Function;
   setPlaylist: Function;
-  setSortBy: Function;
   setSearch: Function;
-  playerState: string;
-  tracks: Track[];
+  setSortBy: Function;
+  sortBy: string;
 }
 
 interface IProps {
@@ -78,18 +80,63 @@ const PlayerProvider = ({ children }: IProps) => {
   const [playlistIndex, setPlaylistIndex] = useState<number>(0);
   const [sortBy, setSortBy] = useState<string>('title');
   const [search, setSearch] = useState<string>('');
+
   const libraryMemo: Library = useMemo(() => {
     return Object.fromEntries(
       Object.entries(library)?.sort(([a], [b]) => a.localeCompare(b)),
     );
   }, [library]);
 
-  const tracks: Track[] = useMemo(() => {
+  const libraryArtists: Artist[] = useMemo(() => {
     const searchRegex = new RegExp(search, 'i');
-    const filteredTracks: Track[] = [];
+    const filteredArtists: Artist[] = [];
 
     for (const key in library) {
       const item = library[key];
+      if (searchRegex.test(item.title)) {
+        filteredArtists.push(item);
+      }
+    }
+
+    filteredArtists?.sort((a: Artist, b: Artist) => {
+      return Number(String(a.title).localeCompare(String(b.title)));
+    });
+
+    return filteredArtists;
+  }, [library, search]);
+
+  const libraryAlbums: Album[] = useMemo(() => {
+    const searchRegex = new RegExp(search, 'i');
+    const filteredAlbums: Album[] = [];
+
+    for (const key in libraryMemo) {
+      const item = libraryMemo[key];
+      if (item.albums) {
+        for (const album of item.albums) {
+          if (!searchRegex.test(album.title) && !searchRegex.test(item.title)) {
+            continue;
+          }
+          filteredAlbums.push({ ...album, artist: item.title });
+        }
+      }
+    }
+
+    filteredAlbums?.sort((a: Album, b: Album) => {
+      if (sortBy === 'year') {
+        return Number(b[sortBy]) - Number(a[sortBy]);
+      }
+      return Number(String(a[sortBy]).localeCompare(String(b[sortBy])));
+    });
+
+    return filteredAlbums;
+  }, [libraryMemo, search, sortBy]);
+
+  const libraryTracks: Track[] = useMemo(() => {
+    const searchRegex = new RegExp(search, 'i');
+    const filteredTracks: Track[] = [];
+
+    for (const key in libraryMemo) {
+      const item = libraryMemo[key];
       if (item.albums) {
         for (const album of item.albums) {
           if (album?.tracks) {
@@ -116,7 +163,7 @@ const PlayerProvider = ({ children }: IProps) => {
     });
 
     return filteredTracks;
-  }, [library, search, sortBy]);
+  }, [libraryMemo, search, sortBy]);
 
   const handlePlayMode = (mode: string): void => {
     if (mode === 'random-all') {
@@ -286,13 +333,16 @@ const PlayerProvider = ({ children }: IProps) => {
         handlePlayPrev,
         handleToggleMute,
         howl,
-        list,
-        listStatus,
         library,
+        libraryAlbums,
+        libraryArtists,
         libraryMemo,
         libraryStatus,
-        playerMuted,
+        libraryTracks,
+        list,
+        listStatus,
         playerMode,
+        playerMuted,
         playerState,
         playlist,
         search,
@@ -304,7 +354,6 @@ const PlayerProvider = ({ children }: IProps) => {
         setSearch,
         setSortBy,
         sortBy,
-        tracks,
       }}
     >
       {children}

@@ -1,32 +1,35 @@
-import React, { Fragment } from 'react';
-import ListAllTrack from '../list-all-track/index';
+import React, { Fragment, useContext } from 'react';
+import ListAllTrack from '../list-all-track';
 import ListCover from '../../list-cover';
 import ListIntersection from '../../list-intersecton';
 import Link from 'next/link';
 import {
+  getAlbumPlaylist,
   getAlbumTotalDuration,
   getAlbumTotalTracks,
   sortAlbums,
 } from '~/renderer/utils';
-import { Library } from '~/types';
+import { Artist, Library } from '~/types';
 import HeaderInfo from '~/renderer/components/header-info';
+import { shufflePlaylist } from '~/renderer/utils/random';
+import { PlayerContext } from '~/renderer/context';
+import { PlayArrow, Shuffle } from '~/renderer/components/icons';
 
 interface IProps {
-  library: Library;
-  artist: string;
+  artist: Artist;
   show?: object;
 }
 
-const ListAllItem = ({ library, artist, show }: IProps) => {
+const ListAllItem = ({ artist, show }: IProps) => {
   const display = { artist: true, info: true, ...show };
-  const dataArtist = library[artist];
-  const albums = sortAlbums(dataArtist?.albums);
+  const albums = sortAlbums(artist?.albums);
+  const { handlePlayPlaylist } = useContext(PlayerContext);
 
   return (
     <div>
       {display.artist && (
         <h2 className="font-headings text-3xl font-semibold">
-          <Link href={`/artist/${dataArtist?.slug}`}>{artist}</Link>
+          <Link href={`/artist/${artist?.slug}`}>{artist.title}</Link>
         </h2>
       )}
       <div className="divide-y divide-black/[0.1] dark:divide-white/[0.05]">
@@ -35,17 +38,37 @@ const ListAllItem = ({ library, artist, show }: IProps) => {
             <ListIntersection>
               <div className="flex flex-col flex-wrap gap-5 py-5 md:flex-row">
                 <div className="w-[200px] flex-initial">
-                  <Link href={`/artist/${dataArtist?.slug}/${album?.slug}`}>
-                    <ListCover album={album} width="200px" />
+                  <Link href={`/artist/${artist?.slug}/${album?.slug}`}>
+                    <ListCover album={album} width={'200px'} />
                   </Link>
+                  <div className="mt-3 flex flex-col gap-2">
+                    <button
+                      className="btn-sm btn gap-2"
+                      type="button"
+                      onClick={() =>
+                        handlePlayPlaylist(getAlbumPlaylist(artist, album))
+                      }
+                    >
+                      <PlayArrow /> Play album
+                    </button>
+                    <button
+                      className="btn-sm btn gap-2"
+                      type="button"
+                      onClick={() =>
+                        handlePlayPlaylist(
+                          shufflePlaylist(getAlbumPlaylist(artist, album)),
+                        )
+                      }
+                    >
+                      <Shuffle /> Play shuffle
+                    </button>
+                  </div>
                 </div>
                 <div className="flex-1 flex-col truncate">
                   {display.info && (
                     <div className="list-info mb-3">
                       <h3 className="font-headings text-2xl font-semibold">
-                        <Link
-                          href={`/artist/${dataArtist?.slug}/${album?.slug}`}
-                        >
+                        <Link href={`/artist/${artist?.slug}/${album?.slug}`}>
                           {album?.title}
                         </Link>
                       </h3>

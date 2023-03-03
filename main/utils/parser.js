@@ -59,7 +59,7 @@ const parseFolder = async (root) => {
           codec = null,
           duration = 0,
           bitrate = 0,
-          samplerate = 0,
+          sampleRate = 0,
           bitsPerSample = 0,
         } = format;
 
@@ -76,26 +76,28 @@ const parseFolder = async (root) => {
           trackNo,
           track: trackPadded,
           artist,
-          albumartist,
           artists,
           album,
+          albumArtist: albumartist,
           title,
           genre,
           year,
+          duration,
+          path: filePath,
+          extension: fileExtension,
           container,
           codec,
-          duration,
-          bitrate,
-          samplerate,
+          bitRate: bitrate,
+          sampleRate,
           bitsPerSample,
-          extension: fileExtension,
-          path: filePath,
         };
 
         const coverPath = getCoverFile({ artist, album, year, cover });
 
-        if (!jsonLibrary[albumartist]) {
-          jsonLibrary[albumartist] = {
+        const artistKey = albumartist || artist;
+
+        if (!jsonLibrary[artistKey]) {
+          jsonLibrary[artistKey] = {
             slug: slugifyFile(artist),
             title: artist,
             albums: [],
@@ -103,7 +105,7 @@ const parseFolder = async (root) => {
         }
 
         let albumIndex = -1;
-        for (let i = 0; i < jsonLibrary[albumartist].albums.length; i++) {
+        for (let i = 0; i < jsonLibrary[artistKey].albums.length; i++) {
           if (jsonLibrary[albumartist].albums[i].title === album) {
             albumIndex = i;
             break;
@@ -111,7 +113,7 @@ const parseFolder = async (root) => {
         }
 
         if (albumIndex === -1) {
-          jsonLibrary[albumartist].albums.push({
+          jsonLibrary[artistKey].albums.push({
             slug: slugifyFile(album),
             title: album,
             artist,
@@ -126,7 +128,7 @@ const parseFolder = async (root) => {
             tracks: [musicFileObject],
           });
         } else {
-          jsonLibrary[albumartist].albums[albumIndex].tracks.push(
+          jsonLibrary[artistKey].albums[albumIndex].tracks.push(
             musicFileObject,
           );
         }
@@ -144,7 +146,7 @@ const saveCover = (coverPath, cover) => {
   const cachePath = './library/cache';
   const filePath = cachePath + '/' + coverPath;
 
-  Utils.checkFolder(cachePath);
+  Utils.checkFolder(cachePath, false);
 
   if (!fs.existsSync(filePath)) {
     console.log(`[i] Library parser: Saving cover in cache ${filePath}`);
@@ -203,6 +205,7 @@ const parseLibrary = async (dir, libraryPath, libraryFile, callback) => {
       console.log(`[i] Library parser: Saved to <${libraryFullPath}>`);
 
       // Chunks
+      const createChunks = false;
       console.log(
         `[i] Library parser: Creating chunks <${libraryPath}/chunks> ...`,
       );
@@ -220,13 +223,17 @@ const parseLibrary = async (dir, libraryPath, libraryFile, callback) => {
           path: chunkFullPath,
         });
 
-        fs.promises.writeFile(
-          chunkFullPath,
-          JSON.stringify(jsonLibrarySorted[item], null, 2),
-        );
+        if (createChunks) {
+          fs.promises.writeFile(
+            chunkFullPath,
+            JSON.stringify(jsonLibrarySorted[item], null, 2),
+          );
+        }
       });
-      console.log(`[i] Library parser: Saved chunks`);
 
+      if (createChunks) {
+        console.log(`[i] Library parser: Saved chunks`);
+      }
       // Chunk list
       console.log(
         `[i] Library parser: Creating chunks list <${libraryPath}/list.json> ...`,

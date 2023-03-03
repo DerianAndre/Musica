@@ -1,23 +1,11 @@
-import React, { Fragment, lazy } from 'react';
+import React, { useContext } from 'react';
+import { PlayerContext } from '~/renderer/context';
 import ListIntersection from '../list-intersecton';
 import ListAlbum from './list-album';
 
-const ListAlbums = ({ library }) => {
-  if (!library) return <></>;
-
-  const albums = Object.values(library)
-    .flatMap((item) => {
-      return item.albums;
-    })
-    .sort((a, b) => {
-      if (a.title < b.title) {
-        return -1;
-      }
-      if (a.title > b.title) {
-        return 1;
-      }
-      return 0;
-    });
+const ListAlbums = () => {
+  const { libraryAlbums } = useContext(PlayerContext);
+  const albums = libraryAlbums;
 
   return (
     <div className="list-albums">

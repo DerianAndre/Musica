@@ -3,11 +3,11 @@
 import React, { useContext } from 'react';
 import { Library, Playlist } from '~/types';
 import ListIntersection from '~/renderer/components/list/list-intersecton';
-import ListAllItem from '~/renderer/components/list/list-all/list-all-item/index';
+import ListAllItem from '~/renderer/components/list/list-all/list-all-item';
 import { PlayerContext } from '~/renderer/context';
 import { MdPlayArrow } from 'react-icons/md';
 import { shufflePlaylist } from '~/renderer/utils/random';
-import { Shuffle } from '~/renderer/components/icons/index';
+import { Shuffle } from '~/renderer/components/icons';
 import PageCover from '~/renderer/components/page-cover';
 import GoBack from '~/renderer/components/go-back';
 import { getAlbumTotalDuration, getAlbumTotalTracks } from '~/renderer/utils';
@@ -70,14 +70,7 @@ const PageArtist = ({ params }: IProps) => {
 
       <ListIntersection>
         <ListAllItem
-          library={
-            {
-              [dataArtist?.title]: {
-                albums: [dataAlbum],
-              },
-            } as Library
-          }
-          artist={dataArtist?.title}
+          artist={dataArtist}
           show={{ artist: false, info: false }}
         />
       </ListIntersection>

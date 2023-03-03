@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Artist, Playlist } from '~/types';
 import loadChunk from '~/library/chunks';
 import ListIntersection from '~/renderer/components/list/list-intersecton';
-import ListAllItem from '~/renderer/components/list/list-all/list-all-item/index';
+import ListAllItem from '~/renderer/components/list/list-all/list-all-item';
 import { PlayerContext } from '~/renderer/context';
 import { MdPlayArrow } from 'react-icons/md';
 import {
@@ -16,10 +16,10 @@ import {
   getArtistTotalTracks,
   sortAlbums,
 } from '~/renderer/utils';
-import { Shuffle } from '~/renderer/components/icons/index';
+import { Shuffle } from '~/renderer/components/icons';
 import { shufflePlaylist } from '~/renderer/utils/random';
 import PageCover from '~/renderer/components/page-cover';
-import GoBack from '~/renderer/components/go-back/index';
+import GoBack from '~/renderer/components/go-back';
 import HeaderInfo from '~/renderer/components/header-info';
 
 interface IProps {
@@ -74,11 +74,7 @@ const PageArtist = ({ params }: IProps) => {
         </div>
       </header>
       <ListIntersection>
-        <ListAllItem
-          library={{ [dataArtist?.title]: dataArtist }}
-          artist={dataArtist?.title}
-          show={{ artist: false }}
-        />
+        <ListAllItem artist={dataArtist} show={{ artist: false }} />
       </ListIntersection>
     </>
   );

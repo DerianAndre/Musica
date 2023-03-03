@@ -1,7 +1,17 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { useInView } from 'react-intersection-observer';
 
-const ListIntersection = ({ children, threshold = 0, triggerOnce = true }) => {
+interface IProps {
+  children: React.ReactNode;
+  threshold?: number;
+  triggerOnce?: boolean;
+}
+
+const ListIntersection = ({
+  children,
+  threshold = 0,
+  triggerOnce = true,
+}: IProps) => {
   const [ref, inView] = useInView({
     threshold,
     triggerOnce,

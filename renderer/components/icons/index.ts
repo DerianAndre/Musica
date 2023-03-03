@@ -28,12 +28,13 @@ import {
 
 import { BsCalendar2, BsHourglassSplit } from 'react-icons/bs';
 
-import Play from './play/index';
-import PlayPause from './play-pause/index';
+import Play from './play';
+import PlayPause from './play-pause';
 
 export {
   Play,
   PlayPause,
+  MdPlayArrow as PlayArrow,
   MdSearch as Search,
   MdArrowBack as Back,
   MdPause as Pause,

@@ -1,19 +1,24 @@
 import Link from 'next/link';
+import { Artist } from '~/types';
 import ListCover from '../../list-cover';
 
-const ListArtist = ({ artist, data }) => {
+interface IProps {
+  artist: Artist;
+}
+
+const ListArtist = ({ artist }: IProps) => {
   return (
     <div className="list-artist flex h-full w-full">
       <Link
         className="list-artist-link flex h-full w-full flex-col items-center rounded p-3 transition hover:bg-base-content/[0.15] dark:hover:bg-base-content/[0.05] dark:hover:shadow-lg"
-        href={`/artist/${data?.slug}/`}
+        href={`/artist/${artist?.slug}/`}
       >
         <ListCover
-          album={data?.albums ? data?.albums[0] : null}
+          album={artist?.albums ? artist?.albums[0] : null}
           rounded={true}
         />
         <h2 className="mt-2 text-center font-headings font-semibold">
-          {artist}
+          {artist.title}
         </h2>
       </Link>
     </div>

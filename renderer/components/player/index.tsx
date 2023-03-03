@@ -15,10 +15,10 @@ import {
   SkipPrevious,
 } from '../icons';
 import { useEventListener, useReadLocalStorage } from 'usehooks-ts';
-import PlayerInfo from './player-info/index';
-import PlayerSeeker from './player-seeker/index';
+import PlayerInfo from './player-info';
+import PlayerSeeker from './player-seeker';
 import { PLAYER_STATES } from './constants';
-import ToggleTheme from '../theme-toggle/index';
+import ToggleTheme from '../theme-toggle';
 import { PlayerContext } from '~/renderer/context';
 import PlayerVolume from './player-volume';
 

@@ -12,6 +12,7 @@ import {
   formatSamplerate,
   formatTotalTime,
   formatGenre,
+  getAudioQuality,
 } from '~/renderer/utils';
 
 const PageTrack = ({
@@ -68,15 +69,25 @@ const PageTrack = ({
                 <td>{formatTotalTime(dataTrack?.duration)}</td>
               </tr>
               <tr>
-                <td className="font-bold">Bitrate</td>
-                <td>{formatBitrate(dataTrack?.bitrate)}</td>
+                <td className="font-bold">Quality</td>
+                <td>
+                  {getAudioQuality(
+                    dataTrack?.bitsPerSample,
+                    dataTrack?.sampleRate,
+                    dataTrack?.container,
+                  )}
+                </td>
               </tr>
               <tr>
-                <td className="font-bold">Samplerate</td>
-                <td>{formatSamplerate(dataTrack?.samplerate)}</td>
+                <td className="font-bold">Bit Rate</td>
+                <td>{formatBitrate(dataTrack?.bitRate)}</td>
               </tr>
               <tr>
-                <td className="font-bold">Bits/sample</td>
+                <td className="font-bold">Sample Rate</td>
+                <td>{formatSamplerate(dataTrack?.sampleRate)}</td>
+              </tr>
+              <tr>
+                <td className="font-bold">Bit Depth</td>
                 <td>{dataTrack?.bitsPerSample || 0} bits</td>
               </tr>
               <tr>

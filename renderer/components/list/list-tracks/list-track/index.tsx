@@ -1,8 +1,10 @@
-import { formatDuration, formatGenre } from '~/renderer/utils/index';
+import { formatDuration, formatGenre, getAudioQuality } from '~/renderer/utils';
 import { slugifyFile } from '~/main/utils/files';
 import Link from 'next/link';
+import { handlePlay } from '~/renderer/components/player/utils';
+import { Track } from '~/types';
 
-const ListTrack = ({ track, handlePlay }) => {
+const ListTrack = ({ track }: { track: Track }) => {
   const artist = slugifyFile(track?.artist);
   const album = slugifyFile(track?.album);
 
@@ -20,7 +22,7 @@ const ListTrack = ({ track, handlePlay }) => {
         <div className="hidden w-14 flex-auto sm:block">
           <Link
             className="inline-block max-w-full truncate rounded py-2 px-3"
-            href={`/artist/${artist}`}
+            href={track?.artist ? `/artist/${artist}` : '#'}
           >
             {track?.artist || 'Unkwon artist'}
           </Link>
@@ -28,10 +30,19 @@ const ListTrack = ({ track, handlePlay }) => {
         <div className="hidden w-14 flex-auto sm:block">
           <Link
             className="inline-block max-w-full truncate rounded py-2 px-3"
-            href={`/artist/${artist}/${album}`}
+            href={track?.album ? `/artist/${artist}/${album}` : '#'}
           >
             {track?.album || 'Unkwon album'}
           </Link>
+        </div>
+        <div className="hidden w-2 flex-auto lg:block">
+          <div className="inline-block max-w-full truncate py-2 px-3">
+            {getAudioQuality(
+              track?.bitRate,
+              track?.sampleRate,
+              track?.container,
+            )}
+          </div>
         </div>
         <div className="hidden w-7 flex-auto lg:block">
           <div className="inline-block max-w-full truncate py-2 px-3">
@@ -40,7 +51,7 @@ const ListTrack = ({ track, handlePlay }) => {
         </div>
         <div className="hidden w-14 flex-initial md:block">
           <div className="inline-block max-w-full truncate py-2 px-3">
-            {track?.year || '0000'}
+            {track?.year || '-'}
           </div>
         </div>
         <div className="w-14 flex-initial text-end">

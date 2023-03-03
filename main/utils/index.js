@@ -2,13 +2,13 @@ const fs = require('fs');
 const { slugifyFile } = require('./files');
 const MM = require('music-metadata');
 
-const checkFolder = async (path) => {
+const checkFolder = async (path, log = true) => {
   if (!fs.existsSync(path)) {
     fs.mkdirSync(path);
-    console.log(`[i] Electron: Path "${path}" created.`);
+    log && console.log(`[i] Electron: Path "${path}" created.`);
     return;
   }
-  console.log(`[i] Electron: Path "${path}" exists.`);
+  log && console.log(`[i] Electron: Path "${path}" exists.`);
 };
 
 const checkFile = async (path, file, content = '{}') => {

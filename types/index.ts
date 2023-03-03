@@ -65,8 +65,8 @@ export type Track = {
   container: string;
   codec: string;
   duration: number;
-  bitrate: number;
-  samplerate: number;
+  bitRate: number;
+  sampleRate: number;
   extension: string;
   path: string;
   [key: string]: any;

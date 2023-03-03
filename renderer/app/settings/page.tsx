@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import GoBack from '~/renderer/components/go-back';
-import ToggleTheme from '~/renderer/components/theme-toggle/index';
+import ToggleTheme from '~/renderer/components/theme-toggle';
 
 const PageSettings = () => {
   const [libraryPath, setLibraryPath] = useLocalStorage(

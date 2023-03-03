@@ -1,7 +1,7 @@
 'use client';
 import './layout.module.scss';
 import React from 'react';
-import Player from '../components/player/index';
+import Player from '../components/player';
 import { PlayerProvider } from '~/renderer/context/player/';
 
 interface IProps {
