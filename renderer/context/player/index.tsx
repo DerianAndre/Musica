@@ -18,6 +18,7 @@ import {
 import { handlePlay } from '~/renderer/components/player/utils';
 import { PLAYER_STATES } from '~/renderer/components/player/constants';
 import { useLocalStorage } from 'usehooks-ts';
+import { getAudioQuality } from '~/renderer/utils';
 
 interface HowlRef {
   current: Howl | null;
@@ -136,15 +137,22 @@ const PlayerProvider = ({ children }: IProps) => {
     const filteredTracks: Track[] = [];
 
     for (const key in libraryMemo) {
-      const item = libraryMemo[key];
-      if (item.albums) {
-        for (const album of item.albums) {
+      const artist = libraryMemo[key];
+      if (artist.albums) {
+        for (const album of artist.albums) {
           if (album?.tracks) {
             for (const track of album.tracks) {
+              const trackQuality = getAudioQuality(
+                track?.bitRate,
+                track?.sampleRate,
+                track?.container,
+              );
+
               if (
-                !searchRegex.test(track.title) &&
+                !searchRegex.test(artist.title) &&
                 !searchRegex.test(album.title) &&
-                !searchRegex.test(item.title)
+                !searchRegex.test(track.title) &&
+                !searchRegex.test(trackQuality)
               ) {
                 continue;
               }
@@ -183,7 +191,7 @@ const PlayerProvider = ({ children }: IProps) => {
 
   const handlePlayPause = (): void => {
     if (playerState === PLAYER_STATES.STOP) {
-      handlePlayPlaylist(getRandomTracksPlaylist(tracks));
+      handlePlayPlaylist(getRandomTracksPlaylist(libraryTracks));
       return;
     }
 

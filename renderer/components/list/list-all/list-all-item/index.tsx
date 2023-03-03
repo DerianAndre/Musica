@@ -9,7 +9,7 @@ import {
   getAlbumTotalTracks,
   sortAlbums,
 } from '~/renderer/utils';
-import { Artist, Library } from '~/types';
+import { Album, Artist, Library } from '~/types';
 import HeaderInfo from '~/renderer/components/header-info';
 import { shufflePlaylist } from '~/renderer/utils/random';
 import { PlayerContext } from '~/renderer/context';
@@ -17,12 +17,13 @@ import { PlayArrow, Shuffle } from '~/renderer/components/icons';
 
 interface IProps {
   artist: Artist;
+  album?: Album;
   show?: object;
 }
 
-const ListAllItem = ({ artist, show }: IProps) => {
+const ListAllItem = ({ artist, album, show }: IProps) => {
   const display = { artist: true, info: true, ...show };
-  const albums = sortAlbums(artist?.albums);
+  const albums = sortAlbums(album ? [album] : artist?.albums);
   const { handlePlayPlaylist } = useContext(PlayerContext);
 
   return (

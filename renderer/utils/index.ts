@@ -156,7 +156,7 @@ const getAudioQuality = (
     },
     'Hi-Res': {
       minBitDepth: 24,
-      minSampleRate: 96000,
+      minSampleRate: 48000, // or 96000 (?)
     },
   };
 

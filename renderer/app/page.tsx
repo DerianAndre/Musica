@@ -73,8 +73,8 @@ const Home = () => {
     <main className="page-home">
       <div className="flex flex-col" ref={refHome}>
         <div className="sticky top-0 left-0 right-0 z-[9999] -mx-5 bg-base-100/[0.85] px-5 py-3 px-2 backdrop-blur">
-          <div className="flex w-full flex-wrap items-center justify-between gap-2">
-            <div className="library-mode flex w-[310px]">
+          <div className="flex w-full flex-wrap items-center justify-between md:gap-2">
+            <div className="library-mode order-0 flex flex-initial basis-1/2 md:basis-auto">
               <div className="tabs tabs-boxed bg-base-content/[0.15] font-headings font-semibold dark:bg-base-content/[0.05]">
                 {ITEMS_MENU.map((item) => (
                   <div
@@ -101,29 +101,27 @@ const Home = () => {
               </div>
             </div>
 
-            {true && (
-              <div className="library-search flex min-w-[200px] max-w-[400px] flex-1 justify-center">
-                <div className="relative w-full">
-                  <input
-                    type="search"
-                    className="input input-sm w-full rounded-full bg-base-content/[0.15] py-[1.2rem] pl-5 pr-12 dark:bg-base-content/[0.05]"
-                    placeholder="Search..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
-                  <button
-                    title="search"
-                    type="button"
-                    className="btn-ghost btn-sm btn-circle btn absolute top-1/2 right-2 !-translate-y-1/2 transform bg-transparent text-xl"
-                    onClick={handleSearch}
-                  >
-                    <Search />
-                  </button>
-                </div>
+            <div className="library-search order-2 mt-3 flex flex-1 basis-full justify-center md:order-1 md:mt-0 md:basis-auto ">
+              <div className="relative w-full md:max-w-[400px]">
+                <input
+                  type="search"
+                  className="input input-sm w-full rounded-full bg-base-content/[0.15] py-[1.2rem] pl-5 pr-12 dark:bg-base-content/[0.05]"
+                  placeholder="Search..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+                <button
+                  title="search"
+                  type="button"
+                  className="btn-ghost btn-sm btn-circle btn absolute top-1/2 right-2 !-translate-y-1/2 transform bg-transparent text-xl"
+                  onClick={handleSearch}
+                >
+                  <Search />
+                </button>
               </div>
-            )}
+            </div>
 
-            <div className="library-actions flex w-[310px] flex-wrap justify-end gap-2">
+            <div className="library-actions order-1 flex flex-initial basis-1/2 flex-wrap justify-end gap-2 md:order-2 md:basis-auto">
               {mode === 'tracks' && (
                 <div className="sort-by border-content-base/[0.15] flex items-center gap-2 rounded bg-base-content/[0.15] px-2 dark:bg-base-content/[0.05]">
                   <div className="text-xs">Sort by</div>
@@ -162,7 +160,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <List mode={mode} tracks={libraryTracks} library={libraryMemo} />
+        <List mode={mode} />
       </div>
     </main>
   );

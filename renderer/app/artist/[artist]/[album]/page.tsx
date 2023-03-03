@@ -71,6 +71,7 @@ const PageArtist = ({ params }: IProps) => {
       <ListIntersection>
         <ListAllItem
           artist={dataArtist}
+          album={dataAlbum}
           show={{ artist: false, info: false }}
         />
       </ListIntersection>
