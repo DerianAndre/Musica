@@ -1,3 +1,4 @@
+import { JSXElementConstructor } from 'react';
 import { Artist, Album, Playlist, Track } from '../../types';
 
 const formatBitrate = (
@@ -29,9 +30,23 @@ const formatDuration = (totalSeconds: number = 0): string => {
   if (!totalSeconds) return '00:00';
   const min = Math.floor(totalSeconds / 60);
   const sec = Math.floor(totalSeconds % 60);
-  const minutes = min < 10 ? `0${min}` : `${min}`;
-  const seconds = sec < 10 ? `0${sec}` : `${sec}`;
-  return `${minutes}:${seconds}`;
+  const mins = min < 10 ? `0${min}` : `${min}`;
+  const secs = sec < 10 ? `0${sec}` : `${sec}`;
+  return `${mins}:${secs}`;
+};
+
+const formatCountdown = (totalSeconds: number = 0) => {
+  const min = Math.floor(totalSeconds / 60) || 0;
+  const sec = Math.floor(totalSeconds % 60) || 0;
+  const mins = min < 10 ? `0${min}` : `${min}`;
+  const secs = sec < 10 ? `0${sec}` : `${sec}`;
+
+  return (
+    <>
+      <span style={{ '--value': mins } as object}></span>:
+      <span style={{ '--value': secs } as object}></span>
+    </>
+  );
 };
 
 const formatGenre = (genre?: string | string[]): string => {
@@ -89,24 +104,31 @@ const formatTotalTime = (durationInSeconds: number = 0): string => {
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
 
-  if (minutes === 0) {
+  if (minutes < 60) {
+    const mins = minutes === 1 ? 'min' : 'mins';
     const secs = seconds === 1 ? 'sec' : 'secs';
-    return `${seconds} ${secs}`;
+    return `${minutes} ${mins}${seconds === 0 ? '' : `, ${seconds} ${secs}`}`;
   }
 
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
-  const hrs = hours === 1 ? 'hour' : 'hours';
-  const mins = remainingMinutes === 1 ? 'min' : 'mins';
-  const secs = seconds === 1 ? 'sec' : 'secs';
 
-  if (hours === 0) {
-    return `${remainingMinutes} ${mins}${
+  if (hours < 24) {
+    const hrs = hours === 1 ? 'hour' : 'hours';
+    const mins = remainingMinutes === 1 ? 'min' : 'mins';
+    const secs = seconds === 1 ? 'sec' : 'secs';
+    return `${hours} ${hrs}, ${remainingMinutes} ${mins}${
       seconds === 0 ? '' : `, ${seconds} ${secs}`
     }`;
   }
 
-  return `${hours} ${hrs}, ${remainingMinutes} ${mins}${
+  const days = Math.floor(hours / 24);
+  const remainingHours = hours % 24;
+  const dayStr = days === 1 ? 'day' : 'days';
+  const hrs = remainingHours === 1 ? 'hour' : 'hours';
+  const mins = remainingMinutes === 1 ? 'min' : 'mins';
+  const secs = seconds === 1 ? 'sec' : 'secs';
+  return `${days} ${dayStr}, ${remainingHours} ${hrs}, ${remainingMinutes} ${mins}${
     seconds === 0 ? '' : `, ${seconds} ${secs}`
   }`;
 };
@@ -227,6 +249,7 @@ const getImage = (cover?: string): string => {
 export {
   albumsToTracks,
   formatBitrate,
+  formatCountdown,
   formatDuration,
   formatGenre,
   formatSamplerate,

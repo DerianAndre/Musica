@@ -4,6 +4,8 @@ const Play = () => {
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
       viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
     >
       <defs>
         <clipPath id="clip-path">

@@ -9,6 +9,7 @@ const supportedExtensions = [
   'aiff',
   'dsf',
   'flac',
+  'alac',
   'm4a',
   'mp3',
   'ogg',
@@ -127,13 +128,12 @@ const parseFolder = async (root) => {
             cover: coverPath,
             tracks: [musicFileObject],
           });
+          saveCover(coverPath, cover);
         } else {
           jsonLibrary[artistKey].albums[albumIndex].tracks.push(
             musicFileObject,
           );
         }
-
-        saveCover(coverPath, cover);
       } catch (err) {
         console.error(err);
       } finally {

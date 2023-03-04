@@ -31,7 +31,6 @@ const Home = () => {
     libraryTracks,
     search,
     sortBy,
-    libraryMemo,
     libraryStatus,
     setSortBy,
     setSearch,

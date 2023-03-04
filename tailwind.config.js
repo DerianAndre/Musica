@@ -26,6 +26,7 @@ module.exports = {
     fontFamily: {
       headings: ['"Poppins"', ...defaultTheme.fontFamily.sans],
       sans: ['"Open Sans"', ...defaultTheme.fontFamily.sans],
+      mono: ['"Chivo Mono"',...defaultTheme.fontFamily.mono],
     },
     extend: {
       animation: {

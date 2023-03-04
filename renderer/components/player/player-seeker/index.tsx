@@ -1,7 +1,7 @@
 import styles from './index.module.scss';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { formatDuration } from '~/renderer/utils';
+import { formatCountdown, formatDuration } from '~/renderer/utils';
 import { PLAYER_STATES } from '../constants';
 import { Player } from '~/types';
 import { useInterval } from 'usehooks-ts';
@@ -18,7 +18,7 @@ const PlayerSeeker = ({ player, playerState }: IProps) => {
   const sliderValue = (): number => {
     if (!player) return 0;
     const duration = Number(player.duration());
-    const value = Number(((playerSeek / duration) * 100).toFixed(2));
+    const value = Number(((playerSeek / duration) * 100).toFixed(3));
     return !value || value > 100 ? 0 : value;
   };
 
@@ -60,9 +60,7 @@ const PlayerSeeker = ({ player, playerState }: IProps) => {
     <div className="player-seeker mb-3">
       <div className="flex">
         <div className="flex w-14 items-center justify-start">
-          <span className="block font-headings text-xs font-medium">
-            {timeCurrent}
-          </span>
+          <span className="font-mono text-sm">{timeCurrent}</span>
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className={styles.slider} style={customStyle}>
@@ -82,9 +80,7 @@ const PlayerSeeker = ({ player, playerState }: IProps) => {
           </div>
         </div>
         <div className="flex w-14 items-center justify-end">
-          <span className="block font-headings text-xs font-medium">
-            {timeDuration}
-          </span>
+          <span className="font-mono text-sm">{timeDuration}</span>
         </div>
       </div>
     </div>
