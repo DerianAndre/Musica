@@ -11,7 +11,7 @@ interface IProps {
 const List = ({ mode }: IProps) => {
   const components: any = {
     tracks: <ListTracks />,
-    artists: <ListArtists />,
+    artists: <ListArtists single />,
     albums: <ListAlbums />,
     list: <ListAll />,
   };

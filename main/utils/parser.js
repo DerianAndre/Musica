@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const Utils = require('./index');
 const MM = require('music-metadata');
-const { getCoverFile, slugifyFile } = require('./index');
+const { getCoverFile, slugify } = require('./index');
 
 const supportedExtensions = [
   'aac',
@@ -68,7 +68,7 @@ const parseFolder = async (root) => {
 
         const trackPadded = formatTrackNo(trackNo);
 
-        const fileSlug = slugifyFile(
+        const fileSlug = slugify(
           `${artist}_${year}_${album}_${trackPadded}_${title}_${fileExtension}`,
         );
 
@@ -99,7 +99,7 @@ const parseFolder = async (root) => {
 
         if (!jsonLibrary[artistKey]) {
           jsonLibrary[artistKey] = {
-            slug: slugifyFile(artist),
+            slug: slugify(artist),
             title: artist,
             albums: [],
           };
@@ -115,7 +115,7 @@ const parseFolder = async (root) => {
 
         if (albumIndex === -1) {
           jsonLibrary[artistKey].albums.push({
-            slug: slugifyFile(album),
+            slug: slugify(album),
             title: album,
             artist,
             albumartist,
@@ -212,7 +212,7 @@ const parseLibrary = async (dir, libraryPath, libraryFile, callback) => {
       const chunksList = [];
       Object.keys(jsonLibrarySorted).forEach((item) => {
         const chunkPath = `${libraryPath}/chunks/`;
-        const chunkSlug = slugifyFile(item);
+        const chunkSlug = slugify(item);
         const chunkFile = `${chunkSlug}.json`;
         const chunkFullPath = chunkPath + chunkFile;
 

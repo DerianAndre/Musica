@@ -31,7 +31,7 @@ app.on('ready', async () => {
     height: 800,
     icon: 'icon.ico',
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#101520' : '#FFFFFF',
-    frame: false,
+    // frame: false,
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,
@@ -40,9 +40,9 @@ app.on('ready', async () => {
     },
   });
 
-  const forceRemoveMenu = false;
+  const removeWinMenu = false || !isDev;
 
-  !isDev || (forceRemoveMenu && mainWindow.removeMenu());
+  removeWinMenu && mainWindow.removeMenu();
 
   const url = isDev
     ? 'http://localhost:8000'

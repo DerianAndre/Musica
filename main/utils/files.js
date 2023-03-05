@@ -1,4 +1,4 @@
-const slugifyFile = (string) => {
+const slugify = (string) => {
   if (!string) return '';
   return String(string)
     .toString()
@@ -15,4 +15,4 @@ const slugifyFile = (string) => {
     .replace(/-+$/, ''); // Trim - from end of text
 };
 
-module.exports = { slugifyFile };
+module.exports = { slugify };

@@ -27,7 +27,7 @@ const ListAllItem = ({ artist, album, show }: IProps) => {
   const { handlePlayPlaylist } = useContext(PlayerContext);
 
   return (
-    <div>
+    <div className="list-all-item">
       {display.artist && (
         <h2 className="font-headings text-3xl font-semibold">
           <Link href={`/artist/${artist?.slug}`}>{artist.title}</Link>
@@ -35,7 +35,7 @@ const ListAllItem = ({ artist, album, show }: IProps) => {
       )}
       <div className="divide-y divide-black/[0.1] dark:divide-white/[0.05]">
         {albums?.map((album) => (
-          <Fragment key={album?.title}>
+          <section id={album?.slug} key={album?.title}>
             <ListIntersection>
               <div className="flex flex-col flex-wrap gap-5 py-5 md:flex-row">
                 <div className="w-[200px] flex-initial">
@@ -91,7 +91,7 @@ const ListAllItem = ({ artist, album, show }: IProps) => {
                 </div>
               </div>
             </ListIntersection>
-          </Fragment>
+          </section>
         ))}
       </div>
     </div>

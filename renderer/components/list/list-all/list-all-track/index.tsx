@@ -8,12 +8,15 @@ const ListTrack = ({ track }: { track: Track }) => {
       <div className="list-tracks align-items-center flex cursor-pointer select-none gap-3 rounded p-2 align-bottom text-sm">
         <div className="w-6 opacity-50">{track?.track}</div>
         <div className="min-w-[150px] flex-1 truncate">{track?.title}</div>
-        <div className="w-14 flex-initial truncate text-center opacity-50">
+        <div className="w-14 flex-initial truncate text-center opacity-75">
           {getAudioQuality(
             track?.bitsPerSample,
             track?.sampleRate,
             track?.container,
           )}
+        </div>
+        <div className="w-14 flex-initial truncate text-center opacity-50">
+          {track?.extension.toUpperCase()}
         </div>
         <div className="w-28 flex-initial truncate text-center opacity-75">
           {formatGenre(track?.genre)}

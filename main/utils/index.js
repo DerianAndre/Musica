@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { slugifyFile } = require('./files');
+const { slugify } = require('./files');
 const MM = require('music-metadata');
 
 const checkFolder = async (path, log = true) => {
@@ -38,7 +38,7 @@ const checkLibrary = async () => {
 
 const getCoverFile = ({ artist, album, year, cover }) => {
   const ext = cover.format.replace('image/', '');
-  return `${slugifyFile(artist)}_${year}_${slugifyFile(album)}.${ext}`;
+  return `${slugify(artist)}_${year}_${slugify(album)}.${ext}`;
 };
 
 const readFile = async (payload, event) => {
@@ -71,7 +71,7 @@ module.exports = {
   checkFolder,
   checkLibrary,
   getCoverFile,
-  slugifyFile,
+  slugify,
   readFile,
   readMetadata,
 };

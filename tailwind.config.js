@@ -22,11 +22,16 @@ module.exports = {
     './renderer/pages/**/*.{js,ts,jsx,tsx}',
     './renderer/components/**/*.{js,ts,jsx,tsx}',
   ],
+  safelist: [
+    {
+      pattern: /grid-cols-./,
+    },
+  ],
   theme: {
     fontFamily: {
       headings: ['"Poppins"', ...defaultTheme.fontFamily.sans],
       sans: ['"Open Sans"', ...defaultTheme.fontFamily.sans],
-      mono: ['"Chivo Mono"',...defaultTheme.fontFamily.mono],
+      mono: ['"Chivo Mono"', ...defaultTheme.fontFamily.mono],
     },
     extend: {
       animation: {

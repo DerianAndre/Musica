@@ -1,18 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
-import { slugifyFile } from '~/main/utils/files';
+import { slugify } from '~/main/utils/files';
 import {
   formatBitrate,
   formatSamplerate,
   getAudioQuality,
-  isHiRes,
 } from '~/renderer/utils';
 
 const PlayerInfo = ({ data }: any) => {
   const trackData = data?.data || {};
   const metaData = data?.metadata || {};
-  const artist = slugifyFile(trackData.artist);
-  const album = slugifyFile(trackData.album);
+  const artist = slugify(trackData.artist);
+  const album = slugify(trackData.album);
   const track = trackData.slug;
 
   const playerArtImage = (object: any) => {
@@ -66,7 +65,7 @@ const PlayerInfo = ({ data }: any) => {
                 )}
               </span>
               <span className="opacity-50"> • </span>
-              <span>{metaData?.format?.container}</span>
+              <span>{metaData?.format?.container.split('/')[0]}</span>
               <span className="opacity-50"> • </span>
               <span>{formatSamplerate(metaData?.format?.sampleRate)}</span>
               <span className="opacity-50"> • </span>

@@ -10,10 +10,14 @@ const List = () => {
   return (
     <div className="list-all">
       {libraryArtists?.map((artist: Artist, index: number) => (
-        <ListIntersection key={index + artist.slug}>
-          <ListAllItem library={libraryMemo} artist={artist} />
-          <div className="divider mt-5 mb-10" />
-        </ListIntersection>
+        <>
+          <ListIntersection key={index + artist?.slug}>
+            <section id={artist?.slug}>
+              <ListAllItem artist={artist} />
+            </section>
+            <div className="divider -mx-5 mt-5 mb-10" />
+          </ListIntersection>
+        </>
       ))}
     </div>
   );

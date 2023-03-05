@@ -50,15 +50,15 @@ const formatCountdown = (totalSeconds: number = 0) => {
 };
 
 const formatGenre = (genre?: string | string[]): string => {
-  return !genre
-    ? '-'
-    : typeof genre === 'string'
-    ? genre.replaceAll('/', ', ').replaceAll(' , ', ', ').replaceAll(';', ', ')
-    : genre
-        .join(', ')
-        .replaceAll('/', ', ')
-        .replaceAll(' , ', ', ')
-        .replaceAll(';', ', ');
+  if (!genre) return '-';
+
+  const gen = typeof genre === 'string' ? genre : genre.join(', ');
+
+  return gen
+    .replaceAll('/', ', ')
+    .replaceAll(' & ', ', ')
+    .replaceAll(' , ', ', ')
+    .replaceAll(';', ', ');
 };
 
 const formatSamplerate = (
@@ -167,6 +167,8 @@ const getAudioQuality = (
 ): string => {
   if (!bitDepth || !sampleRate || !codec) return 'Unknown';
 
+  const container = codec.split('/')[0].toLocaleLowerCase();
+
   const formatSpecs = {
     SD: {
       minBitDepth: 16,
@@ -177,6 +179,7 @@ const getAudioQuality = (
       minSampleRate: 44100,
     },
     'Hi-Res': {
+      codec: ['flac', 'alac', 'wav', 'aiff'], // TODO
       minBitDepth: 24,
       minSampleRate: 48000, // or 96000 (?)
     },

@@ -1,6 +1,6 @@
 import ListCover from '../../list-cover';
 import Link from 'next/link';
-import { slugifyFile } from '~/main/utils/files';
+import { slugify } from '~/main/utils/files';
 
 const ListAlbum = ({ artist, album = {}, ...props }) => {
   return (
@@ -11,7 +11,7 @@ const ListAlbum = ({ artist, album = {}, ...props }) => {
     >
       <Link
         className="list-ablbum-link flex h-full w-full flex-col rounded p-3 transition hover:bg-base-content/[0.15] dark:hover:bg-base-content/[0.05] dark:hover:shadow-lg"
-        href={`/artist/${slugifyFile(artist)}/${album?.slug}`}
+        href={`/artist/${slugify(artist)}/${album?.slug}`}
       >
         <ListCover album={album} />
         <h2 className="mt-2 font-headings text-sm font-bold leading-[1.15]">
