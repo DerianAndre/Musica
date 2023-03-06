@@ -4,6 +4,10 @@ const Utils = require('./index');
 const MM = require('music-metadata');
 const { getCoverFile, slugify } = require('./index');
 
+const createChunks = false;
+const libraryData = fs.promises.readFile('library.json');
+const jsonLibrary = { ...libraryData };
+
 const supportedExtensions = [
   'aac',
   'aiff',
@@ -17,8 +21,29 @@ const supportedExtensions = [
   'wav',
   'wv',
 ];
+const checkArtistExists = (artistKey) => {
+  return !!jsonLibrary[artistKey];
+};
 
-const jsonLibrary = {};
+const checkAlbumExists = (artistKey, albumTitle) => {
+  if (!checkArtistExists(artistKey)) return;
+
+  const albumExists = jsonLibrary[artistKey]?.albums?.some(
+    (album) => album.title === albumTitle,
+  );
+
+  return !!albumExists;
+};
+
+const checkTrackExists = (albumObject, trackTitle) => {
+  if (!albumObject) return;
+
+  const trackExists = albumObject.tracks.some(
+    (track) => track.title === trackTitle,
+  );
+
+  return !!trackExists;
+};
 
 const formatTrackNo = (num, targetLength = 2) => {
   return Number(num).toString().padStart(targetLength, '0');
@@ -68,12 +93,12 @@ const parseFolder = async (root) => {
 
         const trackPadded = formatTrackNo(trackNo);
 
-        const fileSlug = slugify(
+        const trackSlug = slugify(
           `${artist}_${year}_${album}_${trackPadded}_${title}_${fileExtension}`,
         );
 
-        const musicFileObject = {
-          slug: fileSlug,
+        const trackObject = {
+          slug: trackSlug,
           trackNo,
           track: trackPadded,
           artist,
@@ -93,11 +118,11 @@ const parseFolder = async (root) => {
           bitsPerSample,
         };
 
-        const coverPath = getCoverFile({ artist, album, year, cover });
-
         const artistKey = albumartist || artist;
 
-        if (!jsonLibrary[artistKey]) {
+        // Artist
+        if (!checkArtistExists(artistKey)) {
+          console.log(`[i] Library parser: Added new artist "${artistKey}"`);
           jsonLibrary[artistKey] = {
             slug: slugify(artist),
             title: artist,
@@ -105,15 +130,14 @@ const parseFolder = async (root) => {
           };
         }
 
-        let albumIndex = -1;
-        for (let i = 0; i < jsonLibrary[artistKey].albums.length; i++) {
-          if (jsonLibrary[albumartist].albums[i].title === album) {
-            albumIndex = i;
-            break;
-          }
-        }
+        // Album
+        if (!checkAlbumExists(artistKey, album)) {
+          console.log(
+            `[i] Library parser: Added new album "${album}" to "${artistKey}"`,
+          );
 
-        if (albumIndex === -1) {
+          const coverPath = getCoverFile({ artist, album, year, cover });
+
           jsonLibrary[artistKey].albums.push({
             slug: slugify(album),
             title: album,
@@ -126,17 +150,23 @@ const parseFolder = async (root) => {
             originaldate,
             genre,
             cover: coverPath,
-            tracks: [musicFileObject],
+            tracks: [trackObject],
           });
           saveCover(coverPath, cover);
-        } else {
-          jsonLibrary[artistKey].albums[albumIndex].tracks.push(
-            musicFileObject,
+        }
+
+        // Track
+        const currentAlbum = jsonLibrary[artistKey].albums.find(
+          (a) => a.title === album,
+        );
+        if (!checkTrackExists(currentAlbum, title)) {
+          console.log(
+            `[i] Library parser: Added new track "${title}" to album "${album}" to "${artistKey}"`,
           );
+          currentAlbum.tracks.push(trackObject);
         }
       } catch (err) {
         console.error(err);
-      } finally {
       }
     }
   }
@@ -202,12 +232,11 @@ const parseLibrary = async (dir, libraryPath, libraryFile, callback) => {
       // Library
       const libraryFullPath = `${libraryPath}/${libraryFile}`;
       fs.promises.writeFile(libraryFullPath, JSON.stringify(jsonLibrarySorted));
-      console.log(`[i] Library parser: Saved to <${libraryFullPath}>`);
+      console.log(`[i] Library parser: Saved to "${libraryFullPath}"`);
 
       // Chunks
-      const createChunks = false;
       console.log(
-        `[i] Library parser: Creating chunks <${libraryPath}/chunks> ...`,
+        `[i] Library parser: Creating chunks "${libraryPath}/chunks> ...`,
       );
       const chunksList = [];
       Object.keys(jsonLibrarySorted).forEach((item) => {
@@ -236,7 +265,7 @@ const parseLibrary = async (dir, libraryPath, libraryFile, callback) => {
       }
       // Chunk list
       console.log(
-        `[i] Library parser: Creating chunks list <${libraryPath}/list.json> ...`,
+        `[i] Library parser: Creating chunks list "${libraryPath}/list.json> ...`,
       );
       fs.promises.writeFile(
         `${libraryPath}/list.json`,
