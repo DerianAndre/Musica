@@ -71,28 +71,25 @@ ipcMain.on('library-select', async (event) => {
 
   if (!folderPath || !folderPath.length) return;
 
+  event.sender.send('library-loading');
+
   console.log(`[i] Electron: Event <library-select> "${folderPath[0]}"`);
 
-  Parser.parseLibrary(
-    folderPath[0],
-    'library',
-    'index.json',
-    (done, error = null) => {
-      if (done) {
-        event.sender.send('library-parsed', {
-          status: 'success',
-          path: folderPath[0],
-          error: null,
-        });
-      } else {
-        event.sender.send('library-parsed', {
-          status: 'error',
-          path: folderPath[0],
-          error,
-        });
-      }
-    },
-  );
+  Parser.parseLibrary(folderPath[0], 'library', 'index.json', (done, error) => {
+    if (done && !error) {
+      event.sender.send('library-parsed', {
+        status: 'success',
+        path: folderPath[0],
+        error: null,
+      });
+    } else {
+      event.sender.send('library-parsed', {
+        status: 'error',
+        path: folderPath[0],
+        error,
+      });
+    }
+  });
 });
 
 // Player: Play file

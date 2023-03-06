@@ -27,7 +27,7 @@ const PageSettings = () => {
   const handleSelectFolder = () => {
     window.electron.library.select();
     // TODO Toast
-    alert('Loading');
+    // alert('Loading');
   };
 
   const libraryValues = Object.values(library);
@@ -76,16 +76,19 @@ const PageSettings = () => {
   ];
 
   useEffect(() => {
-    // TODO
-    //window.electron.library.loading(() => {
-    //  setStatus("loading");
-    //});
+    window.electron.library.loading((event: any) => {
+      setStatus('loading');
+    });
+
     window.electron.library.parsed((event: any, data: any) => {
+      // TODO: Toasts
       if (data.status === 'success') {
         setLibraryPath(data.path);
         setStatus('ready');
+        //alert('Done');
       } else {
         setStatus('error');
+        //alert(data.error);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -108,7 +111,7 @@ const PageSettings = () => {
                 onClick={handleSelectFolder}
                 disabled={status === 'loading'}
               >
-                Select library folder
+                {status === 'loading' ? 'Loading...' : 'Select library folder'}
               </button>
               <p className="opacity-75">{libraryPath}</p>
             </div>

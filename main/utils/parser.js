@@ -276,7 +276,7 @@ const parseLibrary = async (dir, libraryPath, libraryFile, callback) => {
       callback(true, null);
     }
   } catch (error) {
-    callback(false, error);
+    callback(true, error);
   } finally {
     console.timeEnd(`[i] Library parser: Total time`);
   }
