@@ -13,7 +13,7 @@ import packageJson from '~/package.json';
 
 const PageSettings = () => {
   const { library } = useContext(PlayerContext);
-
+  const [status, setStatus] = useState('ready');
   const [libraryPath, setLibraryPath] = useLocalStorage(
     'musica-library-path',
     '<No folder selected>',
@@ -22,12 +22,9 @@ const PageSettings = () => {
     'musica-settings-blur',
     true,
   );
-  const [status, setStatus] = useState('ready');
 
   const handleSelectFolder = () => {
     window.electron.library.select();
-    // TODO Toast
-    // alert('Loading');
   };
 
   const libraryValues = Object.values(library);

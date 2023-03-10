@@ -4,9 +4,8 @@ const Utils = require('./index');
 const MM = require('music-metadata');
 const { getCoverFile, slugify } = require('./index');
 
+let jsonLibrary = {};
 const createChunks = false;
-const libraryData = fs.promises.readFile('library.json');
-const jsonLibrary = { ...libraryData };
 
 const supportedExtensions = [
   'aac',
@@ -21,6 +20,7 @@ const supportedExtensions = [
   'wav',
   'wv',
 ];
+
 const checkArtistExists = (artistKey) => {
   return !!jsonLibrary[artistKey];
 };
@@ -70,9 +70,9 @@ const parseFolder = async (root) => {
           albumsort = 'Unknown Album',
           artist = 'Unknown Artist',
           artists = ['Unknown Artist'],
-          albumartist = 'Unknown Artist',
+          albumartist = null,
           title = 'Unknown Title',
-          track = '??',
+          track = '00',
           genre = 'Unknown Genre',
           year = null,
           originalyear = null,
@@ -89,7 +89,7 @@ const parseFolder = async (root) => {
           bitsPerSample = 0,
         } = format;
 
-        const trackNo = track.no ? track.no : date;
+        const trackNo = track.no ? track.no : 1;
 
         const trackPadded = formatTrackNo(trackNo);
 
@@ -189,6 +189,10 @@ const saveCover = (coverPath, cover) => {
 const parseLibrary = async (dir, libraryPath, libraryFile, callback) => {
   console.log(`[i] Library parser: Init...`);
   console.time(`[i] Library parser: Total time`);
+
+  const libraryData = fs.readFileSync('./library/index.json');
+
+  jsonLibrary = JSON.parse(libraryData);
 
   try {
     const files = await fs.promises.readdir(dir);

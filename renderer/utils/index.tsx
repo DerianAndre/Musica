@@ -173,16 +173,29 @@ const getAudioQuality = (
     SD: {
       minBitDepth: 16,
       minSampleRate: 22050,
+      minBitRate: 705600,
     },
     CD: {
       minBitDepth: 16,
       minSampleRate: 44100,
+      minBitRate: 1411200,
     },
     'Hi-Res': {
       codec: ['flac', 'alac', 'wav', 'aiff'], // TODO
       minBitDepth: 24,
       minSampleRate: 48000, // or 96000 (?)
+      minBitrate: 2304000,
     },
+    DSD: {
+      minBitDepth: 1,
+      minSampleRate: 2822400,
+      minBitrate: 1411000,
+    },
+    //MQA: {
+    //  minBitDepth: 24,
+    //  minSampleRate: 44100,
+    // minBitrate: 2116800,
+    //},
   };
 
   let audioQuality = 'Trash';
