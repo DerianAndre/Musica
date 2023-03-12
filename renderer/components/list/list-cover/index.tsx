@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import { getImage } from '~/renderer/utils';
+import { getAlbumImage } from '~/renderer/utils';
 import { Album } from '~/types';
 
 interface IProps {
@@ -22,7 +22,7 @@ const ListCover = ({
       ${bordered ? ' border border-base-content/[0.05]' : ''}
       ${rounded ? ' rounded-full' : ''}`}
       alt={album?.title || ''}
-      src={getImage(album?.cover)}
+      src={getAlbumImage(album)}
       style={{ maxWidth: width }}
     />
   );

@@ -58,6 +58,7 @@ const parseFolder = async (root) => {
     if (stat.isDirectory()) {
       await parseFolder(filePath);
     } else {
+      const albumPath = path.dirname(filePath);
       const fileExtension = filePath.split('.').slice(-1)[0];
       if (!supportedExtensions.includes(fileExtension)) continue;
       try {
@@ -151,6 +152,7 @@ const parseFolder = async (root) => {
             genre,
             cover: coverPath,
             tracks: [trackObject],
+            path: albumPath,
           });
           saveCover(coverPath, cover);
         }

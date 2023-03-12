@@ -1,14 +1,15 @@
-import { getImage } from '~/renderer/utils';
+import { getAlbumImage } from '~/renderer/utils';
+import { Album } from '~/types';
 
 interface IProps {
-  cover?: string;
+  album?: Album | null;
 }
 
-const PageCover = ({ cover }: IProps) => {
-  return cover ? (
+const PageCover = ({ album }: IProps) => {
+  return album ? (
     <div
       className="swap fixed inset-0 -z-50 bg-cover bg-center opacity-[0.2] blur-lg dark:opacity-[0.05]"
-      style={{ backgroundImage: `url(${getImage(cover)})` }}
+      style={{ backgroundImage: `url(${getAlbumImage(album)})` }}
     />
   ) : (
     <></>

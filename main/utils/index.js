@@ -37,7 +37,7 @@ const checkLibrary = async () => {
 };
 
 const getCoverFile = ({ artist, album, year, cover }) => {
-  if (!cover || !cover.format) return '';
+  if (!cover || !cover.format) return null;
   const ext = cover.format.replace('image/', '');
   return `${slugify(artist)}_${year}_${slugify(album)}.${ext}`;
 };

@@ -45,7 +45,7 @@ const PageArtist = ({ params }: IProps) => {
 
   return (
     <>
-      <PageCover cover={dataArtist?.albums[0]?.cover} />
+      <PageCover album={dataArtist?.albums[0]} />
       <GoBack />
       <header>
         <h2 className="font-headings text-3xl font-semibold">

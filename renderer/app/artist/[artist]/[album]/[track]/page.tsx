@@ -29,7 +29,7 @@ const PageTrack = ({
 
   return (
     <>
-      <PageCover cover={dataAlbum?.cover} />
+      <PageCover album={dataAlbum} />
       <GoBack />
       <div className="flex flex-col">
         <h2 className="font-headings text-3xl font-semibold">

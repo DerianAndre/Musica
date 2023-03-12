@@ -46,7 +46,8 @@ export type Album = {
   date: string;
   originaldate: string | null;
   genre: string[];
-  cover: string;
+  path: string;
+  cover: string | null;
   tracks: Track[];
   [key: string]: any;
 };

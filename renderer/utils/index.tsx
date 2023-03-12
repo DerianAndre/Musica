@@ -1,4 +1,3 @@
-import { JSXElementConstructor } from 'react';
 import { Artist, Album, Playlist, Track } from '../../types';
 
 const formatBitrate = (
@@ -251,14 +250,44 @@ const albumsToTracks = (albums: Album[]): Track[] => {
   }, []);
 };
 
-const getImage = (cover?: string): string => {
+const getAlbumImage = (album?: Album | null): string => {
   const skeleton =
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+  if (!album) return skeleton;
+
+  // Fallback to cover.<ext> or skeleton
+  if (!album.cover && album.path) {
+    const fileExtensions = ['jpg', 'png', 'webp', 'gif'];
+
+    for (const extension of fileExtensions) {
+      const albumCover = `${album.path}/cover.${extension}`;
+      if (checkImageExists(albumCover)) {
+        return albumCover;
+      }
+    }
+
+    return skeleton;
+  }
+
   try {
-    if (!cover) return skeleton;
-    return require(`~/library/cache/${cover}`).default.src;
+    return require(`~/library/cache/${album.cover}`).default.src;
   } catch (error) {
     return skeleton;
+  }
+
+  return skeleton;
+};
+
+const checkImageExists = (path?: string | null): boolean => {
+  if (!path) return false;
+
+  try {
+    const req = new XMLHttpRequest();
+    req.open('HEAD', path, false);
+    req.send();
+    return !!(req.status != 404);
+  } catch (error) {
+    return false;
   }
 };
 
@@ -278,6 +307,6 @@ export {
   getArtistTotalAlbums,
   getArtistTotalTracks,
   getArtistTotalDuration,
-  getImage,
+  getAlbumImage,
   sortAlbums,
 };

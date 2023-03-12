@@ -8,6 +8,7 @@ import GoBack from '~/renderer/components/go-back';
 import ToggleTheme from '~/renderer/components/theme-toggle';
 import { Play } from '~/renderer/components/icons';
 import packageJson from '~/package.json';
+import Router from 'next/router';
 
 // TODO: Improve UX/UI
 
@@ -87,6 +88,8 @@ const PageSettings = () => {
         setStatus('error');
         //alert(data.error);
       }
+      // Router.replace('/');
+      // Router.reload();
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

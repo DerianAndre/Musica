@@ -35,7 +35,7 @@ const PageArtist = ({ params }: IProps) => {
 
   return (
     <>
-      <PageCover cover={dataAlbum?.cover} />
+      <PageCover album={dataAlbum} />
 
       <GoBack />
 
