@@ -4,7 +4,7 @@
   Musica
 </h1>
 <center>
-  <p>A minimal hackable music player made with electron, react, next, typescript, daisyui and tailwind.</p>
+  <p>A minimalistic-design & hackable music player made with electron, react, next, typescript, daisyui and tailwind.</p>
 </center>
 
 ## How to use
@@ -30,6 +30,6 @@ You can create the production app using `npm run build:prod` (not working right 
  - [ ] Refactors
  - [ ] Code-optimizaiton
  - [ ] Parser edge-cases
- - [ ] Migrate everything to ts/tsx
+ - [X] Migrate everything to ts/tsx
 
 Made with love, by Derian Castillo
