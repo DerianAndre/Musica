@@ -4,6 +4,13 @@ import React from 'react';
 import Player from '../components/player';
 import { PlayerProvider } from '~/renderer/context/player/';
 
+const metadata = {
+  title: {
+    default: 'Musica',
+    template: '%s | Musica',
+  },
+};
+
 interface IProps {
   children: React.ReactNode;
 }
@@ -25,10 +32,3 @@ const RootLayout = ({ children }: IProps) => {
 };
 
 export default RootLayout;
-
-export const metadata = {
-  title: {
-    default: 'Musica',
-    template: '%s | Musica',
-  },
-};

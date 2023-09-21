@@ -192,7 +192,12 @@ const parseLibrary = async (dir, libraryPath, libraryFile, callback) => {
   console.log(`[i] Library parser: Init...`);
   console.time(`[i] Library parser: Total time`);
 
-  const libraryData = fs.readFileSync('./library/index.json');
+  const libraryData = fs.readFileSync('./library/index.json') || null;
+
+  if (!libraryData) {
+    console.log(`[i] Library parser: No library found`);
+    return;
+  }
 
   jsonLibrary = JSON.parse(libraryData);
 

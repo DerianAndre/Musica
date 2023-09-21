@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useContext } from 'react';
-import { Library, Playlist } from '~/types';
+import { Playlist } from '~/types';
 import ListIntersection from '~/renderer/components/list/list-intersecton';
 import ListAllItem from '~/renderer/components/list/list-all/list-all-item';
 import { PlayerContext } from '~/renderer/context';
@@ -14,7 +14,10 @@ import { getAlbumTotalDuration, getAlbumTotalTracks } from '~/renderer/utils';
 import HeaderInfo from '~/renderer/components/header-info';
 
 interface IProps {
-  params: { artist: string; album: string };
+  params: {
+    artist: string;
+    album: string;
+  };
 }
 
 const PageArtist = ({ params }: IProps) => {

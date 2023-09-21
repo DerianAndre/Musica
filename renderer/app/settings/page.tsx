@@ -99,8 +99,24 @@ const PageSettings = () => {
       <GoBack />
       <div className="flex flex-col">
         <h2 className="mb-5 text-3xl font-bold">Settings</h2>
-        <section id="library" className="mb-5">
+
+        <div className="divider" />
+
+        <section id="library" className="">
           <h3 className="mb-3 text-2xl font-bold">Library</h3>
+          {totalArtists > 0 && (
+            <section id="library-stats" className="mb-4">
+              <h4 className="mb-3 text-xl font-bold">Statistics</h4>
+              <div className="stats w-full bg-neutral-content/5 shadow-lg">
+                {stats.map((stat, index) => (
+                  <div className="stat" key={index}>
+                    <div className="stat-title text-sm">{stat.text}</div>
+                    <div className="font-bold">{stat.value}</div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
           <section id="library-location" className="mb-4">
             <h4 className="mb-3 text-xl font-bold">Location</h4>
@@ -116,22 +132,11 @@ const PageSettings = () => {
               <p className="opacity-75">{libraryPath}</p>
             </div>
           </section>
-
-          {totalArtists > 0 && (
-            <section id="library-stats" className="mb-4">
-              <div className="stats bg-neutral-content/5 shadow-lg">
-                {stats.map((stat, index) => (
-                  <div className="stat" key={index}>
-                    <div className="stat-title text-sm">{stat.text}</div>
-                    <div className="font-bold">{stat.value}</div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
         </section>
 
-        <section id="general" className="mb-5">
+        <div className="divider" />
+
+        <section id="general" className="">
           <h3 className="mb-3 text-2xl font-bold">General</h3>
           <section id="general-theme" className="mb-4">
             <h4 className="mb-3 text-xl font-bold">Theme</h4>
@@ -140,7 +145,7 @@ const PageSettings = () => {
               <p className="opacity-75">Toggle theme</p>
             </div>
           </section>
-          <section id="general-toggle" className="mb-4">
+          <section id="general-toggle" className="">
             <h4 className="mb-3 text-xl font-bold">Blur</h4>
             <div className="flex items-center gap-4">
               <label className="label cursor-pointer">
@@ -156,6 +161,42 @@ const PageSettings = () => {
             </div>
           </section>
         </section>
+
+        <div className="divider" />
+
+        <section id="packages" className="">
+          <h4 className="mb-3 text-xl font-bold">Packages</h4>
+          <div className="flex flex-col gap-1">
+            {packageJson.dependencies && (
+              <>
+                <h5 className="font-bold">Dependencies</h5>
+                {Object.keys(packageJson.dependencies).map((key, index) => (
+                  <div key={index} className="flex items-center gap-4 text-xs">
+                    <div className="">{key}</div>
+                    <div className="badge badge-sm">
+                      {packageJson.dependencies[key]}
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+            {packageJson.devDependencies && (
+              <>
+                <h5 className="mt-3 font-bold">Development Dependencies</h5>
+                {Object.keys(packageJson.devDependencies).map((key, index) => (
+                  <div key={index} className="flex items-center gap-4 text-xs">
+                    <div className="">{key}</div>
+                    <div className="badge badge-sm">
+                      {packageJson.devDependencies[key]}
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
+        </section>
+
+        <div className="divider" />
 
         <footer className="mt-auto flex items-center gap-2">
           <Play />

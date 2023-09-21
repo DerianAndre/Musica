@@ -6,9 +6,7 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
-  typescript: {
-    //ignoreBuildErrors: true, // ! Temporal
-  },
+  output: 'export',
 };
 
 module.exports = nextConfig;

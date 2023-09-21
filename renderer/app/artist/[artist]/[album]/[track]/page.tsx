@@ -1,13 +1,11 @@
 'use client';
 
-import Link from 'next/link';
 import React, { useContext } from 'react';
 import GoBack from '~/renderer/components/go-back';
 import HeaderInfo from '~/renderer/components/header-info';
 import PageCover from '~/renderer/components/page-cover';
 import { PlayerContext } from '~/renderer/context';
 import {
-  formatDuration,
   formatBitrate,
   formatSamplerate,
   formatTotalTime,
@@ -15,11 +13,15 @@ import {
   getAudioQuality,
 } from '~/renderer/utils';
 
-const PageTrack = ({
-  params,
-}: {
-  params: { artist: string; album: string; track: string };
-}) => {
+interface IProps {
+  params: {
+    artist: string;
+    album: string;
+    track: string;
+  };
+}
+
+const PageTrack = ({ params }: IProps) => {
   const { artist, album, track } = params;
   const { library, list } = useContext(PlayerContext);
   const listArtist = list.find((item) => item.slug === artist);

@@ -1,16 +1,13 @@
 'use client';
 
-import React, { useContext, useEffect, useState } from 'react';
-import { Artist, Playlist } from '~/types';
-import loadChunk from '~/library/chunks';
+import React, { useContext } from 'react';
+import { Playlist } from '~/types';
 import ListIntersection from '~/renderer/components/list/list-intersecton';
 import ListAllItem from '~/renderer/components/list/list-all/list-all-item';
 import { PlayerContext } from '~/renderer/context';
 import { MdPlayArrow } from 'react-icons/md';
 import {
   albumsToTracks,
-  formatTotal,
-  formatTotalTime,
   getArtistTotalAlbums,
   getArtistTotalDuration,
   getArtistTotalTracks,
@@ -23,7 +20,9 @@ import GoBack from '~/renderer/components/go-back';
 import HeaderInfo from '~/renderer/components/header-info';
 
 interface IProps {
-  params: { artist: string };
+  params: {
+    artist: string;
+  };
 }
 
 const PageArtist = ({ params }: IProps) => {

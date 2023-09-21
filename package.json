@@ -1,6 +1,7 @@
 {
   "name": "musica",
   "productName": "Musica",
+  "description": "A minimalistic-design & hackable music player",
   "private": true,
   "main": "main/index.js",
   "version": "0.1.0",
@@ -12,10 +13,11 @@
   "scripts": {
     "clean": "rimraf dist renderer/.next renderer/out",
     "start": "electron .",
+    "dev": "electron .",
     "build": "next build renderer && next export renderer",
     "build:dir": "npm run build && electron-builder --dir",
     "build:dist": "npm run build && electron-builder",
-    "parse": "node main/utils/parser.js"
+    "parser": "node main/utils/parser.js"
   },
   "build": {
     "appId": "com.derianandre.musica",
@@ -32,32 +34,32 @@
     }
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.9",
-    "@types/howler": "^2.2.7",
-    "@types/node": "^18.14.6",
-    "@types/react": "^18.0.28",
-    "autoprefixer": "^10.4.13",
-    "electron": "^23.1.2",
-    "electron-builder": "^24.0.0",
-    "eslint": "^8.35.0",
-    "eslint-config-next": "^13.2.3",
-    "music-metadata": "^7.13.3",
-    "next": "^13.2.4",
+    "@tailwindcss/typography": "^0.5.10",
+    "@types/howler": "^2.2.9",
+    "@types/node": "^20.6.3",
+    "@types/react": "^18.2.22",
+    "autoprefixer": "^10.4.16",
+    "electron": "^26.2.2",
+    "electron-builder": "^24.6.4",
+    "eslint": "^8.49.0",
+    "eslint-config-next": "^13.5.2",
+    "next": "^13.5.2",
     "node-dir": "^0.1.17",
-    "postcss": "^8.4.21",
-    "prettier-plugin-tailwindcss": "^0.2.4",
+    "postcss": "^8.4.30",
+    "prettier-plugin-tailwindcss": "^0.5.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "sass": "^1.58.3",
-    "tailwindcss": "^3.2.7"
+    "sass": "^1.67.0",
+    "tailwindcss": "^3.3.3"
   },
   "dependencies": {
-    "daisyui": "^2.51.3",
+    "daisyui": "^3.7.6",
     "electron-is-dev": "^2.0.0",
     "electron-next": "^3.1.5",
-    "howler": "^2.2.3",
-    "react-icons": "^4.8.0",
-    "react-intersection-observer": "^9.4.3",
+    "howler": "^2.2.4",
+    "music-metadata": "^7.13.4",
+    "react-icons": "^4.11.0",
+    "react-intersection-observer": "^9.5.2",
     "usehooks-ts": "^2.9.1"
   }
 }
