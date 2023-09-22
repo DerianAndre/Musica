@@ -10,7 +10,7 @@ import { Play } from '~/renderer/components/icons';
 import packageJson from '~/package.json';
 import Router from 'next/router';
 
-// TODO: Improve UX/UI
+const packages: Record<string, any> = packageJson;
 
 const PageSettings = () => {
   const { library } = useContext(PlayerContext);
@@ -167,27 +167,27 @@ const PageSettings = () => {
         <section id="packages" className="">
           <h4 className="mb-3 text-xl font-bold">Packages</h4>
           <div className="flex flex-col gap-1">
-            {packageJson.dependencies && (
+            {packages.dependencies && (
               <>
                 <h5 className="font-bold">Dependencies</h5>
-                {Object.keys(packageJson.dependencies).map((key, index) => (
+                {Object.keys(packages.dependencies).map((key, index) => (
                   <div key={index} className="flex items-center gap-4 text-xs">
                     <div className="">{key}</div>
                     <div className="badge badge-sm">
-                      {packageJson.dependencies[key]}
+                      {packages.dependencies[key]}
                     </div>
                   </div>
                 ))}
               </>
             )}
-            {packageJson.devDependencies && (
+            {packages.devDependencies && (
               <>
                 <h5 className="mt-3 font-bold">Development Dependencies</h5>
-                {Object.keys(packageJson.devDependencies).map((key, index) => (
+                {Object.keys(packages.devDependencies).map((key, index) => (
                   <div key={index} className="flex items-center gap-4 text-xs">
                     <div className="">{key}</div>
                     <div className="badge badge-sm">
-                      {packageJson.devDependencies[key]}
+                      {packages.devDependencies[key]}
                     </div>
                   </div>
                 ))}
