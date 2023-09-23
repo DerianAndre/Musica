@@ -16,5 +16,21 @@
 }
 
 .backdrop-false {
-  background-color: hsl(var(--b3, var(--b2)) / 0.95);
+  background-image: linear-gradient(
+    to top,
+    hsl(var(--b1, var(--b2)) / 1),
+    hsl(var(--b1, var(--b2)) / .85),
+    hsl(var(--b1, var(--b2)) / .75)
+  );
+}
+
+[data-theme="dark"] {
+  .backdrop-false {
+    background-image: linear-gradient(
+      to top,
+      hsl(var(--b1, var(--b2)) / 1),
+      hsl(var(--b1, var(--b2)) / .98),
+      hsl(var(--b1, var(--b2)) / .95)
+    );
+  }
 }
