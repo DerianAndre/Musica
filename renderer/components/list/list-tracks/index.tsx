@@ -9,7 +9,14 @@ const ListTracks = () => {
 
   return (
     <div className="list-tracks">
-      <div className="align-stretch grid grid-cols-1 gap-1 [&>.item:nth-child(odd)]:bg-base-200 [&>.item]:rounded hover:[&>.item]:bg-base-300">
+      <div className="
+        align-stretch grid grid-cols-1 gap-1
+        [&>.item]:rounded
+        [&>.item:nth-child(odd)]:bg-black/[.065]
+        hover:[&>.item]:bg-black/[.125]
+        dark:[&>.item:nth-child(odd)]:bg-black/[.15]
+        dark:hover:[&>.item]:bg-black/[.30]
+      ">
         {libraryTracks?.map((track: Track, index: number) => (
           <ListIntersection key={index + track?.path}>
             <ListTrack track={track} />

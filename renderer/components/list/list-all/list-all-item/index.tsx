@@ -81,7 +81,14 @@ const ListAllItem = ({ artist, album, show }: IProps) => {
                       />
                     </div>
                   )}
-                  <div className="flex flex-col gap-1 [&>.item:nth-child(odd)]:bg-base-200/50 [&>.item]:rounded hover:[&>.item]:bg-base-300/50">
+                  <div className="
+                    flex flex-col gap-1
+                    [&>.item]:rounded
+                    [&>.item:nth-child(odd)]:bg-black/[.065]
+                    hover:[&>.item]:bg-black/[.125]
+                    dark:[&>.item:nth-child(odd)]:bg-black/[.15]
+                    dark:hover:[&>.item]:bg-black/[.30]
+                  ">
                     {album?.tracks?.map((track) => (
                       <ListIntersection key={track?.path}>
                         <ListAllTrack track={track} />

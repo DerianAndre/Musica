@@ -8,7 +8,7 @@
 .backdrop-true {
   background-image: linear-gradient(
     to top,
-    hsl(var(--b3, var(--b2))),
+    hsl(var(--b3, var(--b2)) / .65),
     hsl(var(--b3, var(--b2)) / 0)
   );
   backdrop-filter: blur(24px);

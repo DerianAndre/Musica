@@ -104,7 +104,13 @@ const Home = () => {
               <div className="relative w-full md:max-w-[400px]">
                 <input
                   type="search"
-                  className="input input-sm w-full rounded-full bg-base-content/[0.15] py-[1.2rem] pl-5 pr-12 dark:bg-base-content/[0.05]"
+                  className="
+                    input input-sm w-full rounded-full py-[1.2rem] pl-5 pr-12
+                    bg-black/[0.075]
+                    focus:bg-black/[0.05]
+                    dark:bg-white/[0.05]
+                    focus:dark:bg-white/[0.025]
+                  "
                   placeholder="Search..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
